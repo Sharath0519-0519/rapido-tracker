@@ -4,229 +4,222 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Rapido Captain Tracker</title>
-
-<!-- PWA Meta Tags -->
 <meta name="theme-color" content="#2E7D32">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rapido Tracker">
 <meta name="description" content="Track your Rapido rides, expenses and profits">
-
-<!-- PWA Icons (inline SVG as data URI) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232E7D32'/><text y='.9em' font-size='80' x='10'>🛵</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232E7D32'/><text y='.9em' font-size='80' x='10'>🛵</text></svg>">
-
-<!-- PWA Manifest (inline) -->
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Rapido%20Captain%20Tracker%22,%22short_name%22:%22Rapido%20Tracker%22,%22description%22:%22Track%20your%20Rapido%20rides,%20expenses%20and%20profits%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F4F6F4%22,%22theme_color%22:%22%232E7D32%22,%22orientation%22:%22portrait%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'><rect%20width='100'%20height='100'%20rx='20'%20fill='%232E7D32'/><text%20y='.9em'%20font-size='80'%20x='10'>🛵</text></svg>%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}]}">
-
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
   const firebaseConfig = {
-    apiKey:            "AIzaSyDAcOgIN5vcjkPZUenOtH58u9fLWsbgiLI",
-    authDomain:        "tracker-9aa73.firebaseapp.com",
-    projectId:         "tracker-9aa73",
-    storageBucket:     "tracker-9aa73.firebasestorage.app",
-    messagingSenderId: "752124193682",
-    appId:             "1:752124193682:web:7cdd3b9ca578abe3daef4b"
+    apiKey:"AIzaSyDAcOgIN5vcjkPZUenOtH58u9fLWsbgiLI",
+    authDomain:"tracker-9aa73.firebaseapp.com",
+    projectId:"tracker-9aa73",
+    storageBucket:"tracker-9aa73.firebasestorage.app",
+    messagingSenderId:"752124193682",
+    appId:"1:752124193682:web:7cdd3b9ca578abe3daef4b"
   };
-
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-  window._fbSignIn = () => signInWithPopup(auth, provider).catch(e => {
-    document.getElementById('authErr').textContent = 'Sign-in failed: ' + e.message;
-    document.getElementById('authErr').style.display = 'block';
+  const app=initializeApp(firebaseConfig);
+  const auth=getAuth(app);
+  const provider=new GoogleAuthProvider();
+  window._fbSignIn=()=>signInWithPopup(auth,provider).catch(e=>{
+    document.getElementById('authErr').textContent='Sign-in failed: '+e.message;
+    document.getElementById('authErr').style.display='block';
   });
-
-  window._fbSignOut = () => signOut(auth);
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      window._currentUID  = user.uid;
-      window._currentName = user.displayName || 'Captain';
-      window._currentPhoto= user.photoURL;
-      showApp(user);
-    } else {
-      window._currentUID = null;
-      showAuth();
-    }
+  window._fbSignOut=()=>signOut(auth);
+  onAuthStateChanged(auth,user=>{
+    if(user){window._currentUID=user.uid;window._currentName=user.displayName||'Captain';window._currentPhoto=user.photoURL;showApp(user);}
+    else{window._currentUID=null;showAuth();}
   });
 </script>
 
 <style>
-:root {
-  --green:#2E7D32; --green-light:#E8F5E9; --green-mid:#A5D6A7; --green-dark:#1B5E20;
-  --red:#C62828; --red-light:#FFEBEE; --blue:#1565C0; --blue-light:#E3F2FD;
-  --bg:#F4F6F4; --card:#ffffff; --border:#E0E0E0; --text:#1a1a1a; --muted:#6B7280;
-  --radius:16px; --radius-sm:10px;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bot: env(safe-area-inset-bottom, 0px);
+:root{
+  --green:#2E7D32;--green-light:#E8F5E9;--green-mid:#A5D6A7;--green-dark:#1B5E20;
+  --red:#C62828;--red-light:#FFEBEE;--blue:#1565C0;--blue-light:#E3F2FD;
+  --bg:#F4F6F4;--card:#fff;--border:#E0E0E0;--text:#1a1a1a;--muted:#6B7280;
+  --radius:16px;--radius-sm:10px;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%}
-body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:-webkit-fill-available;overscroll-behavior:none}
+html,body{height:100%}
+body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);overscroll-behavior:none}
 h1,h2,h3{font-family:'Baloo 2',cursive}
 
 /* AUTH */
-.auth-wrap{min-height:100vh;min-height:-webkit-fill-available;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;background:linear-gradient(160deg,#E8F5E9 0%,#F1F8E9 60%,#fff 100%)}
-.auth-logo{width:88px;height:88px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 6px 24px rgba(46,125,50,0.35)}
+.auth-wrap{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;background:linear-gradient(160deg,#E8F5E9 0%,#F1F8E9 60%,#fff 100%)}
+.auth-logo{width:88px;height:88px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 6px 24px rgba(46,125,50,.35)}
 .auth-logo svg{width:44px;height:44px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .auth-title{font-size:30px;color:var(--green-dark);margin-bottom:4px}
 .auth-sub{font-size:14px;color:var(--muted);margin-bottom:32px;text-align:center;line-height:1.6}
-.auth-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:32px 24px;width:100%;max-width:380px;box-shadow:0 6px 32px rgba(0,0,0,0.08);text-align:center}
+.auth-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:32px 24px;width:100%;max-width:380px;box-shadow:0 6px 32px rgba(0,0,0,.08);text-align:center}
 .auth-card h2{font-size:22px;margin-bottom:8px;color:var(--green-dark)}
 .auth-card p{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:15px 20px;background:#fff;border:1.5px solid #DADCE0;border-radius:10px;font-size:16px;font-family:'Noto Sans',sans-serif;font-weight:500;color:#3C4043;cursor:pointer;transition:background 0.15s,box-shadow 0.15s;-webkit-appearance:none}
-.google-btn:hover{background:#F8F9FA;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.google-btn:active{background:#F1F3F4;transform:scale(0.98)}
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:15px 20px;background:#fff;border:1.5px solid #DADCE0;border-radius:10px;font-size:16px;font-family:'Noto Sans',sans-serif;font-weight:500;color:#3C4043;cursor:pointer}
+.google-btn:active{background:#F1F3F4;transform:scale(.98)}
 .google-btn svg{width:22px;height:22px;flex-shrink:0}
 .auth-err{background:var(--red-light);color:var(--red);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-top:14px;display:none;text-align:left}
 .auth-note{font-size:12px;color:var(--muted);margin-top:20px;line-height:1.6}
 
-/* INSTALL MODAL OVERLAY */
-.install-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+/* INSTALL MODAL */
+.install-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
 .install-overlay.show{display:flex}
-.install-modal{background:#fff;border-radius:24px 24px 0 0;padding:28px 24px 36px;width:100%;max-width:480px;animation:slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1)}
+.install-modal{background:#fff;border-radius:24px 24px 0 0;padding:28px 24px calc(32px + var(--safe-bot));width:100%;max-width:480px;animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.install-modal-drag{width:40px;height:4px;background:#E0E0E0;border-radius:4px;margin:0 auto 20px}
-.install-modal-icon{width:72px;height:72px;background:var(--green);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;box-shadow:0 6px 20px rgba(46,125,50,0.3)}
-.install-modal h2{font-family:'Baloo 2',cursive;font-size:22px;color:var(--green-dark);text-align:center;margin-bottom:6px}
-.install-modal p{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.6}
-.install-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-.install-feat{background:var(--green-light);border-radius:10px;padding:12px;text-align:center;font-size:12px;color:var(--green-dark);font-weight:500}
-.install-feat .feat-icon{font-size:22px;margin-bottom:4px}
-.install-modal-btn{width:100%;padding:15px;border:none;border-radius:12px;background:var(--green);color:#fff;font-size:17px;font-family:'Baloo 2',cursive;font-weight:700;cursor:pointer;margin-bottom:10px}
-.install-modal-btn:active{background:var(--green-dark)}
-.install-modal-skip{width:100%;padding:12px;border:none;background:none;color:var(--muted);font-size:14px;font-family:'Noto Sans',sans-serif;cursor:pointer}
-/* iOS install instructions */
-.ios-steps{background:#F8F9FA;border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--text);line-height:2}
+.im-drag{width:40px;height:4px;background:#E0E0E0;border-radius:4px;margin:0 auto 20px}
+.im-icon{width:72px;height:72px;background:var(--green);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;box-shadow:0 6px 20px rgba(46,125,50,.3)}
+.install-modal h2{font-size:22px;color:var(--green-dark);text-align:center;margin-bottom:6px}
+.install-modal p{font-size:14px;color:var(--muted);text-align:center;margin-bottom:22px;line-height:1.6}
+.im-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.im-feat{background:var(--green-light);border-radius:10px;padding:12px;text-align:center;font-size:12px;color:var(--green-dark);font-weight:500}
+.im-feat .fi{font-size:22px;margin-bottom:4px}
+.im-btn{width:100%;padding:15px;border:none;border-radius:12px;background:var(--green);color:#fff;font-size:17px;font-family:'Baloo 2',cursive;font-weight:700;cursor:pointer;margin-bottom:10px}
+.im-btn:active{background:var(--green-dark)}
+.im-skip{width:100%;padding:12px;border:none;background:none;color:var(--muted);font-size:14px;font-family:'Noto Sans',sans-serif;cursor:pointer}
+.ios-steps{background:#F8F9FA;border-radius:12px;padding:14px;margin-bottom:18px;font-size:13px;color:var(--text);line-height:2.1}
 
-/* APP */
-.app-wrap{display:none;flex-direction:column;height:100vh;height:-webkit-fill-available}
+/* APP SHELL — KEY FIX: normal flow, no fixed height */
+.app-wrap{display:none;flex-direction:column;min-height:100dvh}
 .app-wrap.show{display:flex}
 
 /* TOPBAR */
-.topbar{background:var(--green);color:#fff;padding:0 16px;padding-top:var(--safe-top);display:flex;align-items:center;justify-content:space-between;height:calc(56px + var(--safe-top));flex-shrink:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.topbar{background:var(--green);color:#fff;padding:calc(var(--safe-top) + 10px) 16px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15);position:sticky;top:0;z-index:100}
 .topbar-left{display:flex;align-items:center;gap:10px}
 .topbar h1{font-size:18px;font-weight:600}
 .user-chip{display:flex;align-items:center;gap:8px}
-.user-photo{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.5);object-fit:cover}
-.user-initials{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
-.user-name-chip{font-size:13px;color:rgba(255,255,255,0.9);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.logout-btn{background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Noto Sans',sans-serif;white-space:nowrap}
-.logout-btn:active{background:rgba(255,255,255,0.3)}
+.user-photo{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.5);object-fit:cover}
+.user-initials{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.user-name-chip{font-size:13px;color:rgba(255,255,255,.9);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Noto Sans',sans-serif;white-space:nowrap}
+.logout-btn:active{background:rgba(255,255,255,.3)}
 
 /* BOTTOM NAV */
-.bottom-nav{flex-shrink:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:var(--safe-bot)}
-.bnav-btn{flex:1;padding:12px 4px 10px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:11px;font-family:'Noto Sans',sans-serif;transition:color 0.15s;font-weight:500}
+.bottom-nav{background:var(--card);border-top:1px solid var(--border);display:flex;flex-shrink:0;position:sticky;bottom:0;z-index:100;padding-bottom:var(--safe-bot)}
+.bnav-btn{flex:1;padding:12px 4px 10px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:11px;font-family:'Noto Sans',sans-serif;font-weight:500}
 .bnav-btn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bnav-btn.on{color:var(--green)}
 .bnav-btn.on svg{stroke-width:2.2}
 
-/* MAIN */
-.main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.page{display:none;padding:16px 16px 8px}
+/* MAIN SCROLL — KEY FIX: flex:1 + overflow-y:auto */
+.main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page{display:none;padding:16px 16px 100px}
 .page.on{display:block}
 
-/* COMPONENTS */
+/* DATE BAR */
 .date-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .date-bar label{font-size:13px;color:var(--muted);font-weight:500}
 .date-bar input{border:none;background:none;font-size:15px;font-family:'Noto Sans',sans-serif;color:var(--text);flex:1}
 .date-bar input:focus{outline:none}
 
+/* METRICS */
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .mc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px}
-.mc .lbl{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+.mc .lbl{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:.3px}
 .mc .val{font-size:22px;font-family:'Baloo 2',cursive;font-weight:700}
 
+/* FORM */
 .form-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px}
-.form-block-title{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.form-block-title{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:7px}
 .dot{width:10px;height:10px;border-radius:50%}
 .dot-g{background:var(--green)}
 .dot-r{background:var(--red)}
 .f-row{margin-bottom:12px}
-.f-row label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
-.f-row input,.f-row select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:'Noto Sans',sans-serif;background:#FAFAFA;color:var(--text);transition:border-color 0.2s;-webkit-appearance:none;appearance:none}
+.f-row label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:.3px}
+.f-row input,.f-row select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:'Noto Sans',sans-serif;background:#FAFAFA;color:var(--text);transition:border-color .2s;-webkit-appearance:none;appearance:none}
 .f-row input:focus,.f-row select:focus{outline:none;border-color:var(--green);background:#fff}
 .f-row select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;background-color:#FAFAFA}
-
-.submit-btn{width:100%;padding:14px;border:none;border-radius:var(--radius-sm);font-size:16px;font-family:'Baloo 2',cursive;font-weight:600;cursor:pointer;transition:opacity 0.15s,transform 0.1s;-webkit-appearance:none}
-.submit-btn:active{transform:scale(0.97)}
+.quick-amts{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.qa{background:var(--green-light);border:1px solid var(--green-mid);color:var(--green-dark);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans',sans-serif}
+.qa:active{background:var(--green-mid)}
+.qa-red{background:var(--red-light);border-color:#FFCDD2;color:var(--red)}
+.qa-red:active{background:#FFCDD2}
+.submit-btn{width:100%;padding:14px;border:none;border-radius:var(--radius-sm);font-size:16px;font-family:'Baloo 2',cursive;font-weight:700;cursor:pointer;-webkit-appearance:none}
+.submit-btn:active{transform:scale(.97)}
 .btn-green{background:var(--green);color:#fff}
-.btn-green:active{background:#256427}
+.btn-green:active{background:var(--green-dark)}
 .btn-red{background:var(--red);color:#fff}
 .btn-red:active{background:#a82020}
 
-.section-hdr{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 8px}
+/* ENTRIES */
+.section-hdr{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;display:flex;justify-content:space-between;align-items:center}
+.section-count{background:var(--border);border-radius:10px;padding:2px 8px;font-size:11px;color:var(--muted);font-weight:700}
 .entry-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.ei-left .cat{font-size:11px;color:var(--muted)}
-.ei-left .note{font-size:14px;color:var(--text);margin-top:2px;font-weight:500}
+.ei-left{flex:1;min-width:0}
+.ei-cat{font-size:11px;color:var(--muted)}
+.ei-note{font-size:14px;color:var(--text);margin-top:2px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ei-right{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:8px}
 .ei-amt{font-size:16px;font-family:'Baloo 2',cursive;font-weight:700}
-.ei-del{background:none;border:none;cursor:pointer;padding:8px;color:var(--muted);border-radius:8px;font-size:18px;flex-shrink:0}
+.ei-del{background:none;border:none;cursor:pointer;padding:8px;color:var(--muted);border-radius:8px;font-size:18px}
 .ei-del:active{color:var(--red);background:var(--red-light)}
-.empty-state{text-align:center;padding:32px 0;color:var(--muted);font-size:14px}
+.empty-state{text-align:center;padding:32px 0;color:var(--muted);font-size:14px;line-height:2}
 
+/* TODAY */
 .profit-banner{background:var(--blue-light);border:1px solid #90CAF9;border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center}
 .profit-banner .pb-lbl{font-size:12px;color:var(--blue);font-weight:500;margin-bottom:4px}
 .profit-banner .pb-val{font-size:40px;font-family:'Baloo 2',cursive;font-weight:700;color:var(--blue)}
 .profit-banner .pb-val.loss{color:var(--red)}
-
 .breakdown-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px}
 .br-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F5F5F5;font-size:14px}
 .br-row:last-child{border-bottom:none}
 .br-lbl{color:var(--muted)}
 .br-val{font-weight:600;font-family:'Baloo 2',cursive}
 
+/* MONTH */
 .month-banner{background:var(--green-light);border:1px solid var(--green-mid);border-radius:var(--radius);padding:22px 20px;margin-bottom:16px;text-align:center}
 .month-banner .mb-lbl{font-size:12px;color:var(--green);font-weight:500;margin-bottom:4px}
 .month-banner .mb-val{font-size:44px;font-family:'Baloo 2',cursive;font-weight:700;color:var(--green)}
 .month-banner .mb-val.loss{color:var(--red)}
 .month-banner .mb-sub{font-size:13px;color:#555;margin-top:6px}
-
 .month-sel-row{display:flex;gap:10px;margin-bottom:14px}
 .month-sel-row select{flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:'Noto Sans',sans-serif;background:var(--card);color:var(--text);-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
-
 .chart-wrap{position:relative;width:100%;height:200px;margin-bottom:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px}
 .day-row-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .dri-left .dri-date{font-size:14px;font-weight:600}
 .dri-left .dri-sub{font-size:12px;color:var(--muted);margin-top:3px}
 .dri-profit{font-size:18px;font-family:'Baloo 2',cursive;font-weight:700}
 
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1a1a1a;color:#fff;padding:11px 22px;border-radius:24px;font-size:14px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:9998;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+/* CONFIRM DELETE */
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8888;align-items:center;justify-content:center;padding:20px}
+.confirm-overlay.show{display:flex}
+.confirm-box{background:#fff;border-radius:var(--radius);padding:24px;width:100%;max-width:320px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.confirm-box h3{font-size:18px;margin-bottom:8px}
+.confirm-box p{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.confirm-btns{display:flex;gap:10px}
+.cb-cancel{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:#fff;font-size:15px;font-family:'Noto Sans',sans-serif;cursor:pointer;color:var(--text)}
+.cb-del{flex:1;padding:12px;border:none;border-radius:var(--radius-sm);background:var(--red);color:#fff;font-size:15px;font-family:'Noto Sans',sans-serif;font-weight:600;cursor:pointer}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(30px);background:#1a1a1a;color:#fff;padding:11px 22px;border-radius:24px;font-size:14px;opacity:0;transition:all .3s;pointer-events:none;z-index:9997;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- AUTH PAGE -->
+<!-- AUTH -->
 <div class="auth-wrap" id="authSection">
   <div class="auth-logo">
     <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
   </div>
   <h1 class="auth-title">Rapido Captain</h1>
   <p class="auth-sub">Track your rides, expenses &amp; profits<br>Sign in with your Google account</p>
-
   <div class="auth-card">
     <h2>Welcome Captain 👋</h2>
-    <p>Sign in to access your personal earnings tracker. Your data is saved to your device.</p>
+    <p>Sign in to access your personal earnings tracker. Your data stays on your device.</p>
     <button class="google-btn" onclick="window._fbSignIn()">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       Sign in with Google
     </button>
     <div class="auth-err" id="authErr"></div>
-    <p class="auth-note">🔒 Secure sign-in via Google. Each captain's data is private and separate.</p>
+    <p class="auth-note">🔒 Secure Google sign-in. Each captain's data is private.</p>
   </div>
 </div>
 
@@ -234,7 +227,7 @@ h1,h2,h3{font-family:'Baloo 2',cursive}
 <div class="app-wrap" id="appSection">
   <div class="topbar">
     <div class="topbar-left">
-      <div style="width:34px;height:34px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <div style="width:34px;height:34px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
       </div>
       <h1>Rapido Tracker</h1>
@@ -248,7 +241,8 @@ h1,h2,h3{font-family:'Baloo 2',cursive}
   </div>
 
   <div class="main" id="mainContent">
-    <!-- ADD ENTRY -->
+
+    <!-- ADD ENTRY TAB -->
     <div class="page on" id="pgAdd">
       <div class="date-bar">
         <label>📅</label>
@@ -258,10 +252,15 @@ h1,h2,h3{font-family:'Baloo 2',cursive}
       <div class="form-block">
         <div class="form-block-title"><span class="dot dot-g"></span> Add Income</div>
         <div class="f-row"><label>Amount (₹)</label><input type="number" id="incAmt" placeholder="e.g. 250" min="0" inputmode="decimal"></div>
+        <div class="quick-amts">
+          <button class="qa" onclick="setAmt('incAmt',50)">₹50</button>
+          <button class="qa" onclick="setAmt('incAmt',100)">₹100</button>
+          <button class="qa" onclick="setAmt('incAmt',150)">₹150</button>
+          <button class="qa" onclick="setAmt('incAmt',200)">₹200</button>
+          <button class="qa" onclick="setAmt('incAmt',300)">₹300</button>
+        </div>
         <div class="f-row"><label>Type</label>
-          <select id="incCat">
-            <option>Rapido Ride</option><option>Bonus / Incentive</option><option>Tip</option><option>Other Income</option>
-          </select>
+          <select id="incCat"><option>Rapido Ride</option><option>Bonus / Incentive</option><option>Tip</option><option>Other Income</option></select>
         </div>
         <div class="f-row"><label>Note (optional)</label><input type="text" id="incNote" placeholder="e.g. Long ride, surge"></div>
         <button class="submit-btn btn-green" onclick="addEntry('income')">+ Add Income</button>
@@ -269,25 +268,29 @@ h1,h2,h3{font-family:'Baloo 2',cursive}
       <div class="form-block">
         <div class="form-block-title"><span class="dot dot-r"></span> Add Expense</div>
         <div class="f-row"><label>Amount (₹)</label><input type="number" id="expAmt" placeholder="e.g. 100" min="0" inputmode="decimal"></div>
+        <div class="quick-amts">
+          <button class="qa qa-red" onclick="setAmt('expAmt',50)">₹50</button>
+          <button class="qa qa-red" onclick="setAmt('expAmt',100)">₹100</button>
+          <button class="qa qa-red" onclick="setAmt('expAmt',200)">₹200</button>
+          <button class="qa qa-red" onclick="setAmt('expAmt',500)">₹500</button>
+        </div>
         <div class="f-row"><label>Category</label>
-          <select id="expCat">
-            <option>Petrol</option><option>Food &amp; Water</option><option>Vehicle Service</option>
-            <option>Mobile Recharge</option><option>Toll / Parking</option><option>Vehicle Repair</option><option>Other</option>
-          </select>
+          <select id="expCat"><option>Petrol</option><option>Food &amp; Water</option><option>Vehicle Service</option><option>Mobile Recharge</option><option>Toll / Parking</option><option>Vehicle Repair</option><option>Other</option></select>
         </div>
         <div class="f-row"><label>Note (optional)</label><input type="text" id="expNote" placeholder="e.g. Full tank, lunch"></div>
-        <button class="submit-btn btn-red" onclick="addEntry('expense')">- Add Expense</button>
+        <button class="submit-btn btn-red" onclick="addEntry('expense')">− Add Expense</button>
       </div>
     </div>
 
-    <!-- TODAY -->
+    <!-- TODAY TAB -->
     <div class="page" id="pgToday"><div id="todayContent"></div></div>
 
-    <!-- MONTH -->
+    <!-- MONTH TAB -->
     <div class="page" id="pgMonth">
       <div class="month-sel-row"><select id="monthSel" onchange="renderMonth()"></select></div>
       <div id="monthContent"></div>
     </div>
+
   </div>
 
   <div class="bottom-nav">
@@ -306,26 +309,36 @@ h1,h2,h3{font-family:'Baloo 2',cursive}
 <!-- INSTALL MODAL -->
 <div class="install-overlay" id="installOverlay">
   <div class="install-modal">
-    <div class="install-modal-drag"></div>
-    <div class="install-modal-icon">🛵</div>
+    <div class="im-drag"></div>
+    <div class="im-icon">🛵</div>
     <h2>Install Rapido Tracker</h2>
-    <p>Add this app to your home screen for quick access — works like a real app, no Play Store needed!</p>
-    <div class="install-features">
-      <div class="install-feat"><div class="feat-icon">⚡</div>Opens instantly</div>
-      <div class="install-feat"><div class="feat-icon">📴</div>Works offline</div>
-      <div class="install-feat"><div class="feat-icon">🔒</div>No Play Store</div>
-      <div class="install-feat"><div class="feat-icon">📱</div>Full screen</div>
+    <p>Add to your home screen — opens like a real app, no Play Store needed!</p>
+    <div class="im-feats">
+      <div class="im-feat"><div class="fi">⚡</div>Opens instantly</div>
+      <div class="im-feat"><div class="fi">📴</div>Works offline</div>
+      <div class="im-feat"><div class="fi">🔒</div>No Play Store</div>
+      <div class="im-feat"><div class="fi">📱</div>Full screen</div>
     </div>
-    <!-- Android install button -->
-    <button class="install-modal-btn" id="installBtn" style="display:none">📲 Install App Now</button>
-    <!-- iOS instructions -->
+    <button class="im-btn" id="installBtn" style="display:none">📲 Install App Now</button>
     <div class="ios-steps" id="iosSteps" style="display:none">
-      <b>To install on iPhone/iPad:</b><br>
-      1️⃣ Tap the <b>Share</b> button (□↑) at the bottom<br>
-      2️⃣ Scroll and tap <b>"Add to Home Screen"</b><br>
+      <b>Install on iPhone/iPad:</b><br>
+      1️⃣ Tap the <b>Share</b> button (□↑) below<br>
+      2️⃣ Tap <b>"Add to Home Screen"</b><br>
       3️⃣ Tap <b>Add</b> — done! 🎉
     </div>
-    <button class="install-modal-skip" onclick="closeInstallModal()">Maybe later</button>
+    <button class="im-skip" onclick="closeInstallModal()">Maybe later</button>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>Delete entry? 🗑</h3>
+    <p>This entry will be permanently removed and cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="cb-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="cb-del" id="confirmDelBtn">Delete</button>
+    </div>
   </div>
 </div>
 
@@ -333,159 +346,52 @@ h1,h2,h3{font-family:'Baloo 2',cursive}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-let monthChart = null;
-let deferredInstallPrompt = null;
+let monthChart=null,deferredInstallPrompt=null,pendingDeleteId=null;
 
-function closeInstallModal() {
-  document.getElementById('installOverlay').classList.remove('show');
-  localStorage.setItem('installDismissed', Date.now());
-}
-
-// Close modal if user taps the dark overlay background
-document.getElementById('installOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeInstallModal();
-});
-
-// Detect iOS
-function isIOS() {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
-}
-// Detect if already installed (standalone)
-function isInstalled() {
-  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-}
-
-// Show install modal on page load (after 1.5s), once per session
-window.addEventListener('load', () => {
-  if (isInstalled()) return; // already installed, skip
-  const dismissed = localStorage.getItem('installDismissed');
-  if (dismissed && Date.now() - dismissed < 3 * 24 * 60 * 60 * 1000) return; // skip for 3 days after dismiss
-
-  setTimeout(() => {
-    const overlay = document.getElementById('installOverlay');
-    if (isIOS()) {
-      document.getElementById('iosSteps').style.display = 'block';
-      overlay.classList.add('show');
-    }
-    // Android: wait for beforeinstallprompt, show modal with button
-    if (deferredInstallPrompt) {
-      document.getElementById('installBtn').style.display = 'block';
-      overlay.classList.add('show');
-    }
-  }, 1500);
-});
-
-// Capture Android install prompt
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  // If modal already shown (timing), just show the button
-  document.getElementById('installBtn').style.display = 'block';
-  // Show modal if not already visible
-  const overlay = document.getElementById('installOverlay');
-  if (!overlay.classList.contains('show')) {
-    const dismissed = localStorage.getItem('installDismissed');
-    if (!dismissed || Date.now() - dismissed > 3 * 24 * 60 * 60 * 1000) {
-      setTimeout(() => overlay.classList.add('show'), 1500);
-    }
-  }
-});
-
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (!deferredInstallPrompt) return;
-  deferredInstallPrompt.prompt();
-  const { outcome } = await deferredInstallPrompt.userChoice;
-  deferredInstallPrompt = null;
-  closeInstallModal();
-  if (outcome === 'accepted') showToast('App installed! 🎉');
-});
-
-window.addEventListener('appinstalled', () => {
-  closeInstallModal();
-  showToast('App installed! 🎉');
-});
-
-// Service Worker registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    const swContent = `
-const CACHE = 'rapido-v1';
-const ASSETS = ['./', './index.html'];
-self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))));
-self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('./index.html')))));
-    `;
-    const blob = new Blob([swContent], {type: 'application/javascript'});
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl).catch(() => {});
-  });
-}
-
-function getEntries(){
-  const uid = window._currentUID;
-  if(!uid) return [];
-  try{ return JSON.parse(localStorage.getItem('rc_'+uid)||'[]'); }catch(e){return[];}
-}
-function saveEntries(e){
-  const uid = window._currentUID;
-  if(uid) localStorage.setItem('rc_'+uid, JSON.stringify(e));
-}
+function getEntries(){const uid=window._currentUID;if(!uid)return[];try{return JSON.parse(localStorage.getItem('rc_'+uid)||'[]');}catch(e){return[];}}
+function saveEntries(e){const uid=window._currentUID;if(uid)localStorage.setItem('rc_'+uid,JSON.stringify(e));}
 
 function showApp(user){
   document.getElementById('authSection').style.display='none';
   document.getElementById('appSection').classList.add('show');
-  const photo = document.getElementById('userPhoto');
-  const initEl = document.getElementById('userInitials');
-  if(user.photoURL){
-    photo.src=user.photoURL; photo.style.display='block'; initEl.style.display='none';
-  } else {
-    const init=(user.displayName||'C').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    initEl.textContent=init; initEl.style.display='flex'; photo.style.display='none';
-  }
+  const photo=document.getElementById('userPhoto'),initEl=document.getElementById('userInitials');
+  if(user.photoURL){photo.src=user.photoURL;photo.style.display='block';initEl.style.display='none';}
+  else{const init=(user.displayName||'C').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);initEl.textContent=init;initEl.style.display='flex';photo.style.display='none';}
   document.getElementById('userNameChip').textContent=(user.displayName||'Captain').split(' ')[0];
-  const today=new Date().toISOString().split('T')[0];
-  document.getElementById('entryDate').value=today;
-  initMonthSel();
-  renderTopMetrics();
-  goTab('Add');
+  document.getElementById('entryDate').value=new Date().toISOString().split('T')[0];
+  initMonthSel();renderTopMetrics();goTab('Add');
 }
-
 function showAuth(){
   document.getElementById('authSection').style.display='flex';
   document.getElementById('appSection').classList.remove('show');
   if(monthChart){monthChart.destroy();monthChart=null;}
 }
 
-function fmt(n){return '₹'+Math.round(n).toLocaleString('en-IN');}
-
+function fmt(n){return'₹'+Math.round(n).toLocaleString('en-IN');}
 function dayProfit(date){
   const e=getEntries().filter(x=>x.date===date);
   const inc=e.filter(x=>x.type==='income').reduce((s,x)=>s+x.amt,0);
   const exp=e.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amt,0);
   return{inc,exp,profit:inc-exp};
 }
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function setAmt(id,val){document.getElementById(id).value=val;}
 
 function goTab(t){
   ['Add','Today','Month'].forEach(n=>{
     document.getElementById('pg'+n).classList.toggle('on',n===t);
     document.getElementById('btn-'+n).classList.toggle('on',n===t);
   });
-  // scroll to top when switching tabs
   document.getElementById('mainContent').scrollTop=0;
-  if(t==='Today') renderToday();
-  if(t==='Month') renderMonth();
-  if(t==='Add') renderTopMetrics();
-}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
+  if(t==='Today')renderToday();
+  if(t==='Month')renderMonth();
+  if(t==='Add')renderTopMetrics();
 }
 
 function addEntry(type){
   const amtEl=document.getElementById(type==='income'?'incAmt':'expAmt');
   const amt=parseFloat(amtEl.value);
-  if(!amt||amt<=0){showToast('Enter a valid amount');return;}
+  if(!amt||amt<=0){showToast('Enter a valid amount ⚠️');return;}
   const cat=document.getElementById(type==='income'?'incCat':'expCat').value;
   const note=document.getElementById(type==='income'?'incNote':'expNote').value.trim();
   const date=document.getElementById('entryDate').value;
@@ -495,14 +401,19 @@ function addEntry(type){
   amtEl.value='';
   document.getElementById(type==='income'?'incNote':'expNote').value='';
   renderTopMetrics();
-  showToast(type==='income'?'✅ Income added!':'✅ Expense added!');
+  const{profit}=dayProfit(date);
+  showToast((type==='income'?'✅ Income added!  ':'✅ Expense added!  ')+'Profit today: '+fmt(profit));
 }
 
-function deleteEntry(id){
-  saveEntries(getEntries().filter(e=>e.id!==id));
-  renderToday(); renderTopMetrics();
+function deleteEntry(id){pendingDeleteId=id;document.getElementById('confirmOverlay').classList.add('show');}
+function closeConfirm(){pendingDeleteId=null;document.getElementById('confirmOverlay').classList.remove('show');}
+document.getElementById('confirmDelBtn').onclick=function(){
+  if(pendingDeleteId==null)return;
+  saveEntries(getEntries().filter(e=>e.id!==pendingDeleteId));
+  closeConfirm();renderToday();renderTopMetrics();
   showToast('Entry deleted');
-}
+};
+document.getElementById('confirmOverlay').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
 
 function renderTopMetrics(){
   const date=document.getElementById('entryDate').value;
@@ -523,12 +434,12 @@ function renderToday(){
   const incList=entries.filter(e=>e.type==='income');
   const expList=entries.filter(e=>e.type==='expense');
   const rides=incList.filter(e=>e.cat==='Rapido Ride').length;
-  const eHtml=(list,col,sign)=>list.length===0?'<div class="empty-state">No entries yet</div>':
-    list.map(e=>`<div class="entry-item">
-      <div class="ei-left"><div class="cat">${e.cat}</div><div class="note">${e.note||'—'}</div></div>
-      <span class="ei-amt" style="color:${col}">${sign}${fmt(e.amt)}</span>
-      <button class="ei-del" onclick="deleteEntry(${e.id})">🗑</button>
-    </div>`).join('');
+  const eHtml=(list,col,sign)=>list.length===0
+    ?`<div class="empty-state">No entries yet<br><span style="font-size:26px">📝</span></div>`
+    :list.map(e=>`<div class="entry-item">
+        <div class="ei-left"><div class="ei-cat">${e.cat}</div><div class="ei-note">${e.note||'—'}</div></div>
+        <div class="ei-right"><span class="ei-amt" style="color:${col}">${sign}${fmt(e.amt)}</span><button class="ei-del" onclick="deleteEntry(${e.id})">🗑</button></div>
+      </div>`).join('');
   document.getElementById('todayContent').innerHTML=`
     <div class="date-bar" style="margin-bottom:14px">
       <label>📅</label>
@@ -544,14 +455,15 @@ function renderToday(){
       <div class="br-row"><span class="br-lbl">Rides done</span><span class="br-val">${rides}</span></div>
       <div class="br-row"><span class="br-lbl">Avg per ride</span><span class="br-val">${rides>0?fmt(inc/rides):'₹0'}</span></div>
     </div>
-    <div class="section-hdr">Income entries</div>${eHtml(incList,'var(--green)','+')}
-    <div class="section-hdr">Expense entries</div>${eHtml(expList,'var(--red)','-')}
+    <div class="section-hdr">Income entries <span class="section-count">${incList.length}</span></div>
+    ${eHtml(incList,'var(--green)','+')}
+    <div class="section-hdr">Expense entries <span class="section-count">${expList.length}</span></div>
+    ${eHtml(expList,'var(--red)','-')}
   `;
 }
 
 function initMonthSel(){
-  const sel=document.getElementById('monthSel');
-  sel.innerHTML='';
+  const sel=document.getElementById('monthSel');sel.innerHTML='';
   const now=new Date();
   for(let i=0;i<12;i++){
     const d=new Date(now.getFullYear(),now.getMonth()-i,1);
@@ -574,35 +486,47 @@ function renderMonth(){
     totalInc+=inc;totalExp+=exp;
     const r=getEntries().filter(e=>e.date===date&&e.cat==='Rapido Ride').length;
     totalRides+=r;
-    const label=new Date(date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
-    return{date,label,inc,exp,profit,rides:r};
+    return{date,label:new Date(date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'}),inc,exp,profit,rides:r};
   });
   const totalProfit=totalInc-totalExp;
-  const rowsHtml=dayRows.length===0?'<div class="empty-state">No entries this month yet.<br>Go to Add Entry tab to start.</div>':
-    dayRows.map(r=>`<div class="day-row-item">
-      <div class="dri-left">
-        <div class="dri-date">${r.label}</div>
-        <div class="dri-sub">In: ${fmt(r.inc)} · Out: ${fmt(r.exp)} · ${r.rides} rides</div>
-      </div>
-      <div class="dri-profit" style="color:${r.profit>=0?'var(--green)':'var(--red)'}">${fmt(r.profit)}</div>
-    </div>`).join('');
-  const labels=dayRows.map(r=>r.label.split(',')[0]);
-  const profits=dayRows.map(r=>Math.round(r.profit));
+
+  let statsHtml='';
+  if(dayRows.length>0){
+    const best=dayRows.reduce((a,b)=>a.profit>b.profit?a:b);
+    statsHtml=`<div class="breakdown-card" style="margin-bottom:16px">
+      <div class="br-row"><span class="br-lbl">🏆 Best day</span><span class="br-val" style="color:var(--green)">${best.label} · ${fmt(best.profit)}</span></div>
+      <div class="br-row"><span class="br-lbl">📊 Daily avg profit</span><span class="br-val">${fmt(totalProfit/dayRows.length)}</span></div>
+      <div class="br-row"><span class="br-lbl">🛵 Total rides</span><span class="br-val">${totalRides}</span></div>
+      <div class="br-row"><span class="br-lbl">💰 Avg per ride</span><span class="br-val">${totalRides>0?fmt(totalInc/totalRides):'₹0'}</span></div>
+    </div>`;
+  }
+
+  const rowsHtml=dayRows.length===0
+    ?`<div class="empty-state">No entries this month yet<br><span style="font-size:28px">📊</span><br>Go to Add Entry to start</div>`
+    :dayRows.map(r=>`<div class="day-row-item">
+        <div class="dri-left"><div class="dri-date">${r.label}</div><div class="dri-sub">In: ${fmt(r.inc)} · Out: ${fmt(r.exp)} · ${r.rides} rides</div></div>
+        <div class="dri-profit" style="color:${r.profit>=0?'var(--green)':'var(--red)'}">${fmt(r.profit)}</div>
+      </div>`).join('');
+
   document.getElementById('monthContent').innerHTML=`
     <div class="month-banner">
       <div class="mb-lbl">Total Profit — ${new Date(yr,mo-1).toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</div>
       <div class="mb-val ${totalProfit<0?'loss':''}">${fmt(totalProfit)}</div>
-      <div class="mb-sub">${allDates.length} working days · ${totalRides} rides · Avg ${allDates.length>0?fmt(totalProfit/allDates.length):fmt(0)}/day</div>
+      <div class="mb-sub">${allDates.length} working days · ${totalRides} rides</div>
     </div>
-    <div class="breakdown-card">
+    <div class="breakdown-card" style="margin-bottom:16px">
       <div class="br-row"><span class="br-lbl">Total income</span><span class="br-val" style="color:var(--green)">${fmt(totalInc)}</span></div>
       <div class="br-row"><span class="br-lbl">Total expenses</span><span class="br-val" style="color:var(--red)">${fmt(totalExp)}</span></div>
-      <div class="br-row"><span class="br-lbl">Pure profit</span><span class="br-val" style="color:${totalProfit>=0?'var(--blue)':'var(--red)'};font-size:17px">${fmt(totalProfit)}</span></div>
+      <div class="br-row"><span class="br-lbl">Net profit</span><span class="br-val" style="color:${totalProfit>=0?'var(--blue)':'var(--red)'}">${fmt(totalProfit)}</span></div>
     </div>
-    <div class="chart-wrap"><canvas id="monthChart" role="img" aria-label="Daily profit chart"></canvas></div>
-    <div class="section-hdr">Day by day profit</div>${rowsHtml}
+    ${statsHtml}
+    <div class="chart-wrap"><canvas id="monthChart" aria-label="Daily profit chart"></canvas></div>
+    <div class="section-hdr">Day by day <span class="section-count">${dayRows.length} days</span></div>
+    ${rowsHtml}
   `;
   if(monthChart){monthChart.destroy();monthChart=null;}
+  const labels=dayRows.map(r=>r.label.split(',')[0]);
+  const profits=dayRows.map(r=>Math.round(r.profit));
   if(labels.length>0){
     monthChart=new Chart(document.getElementById('monthChart'),{
       type:'bar',
@@ -613,6 +537,51 @@ function renderMonth(){
     });
   }
 }
+
+/* SERVICE WORKER */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+}
+
+/* INSTALL */
+function closeInstallModal(){document.getElementById('installOverlay').classList.remove('show');localStorage.setItem('installDismissed',Date.now());}
+document.getElementById('installOverlay').addEventListener('click',function(e){if(e.target===this)closeInstallModal();});
+function isIOS(){return/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;}
+function isInstalled(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+
+// Store prompt as soon as browser fires it
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  document.getElementById('installBtn').style.display='block';
+  // Show modal after short delay if not dismissed recently
+  const dismissed=localStorage.getItem('installDismissed');
+  if(!isInstalled()&&(!dismissed||Date.now()-dismissed>3*24*60*60*1000)){
+    setTimeout(()=>document.getElementById('installOverlay').classList.add('show'),1200);
+  }
+});
+
+window.addEventListener('load',()=>{
+  if(isInstalled())return;
+  const dismissed=localStorage.getItem('installDismissed');
+  if(dismissed&&Date.now()-dismissed<3*24*60*60*1000)return;
+  // iOS: show after delay
+  if(isIOS()){
+    setTimeout(()=>{
+      document.getElementById('iosSteps').style.display='block';
+      document.getElementById('installOverlay').classList.add('show');
+    },1200);
+  }
+});
+
+document.getElementById('installBtn').addEventListener('click',async()=>{
+  if(!deferredInstallPrompt)return;
+  deferredInstallPrompt.prompt();
+  const{outcome}=await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null;closeInstallModal();
+  if(outcome==='accepted')showToast('App installed! 🎉');
+});
+window.addEventListener('appinstalled',()=>{closeInstallModal();showToast('App installed! 🎉');});
 </script>
 </body>
 </html>
