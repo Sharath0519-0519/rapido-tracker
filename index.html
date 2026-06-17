@@ -4,6 +4,12 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <title>Rapido Life Tracker</title>
+<link rel="manifest" href="/rapido-tracker/manifest.json"/>
+<meta name="theme-color" content="#EA580C"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Rapido Life"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
 <style>
 :root{
@@ -16,18 +22,17 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
 
-/* LOGIN SCREEN */
+/* LOGIN */
 #login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#EA580C 0%,#c2410c 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px}
 #login-screen .logo{font-size:64px;margin-bottom:16px}
 #login-screen h1{color:#fff;font-size:28px;font-weight:700;margin-bottom:8px;text-align:center}
 #login-screen p{color:rgba(255,255,255,0.8);font-size:14px;text-align:center;margin-bottom:48px;line-height:1.6}
 .google-btn{background:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2)}
 .google-btn img{width:22px;height:22px}
-.google-btn:active{opacity:.85}
 .login-footer{color:rgba(255,255,255,0.6);font-size:12px;margin-top:24px;text-align:center}
 
-/* SYNC STATUS */
-#sync-bar{background:var(--green);color:#fff;font-size:12px;text-align:center;padding:4px;display:none}
+/* SYNC BAR */
+#sync-bar{background:var(--green);color:#fff;font-size:12px;text-align:center;padding:5px;display:none;font-weight:500}
 #sync-bar.show{display:block}
 #sync-bar.syncing{background:var(--accent)}
 #sync-bar.error{background:var(--red)}
@@ -46,8 +51,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tbar{background:var(--card);padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;margin:0 -12px 14px;display:flex;justify-content:space-between;align-items:flex-start}
 .tbar-left h1{font-size:18px;font-weight:600;letter-spacing:-0.3px}
 .tbar-left p{font-size:12px;color:var(--sub);margin-top:2px}
-.tbar-right{display:flex;align-items:center;gap:8px}
-.avatar-sm{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)}
 .avatar-sm-placeholder{width:34px;height:34px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0}
 
 /* CARDS */
@@ -67,7 +70,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn.acc{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.grn{background:var(--green);border-color:var(--green);color:#fff}
 .btn.red{background:var(--red);border-color:var(--red);color:#fff}
-.btn.pur{background:var(--purple);border-color:var(--purple);color:#fff}
 .btn.blu{background:var(--blue);border-color:var(--blue);color:#fff}
 .btn.sm{padding:6px 12px;font-size:12px}
 .btn.full{width:100%}
@@ -75,7 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* FORM */
 .frow{margin-bottom:11px}
 .frow label{font-size:12px;color:var(--sub);margin-bottom:5px;display:block;font-weight:500}
-.frow input,.frow select,.frow textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;color:var(--text);font-family:inherit;outline:none;-webkit-appearance:none}
+.frow input,.frow select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;color:var(--text);font-family:inherit;outline:none;-webkit-appearance:none}
 .frow input:focus,.frow select:focus{border-color:var(--accent);background:#fff}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
@@ -85,7 +87,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bdg.r{background:var(--red-light);color:var(--red)}
 .bdg.o{background:var(--accent-light);color:var(--accent)}
 .bdg.b{background:var(--blue-light);color:var(--blue)}
-.bdg.p{background:var(--purple-light);color:var(--purple)}
 .bdg.gr{background:#f3f4f6;color:#555}
 
 /* TABS */
@@ -97,7 +98,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .lrow{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:10px}
 .lrow:last-child{border-bottom:none}
 .lrow .linfo{flex:1;min-width:0}
-.lrow .ltitle{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .ltitle{font-size:14px;font-weight:500}
 .lrow .lsub{font-size:11px;color:var(--sub);margin-top:2px}
 
 /* PROGRESS */
@@ -112,7 +113,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tog.on::after{left:21px}.tog.off::after{left:3px}
 
 /* PHOTO SLOT */
-.phslot{border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:120px;cursor:pointer;gap:6px;overflow:hidden;position:relative}
+.phslot{border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:120px;cursor:pointer;gap:6px;overflow:hidden}
 .phslot img{width:100%;height:100%;object-fit:cover}
 .phslot span{font-size:11px;color:var(--sub)}
 .ph2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
@@ -135,7 +136,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ALARM */
 .alrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
 .alrow:last-child{border-bottom:none}
-.altime{font-size:26px;font-weight:600;letter-spacing:-0.5px}
+.altime{font-size:26px;font-weight:600}
 .allabel{font-size:12px;color:var(--sub);margin-top:1px}
 .alring{font-size:11px;color:var(--accent);margin-top:3px}
 
@@ -144,13 +145,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rtrow:last-child{border-bottom:none}
 .rtname{font-size:14px;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rtsub{font-size:11px;color:var(--sub);margin-top:1px}
-.playbtn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:none;color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:15px}
+.playbtn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:none;color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
 /* UPLOAD ZONE */
 .upzone{border:2px dashed var(--border);border-radius:12px;padding:24px;text-align:center;cursor:pointer}
 .upzone i{font-size:36px;color:var(--accent);display:block;margin-bottom:8px}
-.upzone .uptitle{font-size:14px;font-weight:600;margin-bottom:4px}
-.upzone .upsub{font-size:12px;color:var(--sub)}
 
 /* TIMER */
 .timerdisp{font-size:52px;font-weight:700;text-align:center;color:var(--accent);letter-spacing:2px;padding:16px 0;font-variant-numeric:tabular-nums}
@@ -158,7 +157,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* NOTIF BANNER */
 .notif{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#111;color:#fff;padding:14px 16px;font-size:14px;z-index:9998;display:none;border-radius:0 0 14px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .notif.on{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.notif .nclose{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;flex-shrink:0}
+.notif .nclose{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
 
 /* EXERCISE ROW */
 .exrow{background:var(--bg);border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border)}
@@ -167,14 +166,46 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .infobox{background:var(--accent-light);border:1px solid #fed7aa;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
 .infobox i{color:var(--accent);font-size:18px;flex-shrink:0;margin-top:1px}
 .infobox p{font-size:12px;color:#7c2d12;line-height:1.6}
-
 .sep{height:1px;background:var(--border);margin:6px 0}
-.section-label{font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
 
-/* PROFILE PAGE */
+/* NOTIF STATUS CARD */
+.notif-status{display:flex;align-items:center;gap:12px;padding:12px 0}
+.notif-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.notif-icon.enabled{background:var(--green-light)}
+.notif-icon.disabled{background:var(--red-light)}
+.notif-icon.pending{background:var(--accent-light)}
+
+/* PROFILE */
 .profile-card{background:linear-gradient(135deg,var(--accent),#c2410c);border-radius:16px;padding:20px;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:16px}
 .profile-avatar{width:60px;height:60px;border-radius:50%;border:3px solid rgba(255,255,255,0.5);object-fit:cover}
 .profile-avatar-placeholder{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;flex-shrink:0}
+
+/* GALLERY */
+.gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 0 10px}
+.gal-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:var(--bg);border:1px solid var(--border)}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-tag{position:absolute;top:6px;left:6px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;color:#fff;backdrop-filter:blur(4px)}
+.gal-tag.wo{background:rgba(234,88,12,.85)}
+.gal-tag.ml{background:rgba(22,163,74,.85)}
+.gal-date{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff;font-size:10px;padding:14px 8px 6px}
+.gal-empty{text-align:center;padding:40px 20px;color:var(--sub);font-size:13px}
+.upload-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NIGHT PLAN MODAL */
+#night-plan-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9997;display:none;align-items:flex-end;justify-content:center}
+#night-plan-modal.show{display:flex}
+.modal-sheet{background:var(--card);width:100%;max-width:430px;border-radius:20px 20px 0 0;padding:20px;max-height:88vh;overflow-y:auto;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.modal-header h2{font-size:18px;font-weight:700}
+.modal-header button{background:none;border:none;font-size:22px;color:var(--sub);cursor:pointer}
+.modal-sub{font-size:12px;color:var(--sub);margin-bottom:16px}
+.block-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px}
+.block-row .block-fields{flex:1;display:grid;grid-template-columns:90px 1fr;gap:8px}
+.block-row input{background:var(--card)}
+.block-del{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:6px}
+.add-block-btn{width:100%;border:1.5px dashed var(--border);background:none;border-radius:12px;padding:10px;font-size:13px;font-weight:500;color:var(--accent);cursor:pointer;margin-bottom:14px}
 </style>
 </head>
 <body>
@@ -183,7 +214,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="login-screen">
   <div class="logo">🏍️</div>
   <h1>Rapido Life</h1>
-  <p>Track your rides, income, expenses,<br/>workouts & daily routine — all in one place.</p>
+  <p>Track your rides, income, expenses,<br/>workouts & daily routine</p>
   <button class="google-btn" onclick="signInGoogle()">
     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"/>
     Continue with Google
@@ -204,9 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="pg-home" class="pg on">
   <div class="tbar">
     <div class="tbar-left"><h1>🏍️ Rapido Life</h1><p id="today-date">Loading...</p></div>
-    <div class="tbar-right">
-      <div id="user-avatar-home" class="avatar-sm-placeholder">?</div>
-    </div>
+    <div id="user-avatar-home" class="avatar-sm-placeholder">?</div>
   </div>
   <div class="sgrid">
     <div class="sbox"><div class="slabel">Today Rides</div><div class="sval o" id="d-rides">₹0</div></div>
@@ -215,7 +244,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sbox"><div class="slabel">Bank Balance</div><div class="sval b" id="d-bank">₹0</div></div>
   </div>
   <div class="card">
-    <div class="ctitle">Monthly Rapido Goal</div>
+    <div class="ctitle">Monthly Net Profit Goal</div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <span style="font-size:15px;font-weight:600" id="d-goal-label">₹0 / ₹0</span>
       <span class="bdg o" id="d-goal-pct">0%</span>
@@ -253,7 +282,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="frow"><label>Payment Mode</label><select id="r-pay"><option value="cash">Cash</option><option value="upi">UPI</option></select></div>
         <div class="frow"><label>Time</label><input type="time" id="r-time"/></div>
       </div>
-      <div class="frow"><label>Notes (optional)</label><input type="text" id="r-note" placeholder="e.g. Airport ride"/></div>
+      <div class="frow"><label>Notes</label><input type="text" id="r-note" placeholder="e.g. Airport ride"/></div>
       <button class="btn acc full" onclick="addRide()">+ Add Ride</button>
     </div>
     <div class="card">
@@ -303,8 +332,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="blabel">Total Balance</div>
     <div class="bamt" id="bk-bal">₹0</div>
     <div class="bsub">
-      <span><i class="ti ti-arrow-down"></i> <span id="bk-dep-count">0 deposits</span></span>
-      <span><i class="ti ti-arrow-up"></i> <span id="bk-wit-count">0 withdrawals</span></span>
+      <span>↓ <span id="bk-dep-count">0 deposits</span></span>
+      <span>↑ <span id="bk-wit-count">0 withdrawals</span></span>
     </div>
   </div>
   <div class="sgrid">
@@ -323,9 +352,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="ctitle">Add Deposit</div>
       <div class="frow"><label>Amount (₹)</label><input type="number" id="dep-amt" placeholder="e.g. 1000" inputmode="decimal"/></div>
       <div class="f2">
-        <div class="frow"><label>Method</label>
-          <select id="dep-method"><option value="cash">Cash Deposit</option><option value="upi">UPI Transfer</option><option value="cheque">Cheque</option><option value="neft">NEFT / IMPS</option></select>
-        </div>
+        <div class="frow"><label>Method</label><select id="dep-method"><option value="cash">Cash Deposit</option><option value="upi">UPI Transfer</option><option value="cheque">Cheque</option><option value="neft">NEFT / IMPS</option></select></div>
         <div class="frow"><label>Date</label><input type="date" id="dep-date"/></div>
       </div>
       <div class="frow"><label>Description</label><input type="text" id="dep-desc" placeholder="e.g. Rapido earnings"/></div>
@@ -337,9 +364,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="ctitle">Add Withdrawal</div>
       <div class="frow"><label>Amount (₹)</label><input type="number" id="wit-amt" placeholder="e.g. 500" inputmode="decimal"/></div>
       <div class="f2">
-        <div class="frow"><label>Method</label>
-          <select id="wit-method"><option value="atm">ATM Withdrawal</option><option value="upi">UPI Payment</option><option value="transfer">Bank Transfer</option><option value="cash">Cash Withdrawal</option></select>
-        </div>
+        <div class="frow"><label>Method</label><select id="wit-method"><option value="atm">ATM Withdrawal</option><option value="upi">UPI Payment</option><option value="transfer">Bank Transfer</option><option value="cash">Cash Withdrawal</option></select></div>
         <div class="frow"><label>Date</label><input type="date" id="wit-date"/></div>
       </div>
       <div class="frow"><label>Description</label><input type="text" id="wit-desc" placeholder="e.g. Rent payment"/></div>
@@ -356,6 +381,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="tbar"><div class="tbar-left"><h1>Routine & Alarms</h1><p>Alarms with your music</p></div></div>
   <div class="tabs">
     <button class="tab on" onclick="stab('routine','alarms',this)">Alarms</button>
+    <button class="tab" onclick="stab('routine','plan',this)">Plan</button>
     <button class="tab" onclick="stab('routine','ringtones',this)">Ringtones</button>
     <button class="tab" onclick="stab('routine','reminders',this)">Reminders</button>
     <button class="tab" onclick="stab('routine','tasks',this)">Tasks</button>
@@ -368,22 +394,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="frow"><label>Label</label><input type="text" id="al-label" placeholder="e.g. Wake up"/></div>
       </div>
       <div class="f2">
-        <div class="frow"><label>Repeat</label>
-          <select id="al-repeat"><option value="once">Once</option><option value="daily">Every Day</option><option value="weekdays">Mon – Fri</option><option value="weekends">Sat – Sun</option></select>
-        </div>
+        <div class="frow"><label>Repeat</label><select id="al-repeat"><option value="once">Once</option><option value="daily">Every Day</option><option value="weekdays">Mon – Fri</option><option value="weekends">Sat – Sun</option></select></div>
         <div class="frow"><label>Ringtone</label><select id="al-ringtone"><option value="default">Default Beep</option></select></div>
       </div>
       <button class="btn acc full" onclick="addAlarm()">Set Alarm</button>
     </div>
     <div id="al-list"></div>
   </div>
+  <div id="routine-plan" style="display:none">
+    <div class="infobox"><i class="ti ti-moon"></i><p>Every night at <strong>9:55 PM</strong>, the app will ask you to plan tomorrow's schedule. Each time-block you fill in becomes a real alarm for the next day automatically.</p></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="ctitle" style="margin-bottom:0">Nightly Planning Prompt</div>
+        <button class="tog on" id="tog-night-plan" onclick="toggleNightPlanSetting(this)"></button>
+      </div>
+      <p style="font-size:12px;color:var(--sub)">When enabled, you'll get a push notification at 9:55 PM every night asking you to plan tomorrow. If you miss it, a reminder follows.</p>
+      <button class="btn acc full" style="margin-top:12px" onclick="openNightPlanModal()">Plan Tomorrow Now</button>
+    </div>
+    <div class="card">
+      <div class="ctitle">Tomorrow's Plan</div>
+      <div id="tomorrow-plan-view"><p style="font-size:13px;color:var(--sub)">No plan set for tomorrow yet.</p></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Recent Plans</div>
+      <div id="plan-history"><p style="font-size:13px;color:var(--sub)">No plans logged yet.</p></div>
+    </div>
+  </div>
   <div id="routine-ringtones" style="display:none">
-    <div class="infobox"><i class="ti ti-info-circle"></i><p>Upload MP3, WAV, OGG or M4A from your phone. Stored locally on device — no internet needed for playback.</p></div>
+    <div class="infobox"><i class="ti ti-info-circle"></i><p>Upload MP3, WAV, OGG or M4A from your phone. Stored locally — no internet needed for playback.</p></div>
     <div class="card">
       <div class="ctitle">Upload Music / Ringtone</div>
-      <label for="rt-upload">
-        <div class="upzone"><i class="ti ti-music"></i><div class="uptitle">Tap to choose music file</div><div class="upsub">MP3 · WAV · OGG · M4A · AAC</div></div>
-      </label>
+      <label for="rt-upload"><div class="upzone"><i class="ti ti-music"></i><div style="font-size:14px;font-weight:600;margin-bottom:4px">Tap to choose music file</div><div style="font-size:12px;color:var(--sub)">MP3 · WAV · OGG · M4A</div></div></label>
       <input type="file" id="rt-upload" accept="audio/*" multiple style="display:none" onchange="uploadRingtones(this)"/>
     </div>
     <div class="card"><div class="ctitle">My Ringtones</div><div id="rt-list"></div></div>
@@ -404,7 +445,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="card">
       <div class="ctitle">Daily Tasks</div>
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input type="text" id="task-inp" placeholder="Add a task for today..." style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;color:var(--text)"/>
+        <input type="text" id="task-inp" placeholder="Add a task..." style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;color:var(--text)"/>
         <button class="btn acc sm" onclick="addTask()">Add</button>
       </div>
       <div id="task-list"></div>
@@ -414,10 +455,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- ======= WORKOUT ======= -->
 <div id="pg-workout" class="pg">
-  <div class="tbar"><div class="tbar-left"><h1>Workout</h1><p>Log exercises, photos & timer</p></div></div>
+  <div class="tbar"><div class="tbar-left"><h1>Workout</h1><p>Exercises, photos & timer</p></div></div>
   <div class="tabs">
     <button class="tab on" onclick="stab('workout','log',this)">Log</button>
     <button class="tab" onclick="stab('workout','photos',this)">Photos</button>
+    <button class="tab" onclick="stab('workout','gallery',this)">Gallery</button>
     <button class="tab" onclick="stab('workout','timer',this)">Timer</button>
   </div>
   <div id="workout-log">
@@ -428,7 +470,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="frow"><label>Type</label><select id="ex-type"><option>Strength</option><option>Cardio</option><option>Flexibility</option><option>HIIT</option></select></div>
       </div>
       <div class="f2">
-        <div class="frow"><label>Sets × Reps / Duration</label><input type="text" id="ex-sets" placeholder="e.g. 3×15"/></div>
+        <div class="frow"><label>Sets × Reps</label><input type="text" id="ex-sets" placeholder="e.g. 3×15"/></div>
         <div class="frow"><label>Weight (kg)</label><input type="number" id="ex-kg" placeholder="Optional" inputmode="decimal"/></div>
       </div>
       <button class="btn acc full" onclick="addExercise()">Log Exercise</button>
@@ -437,24 +479,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div id="workout-photos" style="display:none">
     <div class="card">
-      <div class="ctitle">Progress Photos</div>
+      <div class="ctitle">Progress Photos — Today</div>
       <div class="ph2">
         <div>
-          <p style="font-size:11px;color:var(--sub);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Before</p>
+          <p style="font-size:11px;color:var(--sub);font-weight:600;margin-bottom:6px">BEFORE</p>
           <label class="phslot" id="ph-before" for="ph-before-inp"><i class="ti ti-camera" style="font-size:28px;color:var(--sub)"></i><span>Tap to upload</span></label>
           <input type="file" id="ph-before-inp" accept="image/*" style="display:none" onchange="prevPhoto(this,'ph-before','ph-before-data')"/>
           <input type="hidden" id="ph-before-data"/>
         </div>
         <div>
-          <p style="font-size:11px;color:var(--sub);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">After</p>
+          <p style="font-size:11px;color:var(--sub);font-weight:600;margin-bottom:6px">AFTER</p>
           <label class="phslot" id="ph-after" for="ph-after-inp"><i class="ti ti-camera" style="font-size:28px;color:var(--sub)"></i><span>Tap to upload</span></label>
           <input type="file" id="ph-after-inp" accept="image/*" style="display:none" onchange="prevPhoto(this,'ph-after','ph-after-data')"/>
           <input type="hidden" id="ph-after-data"/>
         </div>
       </div>
-      <button class="btn acc full" onclick="saveWoPhotos()">Save Progress Photos</button>
+      <button class="btn acc full" id="save-wo-photos-btn" onclick="saveWoPhotos()">Save Progress Photos</button>
     </div>
-    <div id="ph-history"></div>
+  </div>
+  <div id="workout-gallery" style="display:none">
+    <div class="card" style="padding:12px 16px">
+      <div style="display:flex;gap:6px">
+        <button class="tab on sm-filter" data-filter="all" onclick="setGalleryFilter('all',this)" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-size:12px;font-weight:500;color:var(--accent);cursor:pointer">All</button>
+        <button class="tab sm-filter" data-filter="workout" onclick="setGalleryFilter('workout',this)" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:none;font-size:12px;font-weight:500;color:var(--sub);cursor:pointer">Workout</button>
+        <button class="tab sm-filter" data-filter="meal" onclick="setGalleryFilter('meal',this)" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:none;font-size:12px;font-weight:500;color:var(--sub);cursor:pointer">Meals</button>
+      </div>
+    </div>
+    <div id="gallery-grid"></div>
   </div>
   <div id="workout-timer" style="display:none">
     <div class="card" style="text-align:center">
@@ -467,8 +518,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="card">
       <div class="ctitle">Rest Timer</div>
-      <div class="frow"><label>Rest Duration</label>
-        <select id="rest-dur"><option value="30">30 sec</option><option value="60" selected>60 sec</option><option value="90">90 sec</option><option value="120">2 min</option><option value="180">3 min</option><option value="300">5 min</option></select>
+      <div class="frow"><label>Duration</label>
+        <select id="rest-dur"><option value="30">30 sec</option><option value="60" selected>60 sec</option><option value="90">90 sec</option><option value="120">2 min</option><option value="180">3 min</option></select>
       </div>
       <button class="btn blu full" onclick="startRest()">Start Rest Timer</button>
       <div class="timerdisp" id="rest-timer" style="font-size:36px;display:none;color:var(--blue)">01:00</div>
@@ -490,10 +541,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="card">
     <div class="ctitle">Log a Meal</div>
     <div class="f2">
-      <div class="frow"><label>Meal Type</label>
-        <select id="ml-type"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option><option>Pre-workout</option><option>Post-workout</option></select>
-      </div>
-      <div class="frow"><label>Calories (approx)</label><input type="number" id="ml-cal" placeholder="e.g. 450" inputmode="decimal"/></div>
+      <div class="frow"><label>Meal Type</label><select id="ml-type"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option><option>Pre-workout</option><option>Post-workout</option></select></div>
+      <div class="frow"><label>Calories</label><input type="number" id="ml-cal" placeholder="e.g. 450" inputmode="decimal"/></div>
     </div>
     <div class="frow"><label>What did you eat?</label><input type="text" id="ml-desc" placeholder="e.g. Rice, dal, sabzi, roti"/></div>
     <div class="frow">
@@ -513,37 +562,77 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- ======= PROFILE ======= -->
 <div id="pg-profile" class="pg">
-  <div class="tbar"><div class="tbar-left"><h1>Profile</h1><p>Account & settings</p></div></div>
+  <div class="tbar"><div class="tbar-left"><h1>Profile</h1><p>Account & notifications</p></div></div>
   <div class="profile-card">
-    <div id="profile-avatar-wrap">
-      <div class="profile-avatar-placeholder" id="profile-initials">?</div>
-    </div>
+    <div id="profile-avatar-wrap"><div class="profile-avatar-placeholder" id="profile-initials">?</div></div>
     <div>
       <div style="font-size:18px;font-weight:700" id="profile-name">Loading...</div>
       <div style="font-size:13px;opacity:.8;margin-top:2px" id="profile-email">—</div>
-      <div style="font-size:11px;opacity:.65;margin-top:6px" id="profile-uid">—</div>
     </div>
   </div>
+
+  <!-- PUSH NOTIFICATIONS SECTION -->
+  <div class="card">
+    <div class="ctitle">🔔 Push Notifications</div>
+    <div class="notif-status">
+      <div class="notif-icon pending" id="notif-icon"><span style="font-size:22px">🔔</span></div>
+      <div class="linfo">
+        <div class="ltitle" id="notif-status-title">Checking permission...</div>
+        <div class="lsub" id="notif-status-sub">Push notifications keep you on track</div>
+      </div>
+      <button class="btn acc sm" id="notif-enable-btn" onclick="requestNotifPermission()" style="display:none">Enable</button>
+    </div>
+    <div id="notif-token-box" style="display:none;margin-top:8px">
+      <div style="font-size:11px;color:var(--sub);margin-bottom:4px;font-weight:600">FCM TOKEN (for testing)</div>
+      <div id="fcm-token-display" style="font-size:10px;color:var(--sub);word-break:break-all;background:var(--bg);padding:8px;border-radius:8px;border:1px solid var(--border)"></div>
+      <button class="btn sm" style="margin-top:6px;width:100%" onclick="copyFCMToken()">Copy Token</button>
+    </div>
+    <div class="sep" style="margin-top:10px"></div>
+    <div style="font-size:12px;font-weight:600;color:var(--sub);margin:10px 0 8px;text-transform:uppercase;letter-spacing:.5px">Smart Notification Settings</div>
+    <div id="notif-settings">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div><div style="font-size:14px;font-weight:500">Daily Earnings Summary</div><div style="font-size:11px;color:var(--sub)">Every evening at 8 PM</div></div>
+        <button class="tog on" id="tog-summary" onclick="toggleNotifSetting(this,'summary')"></button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div><div style="font-size:14px;font-weight:500">Goal Progress Alert</div><div style="font-size:11px;color:var(--sub)">When you hit 50% & 100% of goal</div></div>
+        <button class="tog on" id="tog-goal" onclick="toggleNotifSetting(this,'goal')"></button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div><div style="font-size:14px;font-weight:500">Low Balance Warning</div><div style="font-size:11px;color:var(--sub)">When bank balance below ₹500</div></div>
+        <button class="tog on" id="tog-balance" onclick="toggleNotifSetting(this,'balance')"></button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+        <div><div style="font-size:14px;font-weight:500">Workout Reminder</div><div style="font-size:11px;color:var(--sub)">Daily at set workout time</div></div>
+        <button class="tog on" id="tog-workout" onclick="toggleNotifSetting(this,'workout')"></button>
+      </div>
+    </div>
+    <button class="btn acc full" style="margin-top:12px" onclick="sendTestNotification()">Send Test Notification 🔔</button>
+  </div>
+
   <div class="card">
     <div class="ctitle">Account</div>
     <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
       <div><div style="font-size:14px;font-weight:500">Sync Status</div><div style="font-size:11px;color:var(--sub)" id="sync-status-text">Checking...</div></div>
-      <span class="bdg g" id="sync-status-badge">Live</span>
+      <span class="bdg g">Live ☁️</span>
     </div>
     <div class="sep"></div>
+    <button class="btn full" style="margin-top:8px" onclick="exportData()">Export Data (JSON)</button>
     <button class="btn red full" style="margin-top:8px" onclick="signOut()">Sign Out</button>
   </div>
-  <div class="card">
-    <div class="ctitle">Export Data</div>
-    <button class="btn full" onclick="exportData()">Export All Data (JSON)</button>
-  </div>
-  <div class="card">
-    <div class="ctitle">App Info</div>
-    <div style="font-size:13px;color:var(--sub);line-height:1.8">
-      <div>Project: <strong>ROUTINE</strong></div>
-      <div>Firebase ID: <strong>routine-a10da</strong></div>
-      <div>Version: <strong>3.0 — Firebase Sync</strong></div>
+</div>
+
+<!-- NIGHT PLAN MODAL -->
+<div id="night-plan-modal">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h2>🌙 Plan Tomorrow</h2>
+      <button onclick="closeNightPlanModal()">✕</button>
     </div>
+    <p class="modal-sub" id="night-plan-date-label">For Tomorrow</p>
+    <div id="plan-blocks-list"></div>
+    <button class="add-block-btn" onclick="addPlanBlockRow()">+ Add Time Block</button>
+    <button class="btn acc full" onclick="saveNightPlan()">Save Plan & Set Alarms</button>
   </div>
 </div>
 
@@ -558,16 +647,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="nv" onclick="spg('profile',this)"><i class="ti ti-user"></i><span>Profile</span></button>
 </nav>
 
-<!-- ======= FIREBASE SDK ======= -->
+<!-- ======= FIREBASE + APP LOGIC ======= -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs,
-         query, orderBy, limit, onSnapshot, serverTimestamp, deleteDoc }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+                                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, serverTimestamp }
+                                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getMessaging, getToken, onMessage }
+                                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
-// ─── FIREBASE CONFIG ───────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyCZbpoMP8OEE2xgfOzF3HXdY9cAWdRa7Bs",
   authDomain: "routine-a10da.firebaseapp.com",
@@ -578,14 +667,34 @@ const firebaseConfig = {
   measurementId: "G-0BZMPMXMFY"
 };
 
-const app      = initializeApp(firebaseConfig);
-const auth     = getAuth(app);
-const db       = getFirestore(app);
-const provider = new GoogleAuthProvider();
+// ── VAPID KEY (generate this in Firebase Console → Cloud Messaging → Web Push certificates)
+// Go to: Firebase Console → Project Settings → Cloud Messaging → Web Push certificates → Generate key pair
+const VAPID_KEY = 'BJ7icgn1nWbvai_wod7i5DOpEnKTfQlxMeXBdb-nXOAS0ZErESgeI3tOaRVDOUg4ljTsvtsGzJ7DMJhzkmIuEKY';
+
+// ── IMAGEBB CONFIG ──────────────────────────────
+const IMGBB_API_KEY = 'e6b1b2fa7601592bbdae879788f6f175';
+async function uploadToImgBB(base64DataUrl){
+  // base64DataUrl looks like "data:image/jpeg;base64,...."  — imgbb wants just the part after the comma
+  const base64 = base64DataUrl.split(',')[1];
+  const form = new FormData();
+  form.append('image', base64);
+  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method:'POST', body:form });
+  const json = await res.json();
+  if(json.success) return json.data.url;
+  throw new Error(json.error?.message || 'ImageBB upload failed');
+}
+
+const app       = initializeApp(firebaseConfig);
+const auth      = getAuth(app);
+const db        = getFirestore(app);
+let messaging;
+try { messaging = getMessaging(app); } catch(e) { console.warn('Messaging not supported'); }
 
 let currentUser = null;
+let fcmToken    = null;
+let notifSettings = { summary:true, goal:true, balance:true, workout:true };
 
-// ─── HELPERS ───────────────────────────────────────────
+// ── HELPERS ────────────────────────────────────
 const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const now    = () => new Date();
@@ -594,24 +703,29 @@ const p2  = n => String(n).padStart(2,'0');
 const fmt = n => '₹' + Number(n||0).toLocaleString('en-IN');
 const uid = () => Date.now() + '_' + Math.random().toString(36).slice(2,7);
 
-// In-memory state (mirrored from Firestore)
 let S = {
   rides:[], expenses:[], bankTxns:[], alarms:[], reminders:[], tasks:[],
-  exercises:[], meals:[], wophotos:[], savingGoals:[], ringtones:[],
+  exercises:[], meals:[], wophotos:[], savingGoals:[], ringtones:[], nightPlans:[],
   monthlyGoal:0, selectedRingtone:'default'
 };
 
-// ─── AUTH ───────────────────────────────────────────────
+// ── SERVICE WORKER REGISTRATION ────────────────
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/rapido-tracker/sw.js')
+    .then(reg => console.log('SW registered:', reg.scope))
+    .catch(err => console.warn('SW registration failed:', err));
+}
+
+// ── AUTH ───────────────────────────────────────
 window.signInGoogle = async () => {
   try {
     syncBar('Signing in...','syncing');
-    await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, new GoogleAuthProvider());
   } catch(e) {
-    syncBar('Sign-in failed: '+e.message,'error');
-    setTimeout(clearSyncBar, 3000);
+    syncBar('Sign-in failed','error');
+    setTimeout(clearSyncBar,3000);
   }
 };
-
 window.signOut = async () => {
   if(!confirm('Sign out?')) return;
   await fbSignOut(auth);
@@ -625,247 +739,313 @@ onAuthStateChanged(auth, async user => {
     updateProfileUI(user);
     await loadAllData();
     initApp();
-    syncBar('Data synced ✓','');
-    setTimeout(clearSyncBar,2500);
+    initPushNotifications();
+    syncBar('Synced ✓',''); setTimeout(clearSyncBar,2500);
   } else {
-    currentUser = null;
     document.getElementById('login-screen').style.display='flex';
   }
 });
 
 function updateProfileUI(user){
-  const name  = user.displayName || 'Driver';
-  const email = user.email || '';
-  const photo = user.photoURL;
+  const name = user.displayName||'Driver';
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-
   document.getElementById('profile-name').textContent  = name;
-  document.getElementById('profile-email').textContent = email;
-  document.getElementById('profile-uid').textContent   = 'UID: '+user.uid.slice(0,12)+'...';
-
-  const avatarWrap = document.getElementById('profile-avatar-wrap');
+  document.getElementById('profile-email').textContent = user.email||'';
+  document.getElementById('sync-status-text').textContent = 'Signed in as '+user.email;
   const homeAvatar = document.getElementById('user-avatar-home');
-
-  if(photo){
-    avatarWrap.innerHTML = `<img src="${photo}" class="profile-avatar" />`;
-    homeAvatar.innerHTML = `<img src="${photo}" class="avatar-sm" />`;
-    homeAvatar.className = '';
+  if(user.photoURL){
+    const wrap = document.getElementById('profile-avatar-wrap');
+    wrap.innerHTML=`<img src="${user.photoURL}" class="profile-avatar"/>`;
+    homeAvatar.innerHTML=`<img src="${user.photoURL}" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--accent)"/>`;
+    homeAvatar.className='';
   } else {
-    document.getElementById('profile-initials').textContent = initials;
-    homeAvatar.textContent = initials;
+    document.getElementById('profile-initials').textContent=initials;
+    homeAvatar.textContent=initials;
   }
-  document.getElementById('sync-status-text').textContent = 'Signed in as '+email;
 }
 
-// ─── FIRESTORE HELPERS ─────────────────────────────────
-const userDoc  = (col, id) => doc(db, 'users', currentUser.uid, col, id);
-const userCol  = col => collection(db, 'users', currentUser.uid, col);
-const metaDoc  = () => doc(db, 'users', currentUser.uid, 'meta', 'settings');
+// ── PUSH NOTIFICATIONS ─────────────────────────
+async function initPushNotifications(){
+  const perm = Notification.permission;
+  updateNotifUI(perm);
+  if(perm==='granted') await getFCMToken();
 
-async function fsSet(col, id, data){
-  if(!currentUser) return;
-  try { await setDoc(userDoc(col, id), {...data, updatedAt: serverTimestamp()}); }
-  catch(e){ console.warn('fsSet error',e); }
+  // Listen for foreground messages
+  if(messaging){
+    onMessage(messaging, payload => {
+      const {title,body} = payload.notification||{};
+      notif('🔔 '+(title||'Notification')+': '+(body||''));
+    });
+  }
+
+  // Schedule daily summary notification at 8 PM
+  scheduleDailySummary();
+
+  // Load saved notif settings
+  try{
+    const saved = JSON.parse(localStorage.getItem('notifSettings_'+currentUser.uid)||'{}');
+    Object.assign(notifSettings, saved);
+    ['summary','goal','balance','workout'].forEach(k=>{
+      const btn=document.getElementById('tog-'+k);
+      if(btn){ btn.className='tog '+(notifSettings[k]?'on':'off'); }
+    });
+  }catch(e){}
 }
-async function fsAdd(col, data){
-  if(!currentUser) return;
-  try { await addDoc(userCol(col), {...data, createdAt: serverTimestamp()}); }
-  catch(e){ console.warn('fsAdd error',e); }
+
+function updateNotifUI(perm){
+  const icon  = document.getElementById('notif-icon');
+  const title = document.getElementById('notif-status-title');
+  const sub   = document.getElementById('notif-status-sub');
+  const btn   = document.getElementById('notif-enable-btn');
+  if(perm==='granted'){
+    icon.className='notif-icon enabled'; icon.innerHTML='<span style="font-size:22px">🔔</span>';
+    title.textContent='Notifications Enabled ✓';
+    sub.textContent='You will receive alarms & reminders';
+    btn.style.display='none';
+  } else if(perm==='denied'){
+    icon.className='notif-icon disabled'; icon.innerHTML='<span style="font-size:22px">🔕</span>';
+    title.textContent='Notifications Blocked';
+    sub.textContent='Enable in browser/app settings';
+    btn.style.display='none';
+  } else {
+    icon.className='notif-icon pending'; icon.innerHTML='<span style="font-size:22px">🔔</span>';
+    title.textContent='Notifications Not Enabled';
+    sub.textContent='Tap Enable to receive alarms & reminders';
+    btn.style.display='block';
+  }
 }
-async function fsDel(col, id){
-  if(!currentUser) return;
-  try { await deleteDoc(userDoc(col, id)); }
-  catch(e){ console.warn('fsDel error',e); }
-}
-async function fsGetAll(col){
-  if(!currentUser) return [];
+
+window.requestNotifPermission = async () => {
+  const perm = await Notification.requestPermission();
+  updateNotifUI(perm);
+  if(perm==='granted'){
+    await getFCMToken();
+    notif('Notifications enabled! 🔔');
+  } else {
+    notif('Notifications blocked. Enable in browser settings.');
+  }
+};
+
+async function getFCMToken(){
+  if(!messaging) return;
   try {
-    const snap = await getDocs(userCol(col));
-    return snap.docs.map(d=>({...d.data(), _fsId:d.id}));
-  } catch(e){ return []; }
+    // NOTE: Replace VAPID_KEY with your actual key from Firebase Console
+    // Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+    if(VAPID_KEY === 'YOUR_VAPID_KEY_HERE'){
+      console.warn('VAPID key not set. Generate one in Firebase Console → Project Settings → Cloud Messaging');
+      document.getElementById('fcm-token-display').textContent = 'Set VAPID_KEY first — see Profile page instructions';
+      document.getElementById('notif-token-box').style.display='block';
+      return;
+    }
+    fcmToken = await getToken(messaging, { vapidKey: VAPID_KEY });
+    if(fcmToken){
+      document.getElementById('fcm-token-display').textContent = fcmToken;
+      document.getElementById('notif-token-box').style.display='block';
+      // Save token to Firestore for server-side sending
+      await setDoc(doc(db,'users',currentUser.uid,'meta','fcmToken'),{
+        token:fcmToken, updatedAt:serverTimestamp()
+      });
+    }
+  } catch(e){ console.warn('FCM token error:',e); }
 }
 
-// ─── LOAD ALL DATA ─────────────────────────────────────
+window.copyFCMToken = () => {
+  const t = document.getElementById('fcm-token-display').textContent;
+  navigator.clipboard.writeText(t).then(()=>notif('Token copied!')).catch(()=>{});
+};
+
+// Show notification (works foreground + background via SW)
+function showPushNotif(title, body, tag='general'){
+  if(Notification.permission !== 'granted') return;
+  // Use SW for reliable background delivery
+  if(navigator.serviceWorker.controller){
+    navigator.serviceWorker.controller.postMessage({
+      type:'SCHEDULE_NOTIFICATION', delay:0, title, body, tag
+    });
+  } else {
+    new Notification(title, { body, icon:'/icon-192.png', badge:'/icon-192.png', tag, vibrate:[300,100,300] });
+  }
+}
+
+// Schedule via SW with delay
+function scheduleSwNotif(title, body, delayMs, tag){
+  if(Notification.permission !== 'granted') return;
+  navigator.serviceWorker.ready.then(reg => {
+    reg.active?.postMessage({ type:'SCHEDULE_NOTIFICATION', delay:delayMs, title, body, tag });
+  });
+}
+
+function scheduleDailySummary(){
+  if(!notifSettings.summary) return;
+  const now8pm = new Date(); now8pm.setHours(20,0,0,0);
+  if(now8pm <= new Date()) now8pm.setDate(now8pm.getDate()+1);
+  const delay = now8pm - new Date();
+  scheduleSwNotif(
+    '🏍️ Daily Earnings Summary',
+    `Today: ${fmt(S.rides.filter(r=>r.date===todayStr()).reduce((a,r)=>a+r.amt,0))} | Net: ${fmt(S.rides.filter(r=>r.date===todayStr()).reduce((a,r)=>a+r.amt,0) - S.expenses.filter(e=>e.date===todayStr()).reduce((a,e)=>a+e.amt,0))}`,
+    delay, 'daily-summary'
+  );
+}
+
+function checkGoalAlert(monthInc){
+  if(!notifSettings.goal || !S.monthlyGoal) return;
+  const pct = Math.round(monthInc/S.monthlyGoal*100);
+  if(pct===50) showPushNotif('🎯 Halfway There!','You\'ve hit 50% of your monthly goal! Keep going 🔥','goal-50');
+  if(pct>=100) showPushNotif('🏆 Goal Achieved!','You\'ve reached your monthly earning goal! Amazing! 🎉','goal-100');
+}
+
+function checkLowBalance(){
+  if(!notifSettings.balance) return;
+  const bal = getBankBalance();
+  if(bal < 500 && bal >= 0) showPushNotif('⚠️ Low Bank Balance','Your bank balance is below ₹500. Consider depositing.','low-balance');
+}
+
+window.sendTestNotification = () => {
+  if(Notification.permission !== 'granted'){
+    alert('Please enable notifications first!');
+    return;
+  }
+  showPushNotif('🏍️ Test Notification!','Rapido Life Tracker notifications are working! 🎉','test');
+  notif('Test notification sent!');
+};
+
+window.toggleNotifSetting = (btn, key) => {
+  btn.classList.toggle('on'); btn.classList.toggle('off');
+  notifSettings[key] = btn.classList.contains('on');
+  try{ localStorage.setItem('notifSettings_'+currentUser.uid, JSON.stringify(notifSettings)); }catch(e){}
+};
+
+// ── FIRESTORE ──────────────────────────────────
+const userCol = col => collection(db,'users',currentUser.uid,col);
+const metaDoc = ()  => doc(db,'users',currentUser.uid,'meta','settings');
+async function fsAdd(col,data){ try{ await addDoc(userCol(col),{...data,createdAt:serverTimestamp()}); }catch(e){} }
+async function fsDel(col,id){  try{ await deleteDoc(doc(db,'users',currentUser.uid,col,id)); }catch(e){} }
+async function fsGetAll(col){  try{ const s=await getDocs(userCol(col)); return s.docs.map(d=>({...d.data(),_fsId:d.id})); }catch(e){ return []; } }
+async function saveMeta(){ try{ await setDoc(metaDoc(),{monthlyGoal:S.monthlyGoal,selectedRingtone:S.selectedRingtone,nightPlanEnabled:S.nightPlanEnabled,updatedAt:serverTimestamp()},{merge:true}); }catch(e){} }
+
 async function loadAllData(){
-  syncBar('Loading your data...','syncing');
-  const [rides,expenses,bankTxns,alarms,reminders,tasks,exercises,meals,wophotos,savingGoals] = await Promise.all([
-    fsGetAll('rides'), fsGetAll('expenses'), fsGetAll('bankTxns'),
-    fsGetAll('alarms'), fsGetAll('reminders'), fsGetAll('tasks'),
-    fsGetAll('exercises'), fsGetAll('meals'), fsGetAll('wophotos'), fsGetAll('savingGoals')
+  syncBar('Loading data...','syncing');
+  const [rides,expenses,bankTxns,alarms,reminders,tasks,exercises,meals,wophotos,savingGoals,nightPlans] = await Promise.all([
+    fsGetAll('rides'),fsGetAll('expenses'),fsGetAll('bankTxns'),
+    fsGetAll('alarms'),fsGetAll('reminders'),fsGetAll('tasks'),
+    fsGetAll('exercises'),fsGetAll('meals'),fsGetAll('wophotos'),fsGetAll('savingGoals'),fsGetAll('nightPlans')
   ]);
-
-  // load meta/settings
-  let meta = {};
-  try { const md = await getDoc(metaDoc()); if(md.exists()) meta = md.data(); } catch(e){}
-
-  // ringtones stored locally (too large for Firestore)
-  let ringtones = [];
-  try { ringtones = JSON.parse(localStorage.getItem('ringtones_'+currentUser.uid)||'[]'); } catch(e){}
-
-  S = {
-    rides, expenses, bankTxns, alarms, reminders, tasks,
-    exercises, meals, wophotos, savingGoals, ringtones,
-    monthlyGoal: meta.monthlyGoal||0,
-    selectedRingtone: meta.selectedRingtone||'default'
-  };
+  let meta={};
+  try{ const md=await getDoc(metaDoc()); if(md.exists())meta=md.data(); }catch(e){}
+  let ringtones=[];
+  try{ ringtones=JSON.parse(localStorage.getItem('ringtones_'+currentUser.uid)||'[]'); }catch(e){}
+  S={rides,expenses,bankTxns,alarms,reminders,tasks,exercises,meals,wophotos,savingGoals,ringtones,nightPlans,
+     monthlyGoal:meta.monthlyGoal||0,selectedRingtone:meta.selectedRingtone||'default',
+     nightPlanEnabled: meta.nightPlanEnabled!==false};
 }
 
-async function saveMeta(){
-  await setDoc(metaDoc(), {
-    monthlyGoal: S.monthlyGoal,
-    selectedRingtone: S.selectedRingtone,
-    updatedAt: serverTimestamp()
-  }, {merge:true});
-}
-
-// ─── NAV ────────────────────────────────────────────────
-window.spg = function(id, btn){
+// ── NAV ────────────────────────────────────────
+window.spg = (id,btn) => {
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nv').forEach(b=>b.classList.remove('on'));
-  document.getElementById('pg-'+id).classList.add('on');
-  btn.classList.add('on');
+  document.getElementById('pg-'+id).classList.add('on'); btn.classList.add('on');
   window.scrollTo(0,0);
   if(id==='home')    renderHome();
   if(id==='rapido')  { renderRapidoHist(); renderSavingGoals(); renderMGoal(); }
   if(id==='bank')    renderBank();
   if(id==='routine') { renderAlarms(); renderRingtones(); renderReminders(); renderTasks(); }
-  if(id==='workout') { renderExercises(); renderWoPhotos(); }
+  if(id==='workout') { renderExercises(); renderGallery(); }
   if(id==='meals')   renderMeals();
 };
-
-window.stab = function(page, tab, btn){
-  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  btn.classList.add('on');
+window.stab = (page,tab,btn) => {
+  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('on')); btn.classList.add('on');
   document.querySelectorAll(`[id^="${page}-"]`).forEach(d=>{ if(d.classList.contains('tabs'))return; d.style.display='none'; });
-  const el = document.getElementById(`${page}-${tab}`);
-  if(el) el.style.display='block';
-  if(tab==='hist')      renderRapidoHist();
-  if(tab==='goals')     { renderSavingGoals(); renderMGoal(); }
-  if(tab==='bkhist')    renderBank();
-  if(tab==='deposit'||tab==='withdraw') renderBank();
-  if(tab==='ringtones') renderRingtones();
-  if(tab==='alarms')    renderAlarms();
-  if(tab==='reminders') renderReminders();
-  if(tab==='tasks')     renderTasks();
-  if(tab==='log')       renderExercises();
-  if(tab==='photos')    renderWoPhotos();
+  const el=document.getElementById(`${page}-${tab}`); if(el)el.style.display='block';
+  if(tab==='hist')renderRapidoHist(); if(tab==='goals'){renderSavingGoals();renderMGoal();}
+  if(tab==='bkhist'||tab==='deposit'||tab==='withdraw')renderBank();
+  if(tab==='ringtones')renderRingtones(); if(tab==='alarms')renderAlarms();
+  if(tab==='plan')renderNightPlanTab();
+  if(tab==='reminders')renderReminders(); if(tab==='tasks')renderTasks();
+  if(tab==='log')renderExercises(); if(tab==='photos'||tab==='gallery')renderGallery();
 };
 
-// ─── DATE ───────────────────────────────────────────────
 document.getElementById('today-date').textContent =
   `${DAYS[now().getDay()]}, ${MONTHS[now().getMonth()]} ${now().getDate()}, ${now().getFullYear()}`;
 
-// ─── RIDES ──────────────────────────────────────────────
-window.addRide = async function(){
-  const amt = parseFloat(document.getElementById('r-amt').value);
-  if(!amt||amt<=0) return alert('Enter a valid ride amount');
-  const pay  = document.getElementById('r-pay').value;
-  const time = document.getElementById('r-time').value || now().toTimeString().slice(0,5);
-  const note = document.getElementById('r-note').value;
-  const item = { id:uid(), amt, pay, time, note, date:todayStr() };
-  S.rides.push(item);
-  renderHome();
-  await fsAdd('rides', item);
+// ── RIDES & EXPENSES ───────────────────────────
+window.addRide = async () => {
+  const amt=parseFloat(document.getElementById('r-amt').value); if(!amt||amt<=0)return alert('Enter valid amount');
+  const pay=document.getElementById('r-pay').value, time=document.getElementById('r-time').value||now().toTimeString().slice(0,5), note=document.getElementById('r-note').value;
+  const item={id:uid(),amt,pay,time,note,date:todayStr()};
+  S.rides.push(item); renderHome();
+  // Check goal milestones (based on NET PROFIT, not raw income)
+  const n=now(); const pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
+  const mProfit=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0)
+              - S.expenses.filter(e=>e.date&&e.date.startsWith(pre)).reduce((a,e)=>a+e.amt,0);
+  checkGoalAlert(mProfit);
+  await fsAdd('rides',item);
   document.getElementById('r-amt').value=''; document.getElementById('r-note').value='';
   notif('Ride '+fmt(amt)+' added ✅');
 };
-
-window.addExpense = async function(){
-  const amt = parseFloat(document.getElementById('e-amt').value);
-  if(!amt||amt<=0) return alert('Enter a valid expense amount');
-  const cat  = document.getElementById('e-cat').value;
-  const desc = document.getElementById('e-desc').value || cat;
-  const item = { id:uid(), amt, cat, desc, date:todayStr() };
-  S.expenses.push(item);
-  renderHome();
-  await fsAdd('expenses', item);
+window.addExpense = async () => {
+  const amt=parseFloat(document.getElementById('e-amt').value); if(!amt||amt<=0)return alert('Enter valid amount');
+  const cat=document.getElementById('e-cat').value, desc=document.getElementById('e-desc').value||cat;
+  const item={id:uid(),amt,cat,desc,date:todayStr()};
+  S.expenses.push(item); renderHome(); await fsAdd('expenses',item);
   document.getElementById('e-amt').value=''; document.getElementById('e-desc').value='';
   notif('Expense '+fmt(amt)+' logged');
 };
 
-// ─── BANK ────────────────────────────────────────────────
+// ── BANK ───────────────────────────────────────
 function getBankBalance(){ return S.bankTxns.reduce((a,t)=>t.type==='deposit'?a+t.amt:a-t.amt,0); }
-
-window.addDeposit = async function(){
-  const amt = parseFloat(document.getElementById('dep-amt').value);
-  if(!amt||amt<=0) return alert('Enter a valid deposit amount');
-  const method = document.getElementById('dep-method').value;
-  const date   = document.getElementById('dep-date').value || todayStr();
-  const desc   = document.getElementById('dep-desc').value || 'Bank Deposit';
-  const item   = { id:uid(), type:'deposit', amt, method, date, desc };
-  S.bankTxns.push(item); renderBank(); renderHome();
-  await fsAdd('bankTxns', item);
+window.addDeposit = async () => {
+  const amt=parseFloat(document.getElementById('dep-amt').value); if(!amt||amt<=0)return alert('Enter valid amount');
+  const method=document.getElementById('dep-method').value, date=document.getElementById('dep-date').value||todayStr(), desc=document.getElementById('dep-desc').value||'Bank Deposit';
+  const item={id:uid(),type:'deposit',amt,method,date,desc};
+  S.bankTxns.push(item); renderBank(); renderHome(); await fsAdd('bankTxns',item);
   document.getElementById('dep-amt').value=''; document.getElementById('dep-desc').value='';
   notif('Deposited '+fmt(amt)+' ✅');
 };
-
-window.addWithdrawal = async function(){
-  const amt = parseFloat(document.getElementById('wit-amt').value);
-  if(!amt||amt<=0) return alert('Enter a valid withdrawal amount');
-  const bal = getBankBalance();
-  if(amt>bal) return alert('Insufficient balance! Available: '+fmt(bal));
-  const method = document.getElementById('wit-method').value;
-  const date   = document.getElementById('wit-date').value || todayStr();
-  const desc   = document.getElementById('wit-desc').value || 'Withdrawal';
-  const item   = { id:uid(), type:'withdrawal', amt, method, date, desc };
-  S.bankTxns.push(item); renderBank(); renderHome();
-  await fsAdd('bankTxns', item);
+window.addWithdrawal = async () => {
+  const amt=parseFloat(document.getElementById('wit-amt').value); if(!amt||amt<=0)return alert('Enter valid amount');
+  const bal=getBankBalance(); if(amt>bal)return alert('Insufficient balance! Available: '+fmt(bal));
+  const method=document.getElementById('wit-method').value, date=document.getElementById('wit-date').value||todayStr(), desc=document.getElementById('wit-desc').value||'Withdrawal';
+  const item={id:uid(),type:'withdrawal',amt,method,date,desc};
+  S.bankTxns.push(item); renderBank(); renderHome(); await fsAdd('bankTxns',item);
+  checkLowBalance();
   document.getElementById('wit-amt').value=''; document.getElementById('wit-desc').value='';
   notif('Withdrawn '+fmt(amt));
 };
-
 function renderBank(){
-  const deps  = S.bankTxns.filter(t=>t.type==='deposit');
-  const wits  = S.bankTxns.filter(t=>t.type==='withdrawal');
-  const tdep  = deps.reduce((a,t)=>a+t.amt,0);
-  const twit  = wits.reduce((a,t)=>a+t.amt,0);
-  const bal   = tdep-twit;
-  const cdep  = deps.filter(t=>t.method==='cash').reduce((a,t)=>a+t.amt,0);
-  const udep  = deps.filter(t=>t.method==='upi').reduce((a,t)=>a+t.amt,0);
-  document.getElementById('bk-bal').textContent = fmt(bal);
-  document.getElementById('bk-dep-count').textContent = deps.length+' deposit'+(deps.length!==1?'s':'');
-  document.getElementById('bk-wit-count').textContent = wits.length+' withdrawal'+(wits.length!==1?'s':'');
-  document.getElementById('bk-tdep').textContent = fmt(tdep);
-  document.getElementById('bk-twit').textContent = fmt(twit);
-  document.getElementById('bk-cash').textContent = fmt(cdep);
-  document.getElementById('bk-upi').textContent  = fmt(udep);
-  const el = document.getElementById('bk-txns');
-  if(!S.bankTxns.length){ el.innerHTML='<p style="font-size:13px;color:var(--sub)">No bank transactions yet.</p>'; return; }
-  const sorted = [...S.bankTxns].sort((a,b)=>(b.id||'').localeCompare(a.id||''));
-  el.innerHTML = sorted.map(t=>`
-    <div class="txnrow">
-      <div class="txnico ${t.type==='deposit'?'dep':'wit'}"><i class="ti ti-arrow-${t.type==='deposit'?'down':'up'}"></i></div>
-      <div class="linfo"><div class="ltitle">${t.desc}</div><div class="lsub">${t.date} · ${t.method}</div></div>
-      <span style="font-weight:700;color:${t.type==='deposit'?'var(--green)':'var(--red)'};flex-shrink:0">${t.type==='deposit'?'+':'-'}${fmt(t.amt)}</span>
-    </div>`).join('');
+  const deps=S.bankTxns.filter(t=>t.type==='deposit'), wits=S.bankTxns.filter(t=>t.type==='withdrawal');
+  const tdep=deps.reduce((a,t)=>a+t.amt,0), twit=wits.reduce((a,t)=>a+t.amt,0);
+  document.getElementById('bk-bal').textContent=fmt(tdep-twit);
+  document.getElementById('bk-dep-count').textContent=deps.length+' deposit'+(deps.length!==1?'s':'');
+  document.getElementById('bk-wit-count').textContent=wits.length+' withdrawal'+(wits.length!==1?'s':'');
+  document.getElementById('bk-tdep').textContent=fmt(tdep); document.getElementById('bk-twit').textContent=fmt(twit);
+  document.getElementById('bk-cash').textContent=fmt(deps.filter(t=>t.method==='cash').reduce((a,t)=>a+t.amt,0));
+  document.getElementById('bk-upi').textContent=fmt(deps.filter(t=>t.method==='upi').reduce((a,t)=>a+t.amt,0));
+  const el=document.getElementById('bk-txns');
+  if(!S.bankTxns.length){el.innerHTML='<p style="font-size:13px;color:var(--sub)">No bank transactions yet.</p>';return;}
+  el.innerHTML=[...S.bankTxns].sort((a,b)=>(b.id||'').localeCompare(a.id||'')).map(t=>`
+    <div class="txnrow"><div class="txnico ${t.type==='deposit'?'dep':'wit'}"><i class="ti ti-arrow-${t.type==='deposit'?'down':'up'}"></i></div>
+    <div class="linfo"><div class="ltitle">${t.desc}</div><div class="lsub">${t.date} · ${t.method}</div></div>
+    <span style="font-weight:700;color:${t.type==='deposit'?'var(--green)':'var(--red)'};flex-shrink:0">${t.type==='deposit'?'+':'-'}${fmt(t.amt)}</span></div>`).join('');
 }
 
-// ─── HOME ────────────────────────────────────────────────
+// ── HOME ──────────────────────────────────────
 function renderHome(){
-  const td   = todayStr();
-  const tR   = S.rides.filter(r=>r.date===td);
-  const tE   = S.expenses.filter(e=>e.date===td);
-  const inc  = tR.reduce((a,r)=>a+r.amt,0);
-  const exp  = tE.reduce((a,e)=>a+e.amt,0);
-  const cash = tR.filter(r=>r.pay==='cash').reduce((a,r)=>a+r.amt,0);
-  const upi  = tR.filter(r=>r.pay==='upi').reduce((a,r)=>a+r.amt,0);
-  const prof = inc-exp; const bal = getBankBalance();
-  document.getElementById('d-rides').textContent  = fmt(inc);
-  document.getElementById('d-profit').textContent = fmt(prof);
-  document.getElementById('d-profit').className   = 'sval '+(prof>=0?'g':'r');
-  document.getElementById('d-exp').textContent    = fmt(exp);
-  document.getElementById('d-bank').textContent   = fmt(bal);
-  document.getElementById('d-cash').textContent   = fmt(cash);
-  document.getElementById('d-upi').textContent    = fmt(upi);
-  document.getElementById('d-bankbal').textContent= fmt(bal);
-  const n=now(); const pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
-  const mInc=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0);
+  const td=todayStr(), tR=S.rides.filter(r=>r.date===td), tE=S.expenses.filter(e=>e.date===td);
+  const inc=tR.reduce((a,r)=>a+r.amt,0), exp=tE.reduce((a,e)=>a+e.amt,0), prof=inc-exp, bal=getBankBalance();
+  document.getElementById('d-rides').textContent=fmt(inc);
+  document.getElementById('d-profit').textContent=fmt(prof); document.getElementById('d-profit').className='sval '+(prof>=0?'g':'r');
+  document.getElementById('d-exp').textContent=fmt(exp); document.getElementById('d-bank').textContent=fmt(bal);
+  document.getElementById('d-cash').textContent=fmt(tR.filter(r=>r.pay==='cash').reduce((a,r)=>a+r.amt,0));
+  document.getElementById('d-upi').textContent=fmt(tR.filter(r=>r.pay==='upi').reduce((a,r)=>a+r.amt,0));
+  document.getElementById('d-bankbal').textContent=fmt(bal);
+  const n=now(), pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
+  const mIncTotal=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0);
+  const mExpTotal=S.expenses.filter(e=>e.date&&e.date.startsWith(pre)).reduce((a,e)=>a+e.amt,0);
+  const mProfit=mIncTotal-mExpTotal;
   if(S.monthlyGoal>0){
-    const pct=Math.min(100,Math.round(mInc/S.monthlyGoal*100));
-    const dleft=new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate();
-    document.getElementById('d-goal-label').textContent=fmt(mInc)+' / '+fmt(S.monthlyGoal);
-    document.getElementById('d-goal-pct').textContent=pct+'%';
-    document.getElementById('d-goal-bar').style.width=pct+'%';
+    const pct=Math.min(100,Math.round(mProfit/S.monthlyGoal*100)), dleft=new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate();
+    document.getElementById('d-goal-label').textContent=fmt(mProfit)+' / '+fmt(S.monthlyGoal);
+    document.getElementById('d-goal-pct').textContent=pct+'%'; document.getElementById('d-goal-bar').style.width=Math.max(0,pct)+'%';
     document.getElementById('d-goal-days').textContent=dleft+' days left this month';
   }
   const tRems=S.reminders.filter(r=>r.date===td);
@@ -873,381 +1053,405 @@ function renderHome(){
     ? tRems.map(r=>`<div class="lrow" style="border:none;padding:6px 0"><div class="linfo"><div class="ltitle">${r.txt}</div><div class="lsub">${r.time}</div></div><span class="bdg o">Today</span></div>`).join('')
     : '<p style="font-size:13px;color:var(--sub)">No reminders today.</p>';
 }
-
-// ─── RAPIDO HISTORY ──────────────────────────────────────
 function renderRapidoHist(){
-  const inc=S.rides.reduce((a,r)=>a+r.amt,0);
-  const exp=S.expenses.reduce((a,e)=>a+e.amt,0);
-  const cih=S.rides.filter(r=>r.pay==='cash').reduce((a,r)=>a+r.amt,0)
-           -S.bankTxns.filter(t=>t.type==='deposit'&&t.method==='cash').reduce((a,t)=>a+t.amt,0);
-  document.getElementById('h-inc').textContent=fmt(inc);
-  document.getElementById('h-exp').textContent=fmt(exp);
-  document.getElementById('h-pro').textContent=fmt(inc-exp);
-  document.getElementById('h-cih').textContent=fmt(cih);
-  const all=[
-    ...S.rides.map(r=>({...r,_lbl:r.note||'Ride income',_col:'var(--green)',_sign:'+',_ico:'rid'})),
-    ...S.expenses.map(e=>({...e,_lbl:e.desc||e.cat,_col:'var(--red)',_sign:'-',_ico:'exp'}))
+  const inc=S.rides.reduce((a,r)=>a+r.amt,0), exp=S.expenses.reduce((a,e)=>a+e.amt,0);
+  const cih=S.rides.filter(r=>r.pay==='cash').reduce((a,r)=>a+r.amt,0)-S.bankTxns.filter(t=>t.type==='deposit'&&t.method==='cash').reduce((a,t)=>a+t.amt,0);
+  document.getElementById('h-inc').textContent=fmt(inc); document.getElementById('h-exp').textContent=fmt(exp);
+  document.getElementById('h-pro').textContent=fmt(inc-exp); document.getElementById('h-cih').textContent=fmt(cih);
+  const all=[...S.rides.map(r=>({...r,_lbl:r.note||'Ride income',_col:'var(--green)',_sign:'+',_ico:'rid'})),
+             ...S.expenses.map(e=>({...e,_lbl:e.desc||e.cat,_col:'var(--red)',_sign:'-',_ico:'exp'}))
   ].sort((a,b)=>(b.id||'').localeCompare(a.id||'')).slice(0,50);
   document.getElementById('r-txns').innerHTML=all.length
-    ? all.map(t=>`<div class="txnrow"><div class="txnico ${t._ico}"><i class="ti ti-${t._ico==='rid'?'motorbike':'receipt'}"></i></div>
-        <div class="linfo"><div class="ltitle">${t._lbl}</div><div class="lsub">${t.date} ${t.time||''} · ${t._ico==='rid'?t.pay:t.cat||''}</div></div>
-        <span style="font-weight:700;color:${t._col};flex-shrink:0">${t._sign}${fmt(t.amt)}</span></div>`).join('')
+    ? all.map(t=>`<div class="txnrow"><div class="txnico ${t._ico}"><i class="ti ti-${t._ico==='rid'?'motorbike':'receipt'}"></i></div><div class="linfo"><div class="ltitle">${t._lbl}</div><div class="lsub">${t.date} ${t.time||''} · ${t._ico==='rid'?t.pay:t.cat||''}</div></div><span style="font-weight:700;color:${t._col};flex-shrink:0">${t._sign}${fmt(t.amt)}</span></div>`).join('')
     : '<p style="font-size:13px;color:var(--sub)">No transactions yet.</p>';
 }
-
-// ─── GOALS ───────────────────────────────────────────────
-window.setMonthlyGoal = async function(){
-  const g=parseFloat(document.getElementById('mg-inp').value);
-  if(!g||g<=0) return alert('Enter a valid goal amount');
-  S.monthlyGoal=g; renderMGoal(); renderHome();
-  await saveMeta(); notif('Monthly goal '+fmt(g)+' set! 🎯');
+window.setMonthlyGoal = async () => {
+  const g=parseFloat(document.getElementById('mg-inp').value); if(!g||g<=0)return alert('Enter valid goal');
+  S.monthlyGoal=g; renderMGoal(); renderHome(); await saveMeta(); notif('Goal '+fmt(g)+' set! 🎯');
 };
 function renderMGoal(){
-  const n=now(); const pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
-  const mInc=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0);
-  const pct=S.monthlyGoal>0?Math.min(100,Math.round(mInc/S.monthlyGoal*100)):0;
-  const b=document.getElementById('mg-bar'); if(b)b.style.width=pct+'%';
-  const s=document.getElementById('mg-status'); if(s)s.textContent=S.monthlyGoal>0?`${fmt(mInc)} earned of ${fmt(S.monthlyGoal)} (${pct}%)`:'No goal set yet';
+  const n=now(), pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
+  const mIncTotal=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0);
+  const mExpTotal=S.expenses.filter(e=>e.date&&e.date.startsWith(pre)).reduce((a,e)=>a+e.amt,0);
+  const mProfit=mIncTotal-mExpTotal;
+  const pct=S.monthlyGoal>0?Math.min(100,Math.round(mProfit/S.monthlyGoal*100)):0;
+  const b=document.getElementById('mg-bar'); if(b)b.style.width=Math.max(0,pct)+'%';
+  const s=document.getElementById('mg-status'); if(s)s.textContent=S.monthlyGoal>0?`${fmt(mProfit)} net profit of ${fmt(S.monthlyGoal)} goal (${pct}%)`:'No goal set yet';
   if(S.monthlyGoal>0){
-    const dleft=new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate();
-    const rem=Math.max(0,S.monthlyGoal-mInc); const daily=dleft>0?Math.ceil(rem/dleft):rem;
-    const d=document.getElementById('mg-daily');
-    if(d)d.innerHTML=`<div class="sgrid"><div class="sbox"><div class="slabel">Remaining</div><div class="sval o">${fmt(rem)}</div></div><div class="sbox"><div class="slabel">Daily Target</div><div class="sval b">${fmt(daily)}</div></div></div>`;
+    const dleft=new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate(), rem=Math.max(0,S.monthlyGoal-mProfit), daily=dleft>0?Math.ceil(rem/dleft):rem;
+    const d=document.getElementById('mg-daily'); if(d)d.innerHTML=`<div class="sgrid"><div class="sbox"><div class="slabel">Remaining</div><div class="sval o">${fmt(rem)}</div></div><div class="sbox"><div class="slabel">Daily Target (net)</div><div class="sval b">${fmt(daily)}</div></div></div><p style="font-size:11px;color:var(--sub);margin-top:8px">This month: ${fmt(mIncTotal)} earned − ${fmt(mExpTotal)} expenses = ${fmt(mProfit)} net profit</p>`;
   }
   const inp=document.getElementById('mg-inp'); if(inp&&S.monthlyGoal)inp.value=S.monthlyGoal;
 }
-window.addSavingGoal = async function(){
-  const name=document.getElementById('sg-name').value;
-  const target=parseFloat(document.getElementById('sg-target').value);
-  if(!name||!target) return;
-  const item={id:uid(),name,target,saved:0};
-  S.savingGoals.push(item); renderSavingGoals();
-  await fsAdd('savingGoals',item);
+window.addSavingGoal = async () => {
+  const name=document.getElementById('sg-name').value, target=parseFloat(document.getElementById('sg-target').value);
+  if(!name||!target)return;
+  const item={id:uid(),name,target,saved:0}; S.savingGoals.push(item); renderSavingGoals(); await fsAdd('savingGoals',item);
   document.getElementById('sg-name').value=''; document.getElementById('sg-target').value='';
 };
 function renderSavingGoals(){
   const el=document.getElementById('sg-list'); if(!el)return;
-  el.innerHTML=S.savingGoals.map(g=>{
-    const pct=Math.min(100,Math.round(g.saved/g.target*100));
-    return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">${g.name}</span><span class="bdg o">${pct}%</span></div><div class="pbar-wrap"><div class="pbar o" style="width:${pct}%"></div></div><div style="font-size:11px;color:var(--sub);margin-top:4px">${fmt(g.saved)} saved of ${fmt(g.target)}</div></div>`;
+  el.innerHTML=S.savingGoals.map(g=>{ const pct=Math.min(100,Math.round(g.saved/g.target*100));
+    return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">${g.name}</span><span class="bdg o">${pct}%</span></div><div class="pbar-wrap"><div class="pbar o" style="width:${pct}%"></div></div><div style="font-size:11px;color:var(--sub);margin-top:4px">${fmt(g.saved)} of ${fmt(g.target)}</div></div>`;
   }).join('');
 }
 
-// ─── RINGTONES ───────────────────────────────────────────
+// ── RINGTONES ─────────────────────────────────
 let rtAudio=null, rtPlayingId=null;
-
-window.uploadRingtones = function(input){
+window.uploadRingtones = input => {
   Array.from(input.files).forEach(file=>{
     const reader=new FileReader();
-    reader.onload=e=>{
-      if(!S.ringtones.find(r=>r.name===file.name)){
-        S.ringtones.push({id:'rt_'+uid(),name:file.name,data:e.target.result,size:Math.round(file.size/1024)+'KB'});
-        try{ localStorage.setItem('ringtones_'+currentUser.uid, JSON.stringify(S.ringtones)); }catch(err){}
-      }
-      renderRingtones(); updateRingtoneSelect();
-      notif('Ringtone uploaded! 🎵');
-    };
+    reader.onload=e=>{ if(!S.ringtones.find(r=>r.name===file.name)){S.ringtones.push({id:'rt_'+uid(),name:file.name,data:e.target.result,size:Math.round(file.size/1024)+'KB'}); try{localStorage.setItem('ringtones_'+currentUser.uid,JSON.stringify(S.ringtones));}catch(err){}} renderRingtones(); updateRingtoneSelect(); notif('Ringtone uploaded! 🎵'); };
     reader.readAsDataURL(file);
   });
 };
-
 function renderRingtones(){
   const el=document.getElementById('rt-list'); if(!el)return;
   const defSel=S.selectedRingtone==='default';
-  let html=`<div class="rtrow"><div style="flex:1;min-width:0"><div class="rtname">Default Beep</div><div class="rtsub">Built-in · Always available</div></div>
-    <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-      <button class="playbtn" onclick="playDefault()"><i class="ti ti-player-play"></i></button>
-      ${defSel?'<span class="bdg g">✓ Selected</span>':`<button class="btn sm" onclick="selectRt('default')">Use</button>`}
-    </div></div>`;
-  html+=S.ringtones.map(r=>{
-    const sel=S.selectedRingtone===r.id; const playing=rtPlayingId===r.id;
-    return `<div class="rtrow"><div style="flex:1;min-width:0"><div class="rtname">${r.name.replace(/\.[^.]+$/,'')}</div><div class="rtsub">${r.size}</div></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-        <button class="playbtn" onclick="playRt('${r.id}')"><i class="ti ti-player-${playing?'stop':'play'}"></i></button>
-        ${sel?'<span class="bdg g">✓ Selected</span>':`<button class="btn sm" onclick="selectRt('${r.id}')">Use</button>`}
-        <button onclick="deleteRt('${r.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px"><i class="ti ti-trash"></i></button>
-      </div></div>`;
+  let html=`<div class="rtrow"><div style="flex:1;min-width:0"><div class="rtname">Default Beep</div><div class="rtsub">Built-in</div></div><div style="display:flex;gap:8px;align-items:center;flex-shrink:0"><button class="playbtn" onclick="playDefault()"><i class="ti ti-player-play"></i></button>${defSel?'<span class="bdg g">✓ Selected</span>':`<button class="btn sm" onclick="selectRt('default')">Use</button>`}</div></div>`;
+  html+=S.ringtones.map(r=>{ const sel=S.selectedRingtone===r.id;
+    return `<div class="rtrow"><div style="flex:1;min-width:0"><div class="rtname">${r.name.replace(/\.[^.]+$/,'')}</div><div class="rtsub">${r.size}</div></div><div style="display:flex;gap:8px;align-items:center;flex-shrink:0"><button class="playbtn" onclick="playRt('${r.id}')"><i class="ti ti-player-${rtPlayingId===r.id?'stop':'play'}"></i></button>${sel?'<span class="bdg g">✓ Selected</span>':`<button class="btn sm" onclick="selectRt('${r.id}')">Use</button>`}<button onclick="deleteRt('${r.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px"><i class="ti ti-trash"></i></button></div></div>`;
   }).join('');
   el.innerHTML=html;
 }
+window.playRt = id=>{ if(rtAudio){rtAudio.pause();rtAudio=null;} if(rtPlayingId===id){rtPlayingId=null;renderRingtones();return;} const rt=S.ringtones.find(r=>r.id===id);if(!rt)return; rtAudio=new Audio(rt.data);rtAudio.play();rtPlayingId=id;rtAudio.onended=()=>{rtPlayingId=null;renderRingtones();};renderRingtones(); };
+window.playDefault=()=>{ try{const ctx=new AudioContext();[[0,880],[0.35,1100],[0.7,880]].forEach(([t,f])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;g.gain.setValueAtTime(0.35,ctx.currentTime+t);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.3);o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.3);});}catch(e){} };
+function fireRingtone(rtId){ if(!rtId||rtId==='default'){window.playDefault();return;} const rt=S.ringtones.find(r=>r.id===rtId);if(rt){const a=new Audio(rt.data);a.loop=true;a.play();setTimeout(()=>a.pause(),30000);}else window.playDefault(); }
+window.selectRt = async id=>{ S.selectedRingtone=id;renderRingtones();updateRingtoneSelect();await saveMeta();notif('Ringtone selected 🎵'); };
+window.deleteRt = id=>{ S.ringtones=S.ringtones.filter(r=>r.id!==id);if(S.selectedRingtone===id)S.selectedRingtone='default';try{localStorage.setItem('ringtones_'+currentUser.uid,JSON.stringify(S.ringtones));}catch(e){}renderRingtones();updateRingtoneSelect(); };
+function updateRingtoneSelect(){ const sel=document.getElementById('al-ringtone');if(!sel)return;sel.innerHTML='<option value="default">Default Beep</option>'+S.ringtones.map(r=>`<option value="${r.id}">${r.name.replace(/\.[^.]+$/,'')}</option>`).join('');sel.value=S.selectedRingtone||'default'; }
 
-window.playRt = function(id){
-  if(rtAudio){rtAudio.pause();rtAudio=null;}
-  if(rtPlayingId===id){rtPlayingId=null;renderRingtones();return;}
-  const rt=S.ringtones.find(r=>r.id===id); if(!rt)return;
-  rtAudio=new Audio(rt.data); rtAudio.play(); rtPlayingId=id;
-  rtAudio.onended=()=>{rtPlayingId=null;renderRingtones();};
-  renderRingtones();
-};
-window.playDefault = function(){
-  try{
-    const ctx=new AudioContext();
-    [[0,880],[0.35,1100],[0.7,880]].forEach(([t,f])=>{
-      const o=ctx.createOscillator(); const g=ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value=f; g.gain.setValueAtTime(0.35,ctx.currentTime+t);
-      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.3);
-      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.3);
-    });
-  }catch(e){}
-};
-function fireRingtone(rtId){
-  if(!rtId||rtId==='default'){window.playDefault();return;}
-  const rt=S.ringtones.find(r=>r.id===rtId);
-  if(rt){const a=new Audio(rt.data);a.loop=true;a.play();setTimeout(()=>a.pause(),30000);}
-  else window.playDefault();
-}
-window.selectRt = async function(id){
-  S.selectedRingtone=id; renderRingtones(); updateRingtoneSelect();
-  await saveMeta(); notif('Ringtone selected 🎵');
-};
-window.deleteRt = function(id){
-  S.ringtones=S.ringtones.filter(r=>r.id!==id);
-  if(S.selectedRingtone===id) S.selectedRingtone='default';
-  try{localStorage.setItem('ringtones_'+currentUser.uid,JSON.stringify(S.ringtones));}catch(e){}
-  renderRingtones(); updateRingtoneSelect();
-};
-function updateRingtoneSelect(){
-  const sel=document.getElementById('al-ringtone'); if(!sel)return;
-  sel.innerHTML='<option value="default">Default Beep</option>'+
-    S.ringtones.map(r=>`<option value="${r.id}">${r.name.replace(/\.[^.]+$/,'')}</option>`).join('');
-  sel.value=S.selectedRingtone||'default';
-}
-
-// ─── ALARMS ──────────────────────────────────────────────
-window.addAlarm = async function(){
-  const time=document.getElementById('al-time').value; if(!time)return alert('Set an alarm time');
-  const label=document.getElementById('al-label').value||'Alarm';
-  const repeat=document.getElementById('al-repeat').value;
-  const ringtone=document.getElementById('al-ringtone').value||'default';
+// ── ALARMS ─────────────────────────────────────
+window.addAlarm = async () => {
+  const time=document.getElementById('al-time').value; if(!time)return alert('Set alarm time');
+  const label=document.getElementById('al-label').value||'Alarm', repeat=document.getElementById('al-repeat').value, ringtone=document.getElementById('al-ringtone').value||'default';
   const alarm={id:uid(),time,label,repeat,ringtone,on:true};
-  S.alarms.push(alarm); renderAlarms(); scheduleAlarm(alarm);
-  await fsAdd('alarms',alarm);
+  S.alarms.push(alarm); renderAlarms(); scheduleAlarm(alarm); await fsAdd('alarms',alarm);
   document.getElementById('al-time').value=''; document.getElementById('al-label').value='';
   notif('Alarm set for '+time+' ⏰');
 };
-function renderAlarms(){
-  const el=document.getElementById('al-list'); if(!el)return;
-  if(!S.alarms.length){el.innerHTML='<div class="card"><p style="font-size:13px;color:var(--sub)">No alarms set yet.</p></div>';return;}
-  el.innerHTML=S.alarms.map((a,i)=>{
-    const rtName=a.ringtone==='default'?'Default Beep':(S.ringtones.find(r=>r.id===a.ringtone)?.name.replace(/\.[^.]+$/,'')||'Default Beep');
-    return `<div class="card"><div class="alrow">
-      <div><div class="altime">${a.time}</div><div class="allabel">${a.label} · ${a.repeat}</div><div class="alring">🎵 ${rtName}</div></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
-        <button class="tog ${a.on?'on':'off'}" onclick="toggleAlarm(${i})"></button>
-        <button onclick="delAlarm(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:20px"><i class="ti ti-trash"></i></button>
-      </div></div></div>`;
-  }).join('');
-}
-window.toggleAlarm = async function(i){ S.alarms[i].on=!S.alarms[i].on; renderAlarms(); if(S.alarms[i].on)scheduleAlarm(S.alarms[i]); };
-window.delAlarm = async function(i){
-  const a=S.alarms.splice(i,1)[0]; renderAlarms();
-  if(a._fsId) await fsDel('alarms',a._fsId);
+function renderAlarms(){ const el=document.getElementById('al-list');if(!el)return;if(!S.alarms.length){el.innerHTML='<div class="card"><p style="font-size:13px;color:var(--sub)">No alarms set yet.</p></div>';return;}
+  el.innerHTML=S.alarms.map((a,i)=>{ const rtName=a.ringtone==='default'?'Default Beep':(S.ringtones.find(r=>r.id===a.ringtone)?.name.replace(/\.[^.]+$/,'')||'Default Beep');
+    return `<div class="card"><div class="alrow"><div><div class="altime">${a.time}</div><div class="allabel">${a.label} · ${a.repeat}</div><div class="alring">🎵 ${rtName}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px"><button class="tog ${a.on?'on':'off'}" onclick="toggleAlarm(${i})"></button><button onclick="delAlarm(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:20px"><i class="ti ti-trash"></i></button></div></div></div>`;
+  }).join(''); }
+window.toggleAlarm = i=>{ S.alarms[i].on=!S.alarms[i].on;renderAlarms();if(S.alarms[i].on)scheduleAlarm(S.alarms[i]); };
+window.delAlarm = async i=>{ const a=S.alarms.splice(i,1)[0];renderAlarms();if(a._fsId)await fsDel('alarms',a._fsId); };
+function scheduleAlarm(alarm){ if(!alarm.on)return; const[h,m]=alarm.time.split(':').map(Number); const target=new Date();target.setHours(h,m,0,0);if(target<=new Date())target.setDate(target.getDate()+1);
+  // Use SW for background delivery
+  scheduleSwNotif('⏰ '+alarm.label, alarm.time+' · '+alarm.repeat, target-new Date(), 'alarm-'+alarm.id);
+  // Also use in-page for ringtone
+  setTimeout(()=>{ fireRingtone(alarm.ringtone||'default'); if('vibrate' in navigator)navigator.vibrate([500,150,500,150,500]);
+    if(alarm.repeat==='daily')scheduleAlarm(alarm);
+    if(alarm.repeat==='weekdays'){const d=new Date().getDay();if(d>=1&&d<=5)scheduleAlarm(alarm);}
+    if(alarm.repeat==='weekends'){const d=new Date().getDay();if(d===0||d===6)scheduleAlarm(alarm);}
+  }, target-new Date()); }
+
+// ── NIGHT PLAN (9:55 PM "plan tomorrow" prompt) ─
+let planBlockCount=0;
+const DEFAULT_PLAN_BLOCKS=[
+  {label:'Wake up',time:'06:00'},
+  {label:'Workout',time:'07:00'},
+  {label:'Start Rapido rides',time:'09:00'},
+];
+
+window.toggleNightPlanSetting = async (btn) => {
+  btn.classList.toggle('on'); btn.classList.toggle('off');
+  S.nightPlanEnabled = btn.classList.contains('on');
+  await saveMeta();
+  if(S.nightPlanEnabled) scheduleNightPlanPrompt();
+  notif(S.nightPlanEnabled ? 'Nightly planning enabled 🌙' : 'Nightly planning turned off');
 };
-function scheduleAlarm(alarm){
-  if(!alarm.on)return;
-  const[h,m]=alarm.time.split(':').map(Number);
-  const target=new Date(); target.setHours(h,m,0,0);
-  if(target<=new Date())target.setDate(target.getDate()+1);
-  setTimeout(()=>fireAlarm(alarm),target-new Date());
-}
-function fireAlarm(alarm){
-  notif('⏰ '+alarm.label+' — '+alarm.time);
-  if('vibrate' in navigator)navigator.vibrate([500,150,500,150,500]);
-  fireRingtone(alarm.ringtone||'default');
-  if(alarm.repeat==='daily')scheduleAlarm(alarm);
-  if(alarm.repeat==='weekdays'){const d=new Date().getDay();if(d>=1&&d<=5)scheduleAlarm(alarm);}
-  if(alarm.repeat==='weekends'){const d=new Date().getDay();if(d===0||d===6)scheduleAlarm(alarm);}
+
+window.openNightPlanModal = () => {
+  const modal=document.getElementById('night-plan-modal');
+  const tmrw=new Date(); tmrw.setDate(tmrw.getDate()+1);
+  const tmrwStr=`${tmrw.getFullYear()}-${p2(tmrw.getMonth()+1)}-${p2(tmrw.getDate())}`;
+  document.getElementById('night-plan-date-label').textContent = `For ${DAYS[tmrw.getDay()]}, ${MONTHS[tmrw.getMonth()]} ${tmrw.getDate()}`;
+  modal.dataset.targetDate = tmrwStr;
+  // pre-fill with existing plan for tomorrow if any, else defaults
+  const existing = S.nightPlans.find(p=>p.date===tmrwStr);
+  const blocksList=document.getElementById('plan-blocks-list');
+  blocksList.innerHTML=''; planBlockCount=0;
+  const blocks = existing ? existing.blocks : DEFAULT_PLAN_BLOCKS;
+  blocks.forEach(b=>addPlanBlockRow(b.time,b.label));
+  modal.classList.add('show');
+};
+window.closeNightPlanModal = () => document.getElementById('night-plan-modal').classList.remove('show');
+
+window.addPlanBlockRow = (time='', label='') => {
+  planBlockCount++;
+  const id='blk_'+planBlockCount+'_'+Date.now();
+  const row=document.createElement('div');
+  row.className='block-row'; row.id=id;
+  row.innerHTML=`
+    <div class="block-fields">
+      <input type="time" value="${time}" class="blk-time"/>
+      <input type="text" value="${label}" placeholder="e.g. Workout, Rides, Meal" class="blk-label"/>
+    </div>
+    <button class="block-del" onclick="document.getElementById('${id}').remove()"><i class="ti ti-trash"></i></button>`;
+  document.getElementById('plan-blocks-list').appendChild(row);
+};
+
+window.saveNightPlan = async () => {
+  const modal=document.getElementById('night-plan-modal');
+  const targetDate=modal.dataset.targetDate;
+  const rows=[...document.querySelectorAll('#plan-blocks-list .block-row')];
+  const blocks=rows.map(r=>({
+    time:r.querySelector('.blk-time').value,
+    label:r.querySelector('.blk-label').value||'Reminder'
+  })).filter(b=>b.time);
+  if(!blocks.length){ alert('Add at least one time block with a time set'); return; }
+
+  // remove any existing plan for that date, then save the new one
+  const oldPlan=S.nightPlans.find(p=>p.date===targetDate);
+  if(oldPlan && oldPlan._fsId){ await fsDel('nightPlans', oldPlan._fsId); S.nightPlans=S.nightPlans.filter(p=>p!==oldPlan); }
+  const planItem={ id:uid(), date:targetDate, blocks, createdAt:Date.now() };
+  S.nightPlans.push(planItem);
+  await fsAdd('nightPlans', planItem);
+
+  // turn each block into a real one-time alarm for that date
+  blocks.forEach(b=>{
+    const alarm={ id:uid(), time:b.time, label:b.label, repeat:'once', ringtone:S.selectedRingtone, on:true, forDate:targetDate };
+    S.alarms.push(alarm);
+    fsAdd('alarms', alarm);
+    scheduleAlarmForDate(alarm, targetDate);
+  });
+  renderAlarms();
+  closeNightPlanModal();
+  renderNightPlanTab();
+  notif(`Tomorrow's plan saved — ${blocks.length} alarm${blocks.length>1?'s':''} set ⏰`);
+};
+
+// schedule an alarm pinned to a specific date (used by night plan), instead of "next occurrence of this time"
+function scheduleAlarmForDate(alarm, dateStr){
+  const [h,m]=alarm.time.split(':').map(Number);
+  const target=new Date(dateStr+'T00:00:00'); target.setHours(h,m,0,0);
+  const diff=target-new Date();
+  if(diff<=0) return; // date already passed, skip
+  scheduleSwNotif('⏰ '+alarm.label, alarm.time+' · planned last night', diff, 'alarm-'+alarm.id);
+  setTimeout(()=>{ fireRingtone(alarm.ringtone||'default'); if('vibrate' in navigator)navigator.vibrate([500,150,500,150,500]); }, diff);
 }
 
-// ─── REMINDERS ───────────────────────────────────────────
-window.addReminder = async function(){
-  const txt=document.getElementById('rem-txt').value; if(!txt)return;
-  const time=document.getElementById('rem-time').value;
-  const date=document.getElementById('rem-date').value||todayStr();
-  const item={id:uid(),txt,time,date};
-  S.reminders.push(item); renderReminders(); renderHome();
+function renderNightPlanTab(){
+  const tog=document.getElementById('tog-night-plan');
+  if(tog) tog.className='tog '+(S.nightPlanEnabled!==false?'on':'off');
+
+  const tmrw=new Date(); tmrw.setDate(tmrw.getDate()+1);
+  const tmrwStr=`${tmrw.getFullYear()}-${p2(tmrw.getMonth()+1)}-${p2(tmrw.getDate())}`;
+  const plan=S.nightPlans.find(p=>p.date===tmrwStr);
+  const viewEl=document.getElementById('tomorrow-plan-view');
+  if(plan){
+    viewEl.innerHTML = plan.blocks.sort((a,b)=>a.time.localeCompare(b.time)).map(b=>
+      `<div class="lrow" style="border:none;padding:6px 0"><div class="linfo"><div class="ltitle">${b.label}</div></div><span class="bdg o">${b.time}</span></div>`
+    ).join('');
+  } else {
+    viewEl.innerHTML='<p style="font-size:13px;color:var(--sub)">No plan set for tomorrow yet. Tap "Plan Tomorrow Now" above.</p>';
+  }
+
+  const histEl=document.getElementById('plan-history');
+  const past=S.nightPlans.filter(p=>p.date!==tmrwStr).sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,10);
+  histEl.innerHTML = past.length ? past.map(p=>`
+    <div class="card" style="padding:12px 16px;margin-bottom:8px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">${p.date}</div>
+      ${p.blocks.sort((a,b)=>a.time.localeCompare(b.time)).map(b=>`<div style="font-size:12px;color:var(--sub);padding:2px 0">${b.time} — ${b.label}</div>`).join('')}
+    </div>`).join('') : '<p style="font-size:13px;color:var(--sub)">No plans logged yet.</p>';
+}
+
+// 9:55 PM nightly prompt scheduler
+function scheduleNightPlanPrompt(){
+  if(S.nightPlanEnabled===false) return;
+  const target=new Date(); target.setHours(21,55,0,0);
+  if(target<=new Date()) target.setDate(target.getDate()+1);
+  const diff=target-new Date();
+  setTimeout(()=>{
+    firePlanningPrompt();
+    scheduleNightPlanPrompt(); // reschedule for next night
+  }, diff);
+}
+
+function firePlanningPrompt(){
+  // push notification at 9:55pm
+  scheduleSwNotif('🌙 Plan Tomorrow', "What's your schedule for tomorrow? Tap to set wake up, workout & ride times.", 0, 'night-plan-prompt');
+  if('vibrate' in navigator) navigator.vibrate([300,100,300]);
+  // if app is open, show the modal directly
+  if(document.visibilityState==='visible'){
+    spgByName('routine'); openNightPlanModal();
+  }
+  // if missed (no plan saved within 30 min), send a follow-up reminder
+  setTimeout(()=>{
+    const tmrw=new Date(); tmrw.setDate(tmrw.getDate()+1);
+    const tmrwStr=`${tmrw.getFullYear()}-${p2(tmrw.getMonth()+1)}-${p2(tmrw.getDate())}`;
+    const planned=S.nightPlans.find(p=>p.date===tmrwStr);
+    if(!planned){
+      scheduleSwNotif('🌙 Still need tomorrow\'s plan', "You haven't planned tomorrow yet — tap to set your alarms now.", 0, 'night-plan-followup');
+    }
+  }, 30*60*1000);
+}
+
+// helper to switch page programmatically (mirrors spg but without a button element)
+function spgByName(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nv').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  const navBtn=[...document.querySelectorAll('.nv')].find(b=>b.getAttribute('onclick')?.includes(`'${id}'`));
+  if(navBtn) navBtn.classList.add('on');
+}
+
+
+window.addReminder = async () => {
+  const txt=document.getElementById('rem-txt').value;if(!txt)return;
+  const time=document.getElementById('rem-time').value, date=document.getElementById('rem-date').value||todayStr();
+  const item={id:uid(),txt,time,date}; S.reminders.push(item); renderReminders(); renderHome();
   await fsAdd('reminders',item);
-  if(time){const target=new Date(date+'T'+time);if(target>new Date())setTimeout(()=>fireAlarm({label:txt,time,on:true,repeat:'once',ringtone:S.selectedRingtone}),target-new Date());}
-  document.getElementById('rem-txt').value='';
-  notif('Reminder added ✅');
+  if(time){ const target=new Date(date+'T'+time); const diff=target-new Date(); if(diff>0) scheduleSwNotif('🔔 Reminder: '+txt,'',diff,'rem-'+item.id); }
+  document.getElementById('rem-txt').value=''; notif('Reminder added ✅');
 };
-function renderReminders(){
-  const el=document.getElementById('rem-list'); if(!el)return;
-  el.innerHTML=S.reminders.length
-    ? S.reminders.slice().reverse().map((r,ri)=>`<div class="card" style="padding:12px 16px"><div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div style="font-weight:600;font-size:14px">${r.txt}</div><div style="font-size:11px;color:var(--sub);margin-top:3px">${r.date} · ${r.time}</div></div>
-        <button onclick="delRem(${S.reminders.length-1-ri})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button>
-      </div></div>`).join('')
-    : '<div class="card"><p style="font-size:13px;color:var(--sub)">No reminders set.</p></div>';
-}
-window.delRem = async function(i){ const r=S.reminders.splice(i,1)[0]; renderReminders(); if(r._fsId)await fsDel('reminders',r._fsId); };
+function renderReminders(){ const el=document.getElementById('rem-list');if(!el)return;
+  el.innerHTML=S.reminders.length?S.reminders.slice().reverse().map((r,ri)=>`<div class="card" style="padding:12px 16px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:600;font-size:14px">${r.txt}</div><div style="font-size:11px;color:var(--sub);margin-top:3px">${r.date} · ${r.time}</div></div><button onclick="delRem(${S.reminders.length-1-ri})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button></div></div>`).join(''):'<div class="card"><p style="font-size:13px;color:var(--sub)">No reminders set.</p></div>'; }
+window.delRem = async i=>{ const r=S.reminders.splice(i,1)[0];renderReminders();if(r._fsId)await fsDel('reminders',r._fsId); };
 
-// ─── TASKS ───────────────────────────────────────────────
-window.addTask = async function(){
-  const t=document.getElementById('task-inp').value; if(!t)return;
-  const item={id:uid(),txt:t,done:false,date:todayStr()};
-  S.tasks.push(item); renderTasks();
-  await fsAdd('tasks',item);
-  document.getElementById('task-inp').value='';
-};
-function renderTasks(){
-  const el=document.getElementById('task-list'); if(!el)return;
-  const td=S.tasks.filter(t=>t.date===todayStr());
-  el.innerHTML=td.length
-    ? td.map(t=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)">
-        <button onclick="toggleTask('${t.id}')" style="width:22px;height:22px;border-radius:50%;border:2px solid ${t.done?'var(--green)':'var(--border)'};background:${t.done?'var(--green)':'none'};display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
-          ${t.done?'<i class="ti ti-check" style="font-size:12px;color:#fff"></i>':''}
-        </button>
-        <span style="font-size:14px;text-decoration:${t.done?'line-through':'none'};color:${t.done?'var(--sub)':'var(--text)'}">${t.txt}</span>
-      </div>`).join('')
-    : '<p style="font-size:13px;color:var(--sub)">No tasks today. Add one above!</p>';
-}
-window.toggleTask = function(id){ const t=S.tasks.find(x=>x.id===id); if(t){t.done=!t.done; renderTasks();} };
+// ── TASKS ──────────────────────────────────────
+window.addTask = async () => { const t=document.getElementById('task-inp').value;if(!t)return; const item={id:uid(),txt:t,done:false,date:todayStr()};S.tasks.push(item);renderTasks();await fsAdd('tasks',item);document.getElementById('task-inp').value=''; };
+function renderTasks(){ const el=document.getElementById('task-list');if(!el)return;const td=S.tasks.filter(t=>t.date===todayStr());
+  el.innerHTML=td.length?td.map(t=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)"><button onclick="toggleTask('${t.id}')" style="width:22px;height:22px;border-radius:50%;border:2px solid ${t.done?'var(--green)':'var(--border)'};background:${t.done?'var(--green)':'none'};display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">${t.done?'<i class="ti ti-check" style="font-size:12px;color:#fff"></i>':''}</button><span style="font-size:14px;text-decoration:${t.done?'line-through':'none'};color:${t.done?'var(--sub)':'var(--text)'}">${t.txt}</span></div>`).join(''):'<p style="font-size:13px;color:var(--sub)">No tasks today.</p>'; }
+window.toggleTask = id=>{ const t=S.tasks.find(x=>x.id===id);if(t){t.done=!t.done;renderTasks();} };
 
-// ─── EXERCISES ───────────────────────────────────────────
-window.addExercise = async function(){
-  const name=document.getElementById('ex-name').value; if(!name)return;
-  const type=document.getElementById('ex-type').value;
-  const sets=document.getElementById('ex-sets').value;
-  const kg=document.getElementById('ex-kg').value;
-  const item={id:uid(),name,type,sets,kg,date:todayStr()};
-  S.exercises.push(item); renderExercises();
-  await fsAdd('exercises',item);
-  document.getElementById('ex-name').value=''; document.getElementById('ex-sets').value=''; document.getElementById('ex-kg').value='';
-  notif(name+' logged 💪');
-};
-function renderExercises(){
-  const el=document.getElementById('ex-list'); if(!el)return;
-  const td=S.exercises.filter(e=>e.date===todayStr());
-  el.innerHTML=td.length?`<div class="card"><div class="ctitle">Today's Exercises (${td.length})</div>`+
-    td.map(e=>`<div class="exrow"><div><div style="font-weight:600;font-size:14px">${e.name}</div><div style="font-size:11px;color:var(--sub);margin-top:2px">${e.sets||''} ${e.kg?'· '+e.kg+'kg':''}</div></div>
-    <span class="bdg ${e.type==='Cardio'?'b':e.type==='HIIT'?'o':'g'}">${e.type}</span></div>`).join('')+'</div>'
-    :'<div class="card"><p style="font-size:13px;color:var(--sub)">No exercises logged today.</p></div>';
-}
+// ── EXERCISES ─────────────────────────────────
+window.addExercise = async () => { const name=document.getElementById('ex-name').value;if(!name)return; const type=document.getElementById('ex-type').value,sets=document.getElementById('ex-sets').value,kg=document.getElementById('ex-kg').value;const item={id:uid(),name,type,sets,kg,date:todayStr()};S.exercises.push(item);renderExercises();await fsAdd('exercises',item);document.getElementById('ex-name').value='';document.getElementById('ex-sets').value='';document.getElementById('ex-kg').value='';notif(name+' logged 💪'); };
+function renderExercises(){ const el=document.getElementById('ex-list');if(!el)return;const td=S.exercises.filter(e=>e.date===todayStr());
+  el.innerHTML=td.length?`<div class="card"><div class="ctitle">Today (${td.length})</div>`+td.map(e=>`<div class="exrow"><div><div style="font-weight:600;font-size:14px">${e.name}</div><div style="font-size:11px;color:var(--sub)">${e.sets||''} ${e.kg?'· '+e.kg+'kg':''}</div></div><span class="bdg ${e.type==='Cardio'?'b':e.type==='HIIT'?'o':'g'}">${e.type}</span></div>`).join('')+'</div>'
+    :'<div class="card"><p style="font-size:13px;color:var(--sub)">No exercises logged today.</p></div>'; }
 
-// ─── PHOTOS ──────────────────────────────────────────────
-window.prevPhoto = function(input,slotId,dataId){
+// ── PHOTOS ─────────────────────────────────────
+// ── PHOTOS (uploaded to ImageBB, URLs stored in Firestore) ─────
+window.prevPhoto = (input,slotId,dataId) => {
   const file=input.files[0]; if(!file)return;
   const reader=new FileReader();
-  reader.onload=e=>{document.getElementById(slotId).innerHTML=`<img src="${e.target.result}"/>`;document.getElementById(dataId).value=e.target.result;};
+  reader.onload=e=>{ document.getElementById(slotId).innerHTML=`<img src="${e.target.result}"/>`; document.getElementById(dataId).value=e.target.result; };
   reader.readAsDataURL(file);
 };
-window.saveWoPhotos = async function(){
-  const before=document.getElementById('ph-before-data').value;
-  const after=document.getElementById('ph-after-data').value;
-  if(!before&&!after)return alert('Upload at least one photo');
-  const item={id:uid(),date:todayStr(),before,after};
-  S.wophotos.push(item); renderWoPhotos();
-  // Note: photos stored locally only (too large for Firestore free tier)
-  try{localStorage.setItem('wophotos_'+currentUser.uid,JSON.stringify(S.wophotos));}catch(e){}
-  notif('Progress photos saved 📸');
+
+window.saveWoPhotos = async () => {
+  const beforeData=document.getElementById('ph-before-data').value;
+  const afterData =document.getElementById('ph-after-data').value;
+  if(!beforeData&&!afterData) return alert('Upload at least one photo');
+  const btn=document.getElementById('save-wo-photos-btn');
+  const origText=btn.textContent;
+  btn.disabled=true; btn.innerHTML='<span class="upload-spinner"></span>Uploading...';
+  try{
+    const [beforeUrl, afterUrl] = await Promise.all([
+      beforeData ? uploadToImgBB(beforeData) : Promise.resolve(null),
+      afterData  ? uploadToImgBB(afterData)  : Promise.resolve(null)
+    ]);
+    const item={ id:uid(), date:todayStr(), before:beforeUrl, after:afterUrl };
+    S.wophotos.push(item);
+    await fsAdd('wophotos', item);
+    notif('Progress photos saved to gallery 📸');
+    // reset slots
+    document.getElementById('ph-before').innerHTML='<i class="ti ti-camera" style="font-size:28px;color:var(--sub)"></i><span>Tap to upload</span>';
+    document.getElementById('ph-after').innerHTML='<i class="ti ti-camera" style="font-size:28px;color:var(--sub)"></i><span>Tap to upload</span>';
+    document.getElementById('ph-before-data').value=''; document.getElementById('ph-after-data').value='';
+    renderGallery();
+  }catch(e){
+    alert('Upload failed: '+e.message+'. Check your internet connection and try again.');
+  }finally{
+    btn.disabled=false; btn.textContent=origText;
+  }
 };
-function renderWoPhotos(){
-  const el=document.getElementById('ph-history'); if(!el)return;
-  el.innerHTML=S.wophotos.slice().reverse().map(p=>`
-    <div class="card"><div class="ctitle">${p.date}</div><div class="ph2">
-      ${p.before?`<div><p style="font-size:11px;color:var(--sub);margin-bottom:5px;font-weight:600">BEFORE</p><img src="${p.before}" style="width:100%;height:110px;object-fit:cover;border-radius:10px"/></div>`:''}
-      ${p.after?`<div><p style="font-size:11px;color:var(--sub);margin-bottom:5px;font-weight:600">AFTER</p><img src="${p.after}" style="width:100%;height:110px;object-fit:cover;border-radius:10px"/></div>`:''}
-    </div></div>`).join('');
+
+// ── GALLERY (combined workout + meal photos) ───────────────────
+let galleryFilter='all';
+window.setGalleryFilter = (filter, btn) => {
+  galleryFilter=filter;
+  btn.parentElement.querySelectorAll('.sm-filter').forEach(b=>{ b.style.background='none'; b.style.color='var(--sub)'; });
+  btn.style.background='var(--card)'; btn.style.color='var(--accent)';
+  renderGallery();
+};
+
+function renderGallery(){
+  const el=document.getElementById('gallery-grid'); if(!el)return;
+  const woItems=S.wophotos.flatMap(p=>{
+    const items=[];
+    if(p.before) items.push({url:p.before, date:p.date, tag:'wo', label:'Before', sortKey:p.id+'a'});
+    if(p.after)  items.push({url:p.after,  date:p.date, tag:'wo', label:'After',  sortKey:p.id+'b'});
+    return items;
+  });
+  const mealItems=S.meals.filter(m=>m.photo).map(m=>({url:m.photo, date:m.date, tag:'ml', label:m.type, sortKey:m.id}));
+  let all=[...woItems,...mealItems].sort((a,b)=>(b.sortKey||'').localeCompare(a.sortKey||''));
+  if(galleryFilter==='workout') all=all.filter(i=>i.tag==='wo');
+  if(galleryFilter==='meal')    all=all.filter(i=>i.tag==='ml');
+
+  if(!all.length){
+    el.innerHTML='<div class="gal-empty"><i class="ti ti-photo" style="font-size:36px;display:block;margin-bottom:8px;opacity:.4"></i>No photos yet.<br/>Upload progress or meal photos to build your gallery.</div>';
+    return;
+  }
+  el.innerHTML='<div class="gal-grid">'+all.map(item=>`
+    <div class="gal-item" onclick="window.open('${item.url}','_blank')">
+      <img src="${item.url}" loading="lazy"/>
+      <span class="gal-tag ${item.tag}">${item.tag==='wo'?'💪 '+item.label:'🍽️ '+item.label}</span>
+      <span class="gal-date">${item.date}</span>
+    </div>`).join('')+'</div>';
 }
 
-// ─── TIMER ───────────────────────────────────────────────
+// ── TIMERS ─────────────────────────────────────
 let woSecs=0,woRunning=false,woInterval=null,restSecs=0,restInterval=null;
-window.woTimerAction=function(){
-  if(woRunning){clearInterval(woInterval);woRunning=false;document.getElementById('wo-timer-btn').textContent='Resume';}
-  else{woRunning=true;document.getElementById('wo-timer-btn').textContent='Pause';
-    woInterval=setInterval(()=>{woSecs++;document.getElementById('wo-timer').textContent=`${p2(Math.floor(woSecs/60))}:${p2(woSecs%60)}`;},1000);}
-};
-window.woTimerReset=function(){clearInterval(woInterval);woSecs=0;woRunning=false;document.getElementById('wo-timer').textContent='00:00';document.getElementById('wo-timer-btn').textContent='Start';};
-window.startRest=function(){
-  clearInterval(restInterval);
-  restSecs=parseInt(document.getElementById('rest-dur').value);
-  const td=document.getElementById('rest-timer'); td.style.display='block';
-  td.textContent=`${p2(Math.floor(restSecs/60))}:${p2(restSecs%60)}`;
-  restInterval=setInterval(()=>{restSecs--;td.textContent=`${p2(Math.floor(restSecs/60))}:${p2(restSecs%60)}`;
-    if(restSecs<=0){clearInterval(restInterval);notif('Rest over! Back to work 💪');fireRingtone(S.selectedRingtone);td.style.display='none';}},1000);
-};
-window.addWoReminder=async function(){
-  const time=document.getElementById('wo-rem-time').value; if(!time)return alert('Set a time');
-  const label=document.getElementById('wo-rem-label').value||'Workout time!';
-  const item={id:uid(),txt:'🏋️ '+label,time,date:todayStr()};
-  S.reminders.push(item); await fsAdd('reminders',item);
-  const target=new Date(); const[h,m]=time.split(':').map(Number); target.setHours(h,m,0,0); if(target<=new Date())target.setDate(target.getDate()+1);
-  setTimeout(()=>fireAlarm({label:'🏋️ '+label,time,on:true,repeat:'once',ringtone:S.selectedRingtone}),target-new Date());
-  notif('Workout reminder set for '+time);
-};
+window.woTimerAction=()=>{ if(woRunning){clearInterval(woInterval);woRunning=false;document.getElementById('wo-timer-btn').textContent='Resume';}else{woRunning=true;document.getElementById('wo-timer-btn').textContent='Pause';woInterval=setInterval(()=>{woSecs++;document.getElementById('wo-timer').textContent=`${p2(Math.floor(woSecs/60))}:${p2(woSecs%60)}`;},1000);} };
+window.woTimerReset=()=>{ clearInterval(woInterval);woSecs=0;woRunning=false;document.getElementById('wo-timer').textContent='00:00';document.getElementById('wo-timer-btn').textContent='Start'; };
+window.startRest=()=>{ clearInterval(restInterval);restSecs=parseInt(document.getElementById('rest-dur').value);const td=document.getElementById('rest-timer');td.style.display='block';td.textContent=`${p2(Math.floor(restSecs/60))}:${p2(restSecs%60)}`;restInterval=setInterval(()=>{restSecs--;td.textContent=`${p2(Math.floor(restSecs/60))}:${p2(restSecs%60)}`;if(restSecs<=0){clearInterval(restInterval);notif('Rest over! Back to work 💪');fireRingtone(S.selectedRingtone);td.style.display='none';}},1000); };
+window.addWoReminder=async()=>{ const time=document.getElementById('wo-rem-time').value;if(!time)return alert('Set a time');const label=document.getElementById('wo-rem-label').value||'Workout!';const item={id:uid(),txt:'🏋️ '+label,time,date:todayStr()};S.reminders.push(item);await fsAdd('reminders',item);const target=new Date();const[h,m]=time.split(':').map(Number);target.setHours(h,m,0,0);if(target<=new Date())target.setDate(target.getDate()+1);scheduleSwNotif('🏋️ Workout Time!',label,target-new Date(),'wo-rem');notif('Workout reminder set for '+time); };
 
-// ─── MEALS ───────────────────────────────────────────────
-window.addMeal = async function(){
-  const type=document.getElementById('ml-type').value;
-  const cal=parseInt(document.getElementById('ml-cal').value)||0;
-  const desc=document.getElementById('ml-desc').value;
-  const photo=document.getElementById('ml-ph-data').value;
-  const item={id:uid(),type,cal,desc,photo,date:todayStr()};
+// ── MEALS ──────────────────────────────────────
+window.addMeal = async () => {
+  const type=document.getElementById('ml-type').value,cal=parseInt(document.getElementById('ml-cal').value)||0,desc=document.getElementById('ml-desc').value;
+  const photoData=document.getElementById('ml-ph-data').value;
+  const btn=document.querySelector('#pg-meals .btn.acc.full');
+  const origText=btn?btn.textContent:'';
+  if(btn){ btn.disabled=true; btn.innerHTML='<span class="upload-spinner"></span>Saving...'; }
+  let photoUrl='';
+  try{
+    if(photoData) photoUrl = await uploadToImgBB(photoData);
+  }catch(e){
+    notif('Photo upload failed, meal saved without photo');
+  }
+  const item={id:uid(),type,cal,desc,photo:photoUrl,date:todayStr()};
   S.meals.push(item); renderMeals();
-  // save text data to Firestore, photo locally
-  await fsAdd('meals',{id:item.id,type,cal,desc,date:item.date});
-  if(photo){try{const mp=JSON.parse(localStorage.getItem('meal_photos_'+currentUser.uid)||'{}');mp[item.id]=photo;localStorage.setItem('meal_photos_'+currentUser.uid,JSON.stringify(mp));}catch(e){}}
-  document.getElementById('ml-cal').value=''; document.getElementById('ml-desc').value='';
+  await fsAdd('meals',{id:item.id,type,cal,desc,photo:photoUrl,date:item.date});
+  document.getElementById('ml-cal').value='';document.getElementById('ml-desc').value='';
   document.getElementById('ml-ph-slot').innerHTML='<i class="ti ti-camera" style="font-size:22px;color:var(--sub)"></i><span>Tap to upload meal photo</span>';
   document.getElementById('ml-ph-data').value='';
+  if(btn){ btn.disabled=false; btn.textContent=origText; }
+  renderGallery();
   notif(type+' logged 🍽️');
 };
-function renderMeals(){
-  const td=S.meals.filter(m=>m.date===todayStr());
-  document.getElementById('ml-cal-total').textContent=td.reduce((a,m)=>a+m.cal,0);
-  document.getElementById('ml-count').textContent=td.length;
-  document.getElementById('ml-list').innerHTML=td.length
-    ? td.map(m=>`<div class="lrow"><div class="linfo"><div class="ltitle">${m.type}${m.desc?' — '+m.desc:''}</div><div class="lsub">${m.cal?m.cal+' cal':''}</div></div>
-        ${m.photo?`<img src="${m.photo}" style="width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0"/>`:'<span class="bdg gr">No photo</span>'}</div>`).join('')
-    : '<p style="font-size:13px;color:var(--sub)">No meals logged today.</p>';
-}
+function renderMeals(){ const td=S.meals.filter(m=>m.date===todayStr());document.getElementById('ml-cal-total').textContent=td.reduce((a,m)=>a+m.cal,0);document.getElementById('ml-count').textContent=td.length;document.getElementById('ml-list').innerHTML=td.length?td.map(m=>`<div class="lrow"><div class="linfo"><div class="ltitle">${m.type}${m.desc?' — '+m.desc:''}</div><div class="lsub">${m.cal?m.cal+' cal':''}</div></div>${m.photo?`<img src="${m.photo}" style="width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0"/>`:'<span class="bdg gr">No photo</span>'}</div>`).join(''):'<p style="font-size:13px;color:var(--sub)">No meals logged today.</p>'; }
 
-// ─── EXPORT ──────────────────────────────────────────────
-window.exportData = function(){
-  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rapido-life-data.json'; a.click();
-};
+// ── EXPORT ─────────────────────────────────────
+window.exportData=()=>{ const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rapido-life-data.json';a.click(); };
 
-// ─── NOTIFICATION ────────────────────────────────────────
+// ── NOTIF UI ───────────────────────────────────
 let notifTimer=null;
-window.notif=function(msg){
-  const el=document.getElementById('notif'); document.getElementById('notif-msg').textContent=msg;
-  el.classList.add('on'); clearTimeout(notifTimer); notifTimer=setTimeout(closeNotif,3500);
-};
-window.closeNotif=function(){document.getElementById('notif').classList.remove('on');};
+window.notif=msg=>{ const el=document.getElementById('notif');document.getElementById('notif-msg').textContent=msg;el.classList.add('on');clearTimeout(notifTimer);notifTimer=setTimeout(closeNotif,3500); };
+window.closeNotif=()=>document.getElementById('notif').classList.remove('on');
+function syncBar(msg,cls){ const el=document.getElementById('sync-bar');el.textContent=msg;el.className='show '+(cls||''); }
+function clearSyncBar(){ document.getElementById('sync-bar').className=''; }
 
-function syncBar(msg, cls){
-  const el=document.getElementById('sync-bar');
-  el.textContent=msg; el.className='show '+(cls||'');
-}
-function clearSyncBar(){
-  const el=document.getElementById('sync-bar'); el.className='';
-}
-
-// ─── INIT ────────────────────────────────────────────────
+// ── INIT ───────────────────────────────────────
 function initApp(){
-  if('Notification' in window) Notification.requestPermission();
+  if('Notification' in window) updateNotifUI(Notification.permission);
   const td=todayStr();
   ['dep-date','wit-date','rem-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=td;});
   document.getElementById('r-time').value=now().toTimeString().slice(0,5);
-  S.alarms.filter(a=>a.on).forEach(scheduleAlarm);
-  S.reminders.forEach(r=>{
-    if(r.time&&r.date){const t=new Date(r.date+'T'+r.time);if(t>new Date())setTimeout(()=>fireAlarm({label:r.txt,time:r.time,on:true,repeat:'once',ringtone:S.selectedRingtone}),t-new Date());}
+  // regular recurring/once alarms
+  S.alarms.filter(a=>a.on && !a.forDate).forEach(scheduleAlarm);
+  // date-pinned alarms from night plans — only reschedule if their date hasn't passed
+  S.alarms.filter(a=>a.on && a.forDate).forEach(a=>{
+    const target=new Date(a.forDate+'T00:00:00'); const[h,m]=a.time.split(':').map(Number); target.setHours(h,m,0,0);
+    if(target>new Date()) scheduleAlarmForDate(a, a.forDate);
   });
-  // load local-only data (photos, ringtones)
-  try{
-    const lp=JSON.parse(localStorage.getItem('wophotos_'+currentUser.uid)||'[]');
-    if(lp.length) S.wophotos=lp;
-    const mp=JSON.parse(localStorage.getItem('meal_photos_'+currentUser.uid)||'{}');
-    S.meals.forEach(m=>{if(mp[m.id])m.photo=mp[m.id];});
-  }catch(e){}
-  updateRingtoneSelect();
-  renderMGoal();
-  renderHome();
-  renderAlarms();
-  renderRingtones();
+  S.reminders.forEach(r=>{ if(r.time&&r.date){const t=new Date(r.date+'T'+r.time);const diff=t-new Date();if(diff>0)scheduleSwNotif('🔔 '+r.txt,'',diff,'rem-'+r.id);} });
+  // photos now load from Firestore (wophotos, meals) via loadAllData() — no local fallback needed
+  scheduleNightPlanPrompt();
+  updateRingtoneSelect(); renderMGoal(); renderHome(); renderAlarms(); renderRingtones();
 }
 </script>
 </body>
