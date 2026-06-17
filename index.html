@@ -2,789 +2,1252 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Rapido Tracker</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>Rapido Life Tracker</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --bg:#0d0f14;--bg2:#151820;--bg3:#1c2030;--bg4:#242840;
-    --accent:#f97316;--accent2:#fb923c;--green:#22c55e;--red:#ef4444;
-    --blue:#3b82f6;--yellow:#eab308;--purple:#a855f7;
-    --text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;
-    --border:#2d3348;--radius:12px;--card-radius:16px;
-    --font:'Segoe UI',system-ui,sans-serif
-  }
-  body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:0}
-  .screen{display:none;min-height:100vh}
-  .screen.active{display:flex;flex-direction:column}
-  
-  /* Auth Screen */
-  #authScreen{align-items:center;justify-content:center;background:linear-gradient(135deg,#0d0f14 0%,#1a1040 100%)}
-  .auth-card{background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:48px 40px;text-align:center;max-width:400px;width:90%}
-  .logo-icon{width:80px;height:80px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:36px}
-  .auth-title{font-size:28px;font-weight:700;margin-bottom:8px}
-  .auth-sub{color:var(--text2);margin-bottom:32px;font-size:14px}
-  .google-btn{background:#fff;color:#1f2937;border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;justify-content:center;transition:transform .15s,box-shadow .15s}
-  .google-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-  .google-btn svg{width:20px;height:20px}
-  .auth-err{background:rgba(239,68,68,.15);border:1px solid var(--red);border-radius:8px;padding:10px 14px;margin-top:16px;font-size:13px;color:#fca5a5;display:none}
+:root{
+  --bg:#f4f4f4;--card:#fff;--border:#e5e5e5;
+  --text:#111;--sub:#888;--accent:#EA580C;
+  --green:#16a34a;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;
+  --accent-light:#ffedd5;--green-light:#dcfce7;--red-light:#fee2e2;
+  --blue-light:#dbeafe;--purple-light:#ede9fe;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
 
-  /* Main App */
-  #appScreen{background:var(--bg)}
-  .topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-  .topbar-left{display:flex;align-items:center;gap:10px}
-  .app-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
-  .app-title{font-size:16px;font-weight:700}
-  .user-info{display:flex;align-items:center;gap:8px}
-  .user-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover}
-  .user-avatar-placeholder{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
-  .sign-out-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer}
-  .sign-out-btn:hover{color:var(--text);background:var(--bg4)}
+/* LOGIN SCREEN */
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#EA580C 0%,#c2410c 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px}
+#login-screen .logo{font-size:64px;margin-bottom:16px}
+#login-screen h1{color:#fff;font-size:28px;font-weight:700;margin-bottom:8px;text-align:center}
+#login-screen p{color:rgba(255,255,255,0.8);font-size:14px;text-align:center;margin-bottom:48px;line-height:1.6}
+.google-btn{background:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+.google-btn img{width:22px;height:22px}
+.google-btn:active{opacity:.85}
+.login-footer{color:rgba(255,255,255,0.6);font-size:12px;margin-top:24px;text-align:center}
 
-  /* Nav Tabs */
-  .nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
-  .nav::-webkit-scrollbar{display:none}
-  .nav-tab{flex:1;min-width:80px;padding:12px 8px;text-align:center;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
-  .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-  .nav-tab:hover:not(.active){color:var(--text2)}
+/* SYNC STATUS */
+#sync-bar{background:var(--green);color:#fff;font-size:12px;text-align:center;padding:4px;display:none}
+#sync-bar.show{display:block}
+#sync-bar.syncing{background:var(--accent)}
+#sync-bar.error{background:var(--red)}
 
-  .content{flex:1;padding:16px;max-width:700px;margin:0 auto;width:100%}
+/* NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,8px)}
+.nv{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:8px 2px 4px;color:var(--sub);font-size:9.5px;font-family:inherit}
+.nv.on{color:var(--accent)}
+.nv i{font-size:21px}
 
-  /* Cards */
-  .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-radius);padding:16px;margin-bottom:12px}
-  .card-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+/* PAGES */
+.pg{display:none;padding:0 12px 90px;min-height:100vh}
+.pg.on{display:block}
 
-  /* Stat Grid */
-  .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
-  .stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-  .stat-label{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
-  .stat-value{font-size:22px;font-weight:700}
-  .stat-value.green{color:var(--green)}
-  .stat-value.red{color:var(--red)}
-  .stat-value.orange{color:var(--accent)}
-  .stat-value.blue{color:var(--blue)}
-  .stat-value.purple{color:var(--purple)}
+/* TOP BAR */
+.tbar{background:var(--card);padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;margin:0 -12px 14px;display:flex;justify-content:space-between;align-items:flex-start}
+.tbar-left h1{font-size:18px;font-weight:600;letter-spacing:-0.3px}
+.tbar-left p{font-size:12px;color:var(--sub);margin-top:2px}
+.tbar-right{display:flex;align-items:center;gap:8px}
+.avatar-sm{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)}
+.avatar-sm-placeholder{width:34px;height:34px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0}
 
-  /* Progress Bar */
-  .progress-wrap{margin:8px 0}
-  .progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px}
-  .progress-bar{height:8px;background:var(--bg4);border-radius:99px;overflow:hidden}
-  .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s ease}
-  .progress-fill.green{background:linear-gradient(90deg,#16a34a,var(--green))}
-  .progress-fill.over{background:linear-gradient(90deg,#dc2626,var(--red))}
+/* CARDS */
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:14px 16px;margin-bottom:10px}
+.ctitle{font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
 
-  /* Forms */
-  .form-group{margin-bottom:12px}
-  .form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block;font-weight:600}
-  .form-input,.form-select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s}
-  .form-input:focus,.form-select:focus{border-color:var(--accent)}
-  .form-select option{background:var(--bg2)}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* STATS */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sbox{background:var(--bg);border-radius:10px;padding:11px 13px;border:1px solid var(--border)}
+.slabel{font-size:11px;color:var(--sub);margin-bottom:3px}
+.sval{font-size:20px;font-weight:600;letter-spacing:-0.5px}
+.sval.g{color:var(--green)}.sval.r{color:var(--red)}.sval.o{color:var(--accent)}.sval.b{color:var(--blue)}.sval.p{color:var(--purple)}
 
-  /* Buttons */
-  .btn{border:none;border-radius:10px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;width:100%}
-  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
-  .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
-  .btn-danger{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
-  .btn-danger:hover{background:rgba(239,68,68,.25)}
-  .btn-sm{padding:6px 12px;font-size:12px;width:auto;border-radius:8px}
+/* BUTTONS */
+.btn{background:none;border:1px solid var(--border);border-radius:9px;padding:9px 16px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text);font-family:inherit;transition:opacity .15s}
+.btn:active{opacity:.7}
+.btn.acc{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.grn{background:var(--green);border-color:var(--green);color:#fff}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.pur{background:var(--purple);border-color:var(--purple);color:#fff}
+.btn.blu{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.sm{padding:6px 12px;font-size:12px}
+.btn.full{width:100%}
 
-  /* Transaction List */
-  .tx-list{display:flex;flex-direction:column;gap:8px}
-  .tx-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
-  .tx-left{display:flex;align-items:center;gap:10px}
-  .tx-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-  .tx-icon.income{background:rgba(34,197,94,.15)}
-  .tx-icon.expense{background:rgba(239,68,68,.15)}
-  .tx-name{font-size:14px;font-weight:500}
-  .tx-meta{font-size:11px;color:var(--text3);margin-top:2px}
-  .tx-amount{font-size:15px;font-weight:700}
-  .tx-amount.income{color:var(--green)}
-  .tx-amount.expense{color:var(--red)}
-  .tx-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:4px}
-  .tx-del:hover{color:var(--red)}
+/* FORM */
+.frow{margin-bottom:11px}
+.frow label{font-size:12px;color:var(--sub);margin-bottom:5px;display:block;font-weight:500}
+.frow input,.frow select,.frow textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;color:var(--text);font-family:inherit;outline:none;-webkit-appearance:none}
+.frow input:focus,.frow select:focus{border-color:var(--accent);background:#fff}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-  /* Target Section */
-  .target-display{text-align:center;padding:20px;background:var(--bg3);border-radius:var(--radius);margin-bottom:14px}
-  .target-amount{font-size:36px;font-weight:700;color:var(--accent)}
-  .target-sub{font-size:12px;color:var(--text3);margin-top:4px}
+/* BADGES */
+.bdg{display:inline-flex;align-items:center;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.bdg.g{background:var(--green-light);color:var(--green)}
+.bdg.r{background:var(--red-light);color:var(--red)}
+.bdg.o{background:var(--accent-light);color:var(--accent)}
+.bdg.b{background:var(--blue-light);color:var(--blue)}
+.bdg.p{background:var(--purple-light);color:var(--purple)}
+.bdg.gr{background:#f3f4f6;color:#555}
 
-  /* Donation Banner */
-  .donation-banner{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(249,115,22,.2));border:1px solid rgba(168,85,247,.4);border-radius:var(--card-radius);padding:16px;margin-bottom:12px;text-align:center}
-  .donation-title{font-size:16px;font-weight:700;color:#c084fc;margin-bottom:6px}
-  .donation-amount{font-size:28px;font-weight:700;color:var(--purple);margin-bottom:10px}
-  .donation-btn{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;width:100%;transition:opacity .2s}
-  .donation-btn:hover{opacity:.9}
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--bg);border-radius:11px;padding:3px;margin-bottom:14px;border:1px solid var(--border)}
+.tab{flex:1;text-align:center;padding:7px 2px;font-size:12px;font-weight:500;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit;color:var(--sub);white-space:nowrap}
+.tab.on{background:var(--card);color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 
-  /* Month Picker */
-  .month-header{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px}
-  .month-nav{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:16px}
-  .month-nav:hover{background:var(--bg4)}
-  .month-label{font-size:15px;font-weight:700}
+/* LIST ROWS */
+.lrow{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:10px}
+.lrow:last-child{border-bottom:none}
+.lrow .linfo{flex:1;min-width:0}
+.lrow .ltitle{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .lsub{font-size:11px;color:var(--sub);margin-top:2px}
 
-  /* Badge */
-  .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600}
-  .badge-green{background:rgba(34,197,94,.15);color:var(--green)}
-  .badge-red{background:rgba(239,68,68,.15);color:var(--red)}
-  .badge-orange{background:rgba(249,115,22,.15);color:var(--accent)}
+/* PROGRESS */
+.pbar-wrap{background:var(--bg);border-radius:20px;height:8px;overflow:hidden;margin-top:8px;border:1px solid var(--border)}
+.pbar{height:100%;border-radius:20px;transition:width .4s ease}
+.pbar.o{background:var(--accent)}.pbar.g{background:var(--green)}.pbar.b{background:var(--blue)}
 
-  /* Summary Rows */
-  .summary-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
-  .summary-row:last-child{border-bottom:none;padding-bottom:0}
-  .summary-row-label{font-size:13px;color:var(--text2)}
-  .summary-row-value{font-size:14px;font-weight:600}
+/* TOGGLE */
+.tog{width:44px;height:26px;border-radius:13px;border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--accent)}.tog.off{background:#d1d5db}
+.tog::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on::after{left:21px}.tog.off::after{left:3px}
 
-  /* Toast */
-  #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* PHOTO SLOT */
+.phslot{border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:120px;cursor:pointer;gap:6px;overflow:hidden;position:relative}
+.phslot img{width:100%;height:100%;object-fit:cover}
+.phslot span{font-size:11px;color:var(--sub)}
+.ph2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 
-  /* Alarm indicator */
-  .alarm-status{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:10px 14px;margin-bottom:10px}
-  .alarm-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* BANK CARD */
+.bankcard{background:linear-gradient(135deg,#1e40af 0%,#3b82f6 60%,#60a5fa 100%);border-radius:16px;padding:20px 18px;margin-bottom:12px;color:#fff}
+.bankcard .blabel{font-size:12px;opacity:.75;margin-bottom:4px}
+.bankcard .bamt{font-size:36px;font-weight:700;letter-spacing:-1px}
+.bankcard .bsub{font-size:11px;opacity:.65;margin-top:8px;display:flex;gap:16px}
 
-  /* Empty state */
-  .empty{text-align:center;padding:32px 16px;color:var(--text3)}
-  .empty-icon{font-size:40px;margin-bottom:10px}
-  .empty-text{font-size:14px}
+/* TXN ROW */
+.txnrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.txnrow:last-child{border-bottom:none}
+.txnico{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.txnico.dep{background:var(--green-light);color:var(--green)}
+.txnico.wit{background:var(--red-light);color:var(--red)}
+.txnico.rid{background:var(--accent-light);color:var(--accent)}
+.txnico.exp{background:#fef9c3;color:#854d0e}
 
-  .section-divider{height:1px;background:var(--border);margin:14px 0}
-  .flex-row{display:flex;gap:8px}
-  .flex-row .btn{flex:1}
-  .small-note{font-size:11px;color:var(--text3);margin-top:6px;text-align:center}
+/* ALARM */
+.alrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.alrow:last-child{border-bottom:none}
+.altime{font-size:26px;font-weight:600;letter-spacing:-0.5px}
+.allabel{font-size:12px;color:var(--sub);margin-top:1px}
+.alring{font-size:11px;color:var(--accent);margin-top:3px}
+
+/* RINGTONE */
+.rtrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.rtrow:last-child{border-bottom:none}
+.rtname{font-size:14px;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtsub{font-size:11px;color:var(--sub);margin-top:1px}
+.playbtn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:none;color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:15px}
+
+/* UPLOAD ZONE */
+.upzone{border:2px dashed var(--border);border-radius:12px;padding:24px;text-align:center;cursor:pointer}
+.upzone i{font-size:36px;color:var(--accent);display:block;margin-bottom:8px}
+.upzone .uptitle{font-size:14px;font-weight:600;margin-bottom:4px}
+.upzone .upsub{font-size:12px;color:var(--sub)}
+
+/* TIMER */
+.timerdisp{font-size:52px;font-weight:700;text-align:center;color:var(--accent);letter-spacing:2px;padding:16px 0;font-variant-numeric:tabular-nums}
+
+/* NOTIF BANNER */
+.notif{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#111;color:#fff;padding:14px 16px;font-size:14px;z-index:9998;display:none;border-radius:0 0 14px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.notif.on{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.notif .nclose{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;flex-shrink:0}
+
+/* EXERCISE ROW */
+.exrow{background:var(--bg);border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border)}
+
+/* INFO BOX */
+.infobox{background:var(--accent-light);border:1px solid #fed7aa;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.infobox i{color:var(--accent);font-size:18px;flex-shrink:0;margin-top:1px}
+.infobox p{font-size:12px;color:#7c2d12;line-height:1.6}
+
+.sep{height:1px;background:var(--border);margin:6px 0}
+.section-label{font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
+
+/* PROFILE PAGE */
+.profile-card{background:linear-gradient(135deg,var(--accent),#c2410c);border-radius:16px;padding:20px;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:16px}
+.profile-avatar{width:60px;height:60px;border-radius:50%;border:3px solid rgba(255,255,255,0.5);object-fit:cover}
+.profile-avatar-placeholder{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;flex-shrink:0}
 </style>
 </head>
 <body>
 
-<!-- Auth Screen -->
-<div id="authScreen" class="screen active">
-  <div class="auth-card">
-    <div class="logo-icon">🛵</div>
-    <div class="auth-title">Rapido Tracker</div>
-    <div class="auth-sub">Track earnings, expenses & pure profit for your rides and deliveries</div>
-    <button class="google-btn" onclick="window._fbSignIn && window._fbSignIn()">
-      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Sign in with Google
-    </button>
-    <div id="authErr" class="auth-err"></div>
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="logo">🏍️</div>
+  <h1>Rapido Life</h1>
+  <p>Track your rides, income, expenses,<br/>workouts & daily routine — all in one place.</p>
+  <button class="google-btn" onclick="signInGoogle()">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"/>
+    Continue with Google
+  </button>
+  <p class="login-footer">Your data syncs securely across all devices</p>
+</div>
+
+<!-- SYNC BAR -->
+<div id="sync-bar"></div>
+
+<!-- NOTIFICATION BANNER -->
+<div id="notif" class="notif">
+  <span id="notif-msg">✅ Done!</span>
+  <button class="nclose" onclick="closeNotif()">✕</button>
+</div>
+
+<!-- ======= HOME ======= -->
+<div id="pg-home" class="pg on">
+  <div class="tbar">
+    <div class="tbar-left"><h1>🏍️ Rapido Life</h1><p id="today-date">Loading...</p></div>
+    <div class="tbar-right">
+      <div id="user-avatar-home" class="avatar-sm-placeholder">?</div>
+    </div>
+  </div>
+  <div class="sgrid">
+    <div class="sbox"><div class="slabel">Today Rides</div><div class="sval o" id="d-rides">₹0</div></div>
+    <div class="sbox"><div class="slabel">Net Profit</div><div class="sval g" id="d-profit">₹0</div></div>
+    <div class="sbox"><div class="slabel">Today Expense</div><div class="sval r" id="d-exp">₹0</div></div>
+    <div class="sbox"><div class="slabel">Bank Balance</div><div class="sval b" id="d-bank">₹0</div></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Monthly Rapido Goal</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:15px;font-weight:600" id="d-goal-label">₹0 / ₹0</span>
+      <span class="bdg o" id="d-goal-pct">0%</span>
+    </div>
+    <div class="pbar-wrap"><div class="pbar o" id="d-goal-bar" style="width:0%"></div></div>
+    <p style="font-size:11px;color:var(--sub);margin-top:6px" id="d-goal-days">Set your monthly goal in the Rapido tab</p>
+  </div>
+  <div class="card">
+    <div class="ctitle">Payment Breakdown</div>
+    <div class="lrow" style="border:none;padding:5px 0"><div class="linfo"><div class="ltitle">Cash Earnings</div></div><span style="font-weight:600;color:var(--green)" id="d-cash">₹0</span></div>
+    <div class="sep"></div>
+    <div class="lrow" style="border:none;padding:5px 0"><div class="linfo"><div class="ltitle">UPI Earnings</div></div><span style="font-weight:600;color:var(--blue)" id="d-upi">₹0</span></div>
+    <div class="sep"></div>
+    <div class="lrow" style="border:none;padding:5px 0"><div class="linfo"><div class="ltitle">Bank Balance</div></div><span style="font-weight:600;color:var(--purple)" id="d-bankbal">₹0</span></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Today's Reminders</div>
+    <div id="d-reminders"><p style="font-size:13px;color:var(--sub)">No reminders today.</p></div>
   </div>
 </div>
 
-<!-- Main App Screen -->
-<div id="appScreen" class="screen">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="app-logo">🛵</div>
-      <div>
-        <div class="app-title">Rapido Tracker</div>
+<!-- ======= RAPIDO ======= -->
+<div id="pg-rapido" class="pg">
+  <div class="tbar"><div class="tbar-left"><h1>Rapido Income</h1><p>Rides, expenses & goals</p></div></div>
+  <div class="tabs">
+    <button class="tab on" onclick="stab('rapido','add',this)">Add Ride</button>
+    <button class="tab" onclick="stab('rapido','hist',this)">History</button>
+    <button class="tab" onclick="stab('rapido','goals',this)">Goals</button>
+  </div>
+  <div id="rapido-add">
+    <div class="card">
+      <div class="ctitle">Log Ride Income</div>
+      <div class="frow"><label>Amount (₹)</label><input type="number" id="r-amt" placeholder="e.g. 85" inputmode="decimal"/></div>
+      <div class="f2">
+        <div class="frow"><label>Payment Mode</label><select id="r-pay"><option value="cash">Cash</option><option value="upi">UPI</option></select></div>
+        <div class="frow"><label>Time</label><input type="time" id="r-time"/></div>
       </div>
+      <div class="frow"><label>Notes (optional)</label><input type="text" id="r-note" placeholder="e.g. Airport ride"/></div>
+      <button class="btn acc full" onclick="addRide()">+ Add Ride</button>
     </div>
-    <div class="user-info">
-      <div id="userAvatarWrap"></div>
-      <button class="sign-out-btn" onclick="window._fbSignOut && window._fbSignOut()">Sign out</button>
+    <div class="card">
+      <div class="ctitle">Add Expense</div>
+      <div class="f2">
+        <div class="frow"><label>Amount (₹)</label><input type="number" id="e-amt" placeholder="e.g. 200" inputmode="decimal"/></div>
+        <div class="frow"><label>Category</label><select id="e-cat"><option>Fuel</option><option>Food</option><option>Maintenance</option><option>Rent</option><option>Other</option></select></div>
+      </div>
+      <div class="frow"><label>Description</label><input type="text" id="e-desc" placeholder="e.g. Petrol fill"/></div>
+      <button class="btn red full" onclick="addExpense()">+ Add Expense</button>
     </div>
   </div>
-
-  <div class="nav">
-    <div class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</div>
-    <div class="nav-tab" onclick="switchTab('add')">➕ Add Entry</div>
-    <div class="nav-tab" onclick="switchTab('history')">📋 History</div>
-    <div class="nav-tab" onclick="switchTab('target')">🎯 Target</div>
-    <div class="nav-tab" onclick="switchTab('donation')">🙏 Donation</div>
+  <div id="rapido-hist" style="display:none">
+    <div class="sgrid">
+      <div class="sbox"><div class="slabel">Total Income</div><div class="sval o" id="h-inc">₹0</div></div>
+      <div class="sbox"><div class="slabel">Total Expense</div><div class="sval r" id="h-exp">₹0</div></div>
+      <div class="sbox"><div class="slabel">Net Profit</div><div class="sval g" id="h-pro">₹0</div></div>
+      <div class="sbox"><div class="slabel">Cash in Hand</div><div class="sval b" id="h-cih">₹0</div></div>
+    </div>
+    <div class="card"><div class="ctitle">Recent Transactions</div><div id="r-txns"><p style="font-size:13px;color:var(--sub)">No transactions yet.</p></div></div>
   </div>
-
-  <!-- Dashboard Tab -->
-  <div id="tab-dashboard" class="content">
-    <div class="month-header">
-      <button class="month-nav" onclick="changeMonth(-1)">◀</button>
-      <div class="month-label" id="monthLabel">May 2025</div>
-      <button class="month-nav" onclick="changeMonth(1)">▶</button>
-    </div>
-
-    <div id="donationAlertWrap" style="display:none">
-      <div class="donation-banner">
-        <div class="donation-title">🙏 Thirupathi Donation Time!</div>
-        <div style="font-size:13px;color:#d8b4fe;margin-bottom:8px">End of month donation (1% of pure profit)</div>
-        <div class="donation-amount" id="dashDonationAmt">₹0</div>
-        <button class="donation-btn" onclick="openDonationSite()">Open Donation Site 🔗</button>
-      </div>
-    </div>
-
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-label">Total Earnings</div>
-        <div class="stat-value green" id="dashEarnings">₹0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Expenses</div>
-        <div class="stat-value red" id="dashExpenses">₹0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Pure Profit</div>
-        <div class="stat-value orange" id="dashProfit">₹0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Donation (1%)</div>
-        <div class="stat-value purple" id="dashDonation">₹0</div>
-      </div>
-    </div>
-
+  <div id="rapido-goals" style="display:none">
     <div class="card">
-      <div class="card-title">🎯 Monthly Target Progress</div>
-      <div id="targetProgressWrap">
-        <div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">No target set. Go to Target tab to set one!</div></div>
-      </div>
+      <div class="ctitle">Monthly Earning Goal</div>
+      <div class="frow"><label>Set Monthly Goal (₹)</label><input type="number" id="mg-inp" placeholder="e.g. 25000" inputmode="decimal"/></div>
+      <button class="btn acc full" onclick="setMonthlyGoal()">Set Goal</button>
+      <div class="pbar-wrap" style="margin-top:12px"><div class="pbar o" id="mg-bar" style="width:0%"></div></div>
+      <p style="font-size:12px;color:var(--sub);margin-top:6px" id="mg-status">No goal set yet</p>
     </div>
-
+    <div class="card"><div class="ctitle">Daily Target</div><div id="mg-daily"><p style="font-size:13px;color:var(--sub)">Set monthly goal to see daily target</p></div></div>
     <div class="card">
-      <div class="card-title">📈 This Month Summary</div>
-      <div id="summaryRows"></div>
-    </div>
-
-    <div class="alarm-status">
-      <div class="alarm-dot"></div>
-      <div style="font-size:13px"><span style="font-weight:600">Month-end alarm active</span> <span style="color:var(--text3)"> — 10:00 PM on last day of month</span></div>
-    </div>
-  </div>
-
-  <!-- Add Entry Tab -->
-  <div id="tab-add" class="content" style="display:none">
-    <div class="card">
-      <div class="card-title">💰 Add Income</div>
-      <div class="form-group">
-        <label class="form-label">Source</label>
-        <select class="form-select" id="incomeSource">
-          <option value="Rapido Bike Ride">Rapido Bike Ride</option>
-          <option value="Rapido Auto">Rapido Auto</option>
-          <option value="Delivery">Delivery</option>
-          <option value="Tip">Tip</option>
-          <option value="Bonus/Incentive">Bonus / Incentive</option>
-          <option value="Other Income">Other Income</option>
-        </select>
+      <div class="ctitle">Savings Goals</div>
+      <div class="f2">
+        <div class="frow"><label>Goal Name</label><input type="text" id="sg-name" placeholder="e.g. Bike EMI"/></div>
+        <div class="frow"><label>Target (₹)</label><input type="number" id="sg-target" placeholder="e.g. 50000" inputmode="decimal"/></div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Amount (₹)</label>
-          <input type="number" class="form-input" id="incomeAmt" placeholder="0" min="0"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date</label>
-          <input type="date" class="form-input" id="incomeDate"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Note (optional)</label>
-        <input type="text" class="form-input" id="incomeNote" placeholder="e.g. 5 rides today"/>
-      </div>
-      <button class="btn btn-primary" onclick="addIncome()">➕ Add Income</button>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <div class="card">
-      <div class="card-title">💸 Add Expense</div>
-      <div class="form-group">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="expenseCategory">
-          <option value="Fuel / Petrol">⛽ Fuel / Petrol</option>
-          <option value="Vehicle Service">🔧 Vehicle Service</option>
-          <option value="Vehicle Repair">🔩 Vehicle Repair</option>
-          <option value="Tyre / Parts">🛞 Tyre / Parts</option>
-          <option value="Food & Water">🍱 Food & Water</option>
-          <option value="Mobile Recharge">📱 Mobile Recharge</option>
-          <option value="Toll / Parking">🚏 Toll / Parking</option>
-          <option value="Insurance">📋 Insurance</option>
-          <option value="EMI / Loan">🏦 EMI / Loan</option>
-          <option value="Other Expense">📦 Other Expense</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Amount (₹)</label>
-          <input type="number" class="form-input" id="expenseAmt" placeholder="0" min="0"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date</label>
-          <input type="date" class="form-input" id="expenseDate"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Note (optional)</label>
-        <input type="text" class="form-input" id="expenseNote" placeholder="e.g. Petrol for 2 days"/>
-      </div>
-      <button class="btn btn-primary" onclick="addExpense()" style="background:linear-gradient(135deg,#dc2626,#ef4444)">➕ Add Expense</button>
-    </div>
-  </div>
-
-  <!-- History Tab -->
-  <div id="tab-history" class="content" style="display:none">
-    <div class="card">
-      <div class="card-title">📋 Transaction History</div>
-      <div class="month-header" style="background:var(--bg3);margin-bottom:10px">
-        <button class="month-nav" onclick="changeMonth(-1)">◀</button>
-        <div class="month-label" id="histMonthLabel">May 2025</div>
-        <button class="month-nav" onclick="changeMonth(1)">▶</button>
-      </div>
-      <div id="txList">
-        <div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No entries yet this month</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Target Tab -->
-  <div id="tab-target" class="content" style="display:none">
-    <div class="card">
-      <div class="card-title">🎯 Set Monthly Target</div>
-      <div class="month-header" style="background:var(--bg3);margin-bottom:14px">
-        <button class="month-nav" onclick="changeMonth(-1)">◀</button>
-        <div class="month-label" id="tgtMonthLabel">May 2025</div>
-        <button class="month-nav" onclick="changeMonth(1)">▶</button>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Monthly Profit Target (₹)</label>
-        <input type="number" class="form-input" id="targetAmt" placeholder="e.g. 25000" min="0"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Daily Work Hours (optional)</label>
-        <input type="number" class="form-input" id="targetHours" placeholder="e.g. 10" min="1" max="24"/>
-      </div>
-      <button class="btn btn-primary" onclick="saveTarget()">💾 Save Target</button>
-    </div>
-
-    <div id="targetCard" class="card" style="display:none">
-      <div class="card-title">📊 Current Target Status</div>
-      <div class="target-display">
-        <div style="font-size:12px;color:var(--text3);margin-bottom:4px">TARGET</div>
-        <div class="target-amount" id="targetDisplayAmt">₹0</div>
-        <div class="target-sub" id="targetDisplaySub"></div>
-      </div>
-      <div class="progress-wrap">
-        <div class="progress-label">
-          <span id="targetPrgLabel">Progress</span>
-          <span id="targetPrgPct">0%</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="targetPrgBar" style="width:0%"></div></div>
-      </div>
-      <div id="targetSummary" style="margin-top:12px"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">⏰ Month-End Alarm</div>
-      <div class="alarm-status">
-        <div class="alarm-dot"></div>
-        <div style="font-size:13px">Alarm set for <strong>10:00 PM</strong> on last day of each month</div>
-      </div>
-      <p style="font-size:12px;color:var(--text3);line-height:1.6">A notification will remind you to donate 1% of your pure profit to Thirupathi Devasthanam. Keep browser/tab open for alarm to ring.</p>
-      <div style="margin-top:10px;background:var(--bg3);border-radius:10px;padding:12px;font-size:13px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--text2)">Next alarm date</span><span style="font-weight:600;color:var(--accent)" id="nextAlarmDate">-</span></div>
-        <div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Time</span><span style="font-weight:600">10:00 PM</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Donation Tab -->
-  <div id="tab-donation" class="content" style="display:none">
-    <div class="donation-banner">
-      <div style="font-size:32px;margin-bottom:8px">🕌</div>
-      <div class="donation-title">Thirupathi Devasthanam Donation</div>
-      <div style="font-size:12px;color:#d8b4fe;margin-bottom:14px">Donate 1% of your pure monthly profit</div>
-      <div class="donation-amount" id="donationCalc">₹0</div>
-      <div style="font-size:12px;color:#d8b4fe;margin-bottom:14px" id="donationCalcSub">Based on this month's profit</div>
-      <button class="donation-btn" onclick="openDonationSite()">🔗 Open Donation Site</button>
-      <div class="small-note" style="margin-top:8px;color:#a78bfa">ttdevasthanams.ap.gov.in/hundi/donation</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📅 Donation History (All Months)</div>
-      <div id="donationHistoryList">
-        <div class="empty"><div class="empty-text">No donation records yet</div></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">✅ Mark Donation Done</div>
-      <div class="form-group">
-        <label class="form-label">Donation Amount (₹)</label>
-        <input type="number" class="form-input" id="donationDoneAmt" placeholder="0"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Note (optional)</label>
-        <input type="text" class="form-input" id="donationDoneNote" placeholder="e.g. Donated via Hundi"/>
-      </div>
-      <button class="btn btn-primary" style="background:linear-gradient(135deg,#7c3aed,#a855f7)" onclick="markDonationDone()">✅ Record Donation</button>
+      <button class="btn acc sm" onclick="addSavingGoal()">+ Add Goal</button>
+      <div id="sg-list" style="margin-top:12px"></div>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
-<div id="toast"></div>
+<!-- ======= BANK ======= -->
+<div id="pg-bank" class="pg">
+  <div class="tbar"><div class="tbar-left"><h1>Bank Account</h1><p>Deposits & withdrawals</p></div></div>
+  <div class="bankcard">
+    <div class="blabel">Total Balance</div>
+    <div class="bamt" id="bk-bal">₹0</div>
+    <div class="bsub">
+      <span><i class="ti ti-arrow-down"></i> <span id="bk-dep-count">0 deposits</span></span>
+      <span><i class="ti ti-arrow-up"></i> <span id="bk-wit-count">0 withdrawals</span></span>
+    </div>
+  </div>
+  <div class="sgrid">
+    <div class="sbox"><div class="slabel">Total Deposited</div><div class="sval g" id="bk-tdep">₹0</div></div>
+    <div class="sbox"><div class="slabel">Total Withdrawn</div><div class="sval r" id="bk-twit">₹0</div></div>
+    <div class="sbox"><div class="slabel">Cash Deposits</div><div class="sval b" id="bk-cash">₹0</div></div>
+    <div class="sbox"><div class="slabel">UPI Deposits</div><div class="sval p" id="bk-upi">₹0</div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="stab('bank','deposit',this)">Deposit</button>
+    <button class="tab" onclick="stab('bank','withdraw',this)">Withdraw</button>
+    <button class="tab" onclick="stab('bank','bkhist',this)">History</button>
+  </div>
+  <div id="bank-deposit">
+    <div class="card">
+      <div class="ctitle">Add Deposit</div>
+      <div class="frow"><label>Amount (₹)</label><input type="number" id="dep-amt" placeholder="e.g. 1000" inputmode="decimal"/></div>
+      <div class="f2">
+        <div class="frow"><label>Method</label>
+          <select id="dep-method"><option value="cash">Cash Deposit</option><option value="upi">UPI Transfer</option><option value="cheque">Cheque</option><option value="neft">NEFT / IMPS</option></select>
+        </div>
+        <div class="frow"><label>Date</label><input type="date" id="dep-date"/></div>
+      </div>
+      <div class="frow"><label>Description</label><input type="text" id="dep-desc" placeholder="e.g. Rapido earnings"/></div>
+      <button class="btn grn full" onclick="addDeposit()">↓ Record Deposit</button>
+    </div>
+  </div>
+  <div id="bank-withdraw" style="display:none">
+    <div class="card">
+      <div class="ctitle">Add Withdrawal</div>
+      <div class="frow"><label>Amount (₹)</label><input type="number" id="wit-amt" placeholder="e.g. 500" inputmode="decimal"/></div>
+      <div class="f2">
+        <div class="frow"><label>Method</label>
+          <select id="wit-method"><option value="atm">ATM Withdrawal</option><option value="upi">UPI Payment</option><option value="transfer">Bank Transfer</option><option value="cash">Cash Withdrawal</option></select>
+        </div>
+        <div class="frow"><label>Date</label><input type="date" id="wit-date"/></div>
+      </div>
+      <div class="frow"><label>Description</label><input type="text" id="wit-desc" placeholder="e.g. Rent payment"/></div>
+      <button class="btn red full" onclick="addWithdrawal()">↑ Record Withdrawal</button>
+    </div>
+  </div>
+  <div id="bank-bkhist" style="display:none">
+    <div class="card"><div class="ctitle">All Bank Transactions</div><div id="bk-txns"><p style="font-size:13px;color:var(--sub)">No bank transactions yet.</p></div></div>
+  </div>
+</div>
 
-<!-- Firebase -->
+<!-- ======= ROUTINE ======= -->
+<div id="pg-routine" class="pg">
+  <div class="tbar"><div class="tbar-left"><h1>Routine & Alarms</h1><p>Alarms with your music</p></div></div>
+  <div class="tabs">
+    <button class="tab on" onclick="stab('routine','alarms',this)">Alarms</button>
+    <button class="tab" onclick="stab('routine','ringtones',this)">Ringtones</button>
+    <button class="tab" onclick="stab('routine','reminders',this)">Reminders</button>
+    <button class="tab" onclick="stab('routine','tasks',this)">Tasks</button>
+  </div>
+  <div id="routine-alarms">
+    <div class="card">
+      <div class="ctitle">Set New Alarm</div>
+      <div class="f2">
+        <div class="frow"><label>Time</label><input type="time" id="al-time"/></div>
+        <div class="frow"><label>Label</label><input type="text" id="al-label" placeholder="e.g. Wake up"/></div>
+      </div>
+      <div class="f2">
+        <div class="frow"><label>Repeat</label>
+          <select id="al-repeat"><option value="once">Once</option><option value="daily">Every Day</option><option value="weekdays">Mon – Fri</option><option value="weekends">Sat – Sun</option></select>
+        </div>
+        <div class="frow"><label>Ringtone</label><select id="al-ringtone"><option value="default">Default Beep</option></select></div>
+      </div>
+      <button class="btn acc full" onclick="addAlarm()">Set Alarm</button>
+    </div>
+    <div id="al-list"></div>
+  </div>
+  <div id="routine-ringtones" style="display:none">
+    <div class="infobox"><i class="ti ti-info-circle"></i><p>Upload MP3, WAV, OGG or M4A from your phone. Stored locally on device — no internet needed for playback.</p></div>
+    <div class="card">
+      <div class="ctitle">Upload Music / Ringtone</div>
+      <label for="rt-upload">
+        <div class="upzone"><i class="ti ti-music"></i><div class="uptitle">Tap to choose music file</div><div class="upsub">MP3 · WAV · OGG · M4A · AAC</div></div>
+      </label>
+      <input type="file" id="rt-upload" accept="audio/*" multiple style="display:none" onchange="uploadRingtones(this)"/>
+    </div>
+    <div class="card"><div class="ctitle">My Ringtones</div><div id="rt-list"></div></div>
+  </div>
+  <div id="routine-reminders" style="display:none">
+    <div class="card">
+      <div class="ctitle">Add Reminder</div>
+      <div class="frow"><label>What to remind?</label><input type="text" id="rem-txt" placeholder="e.g. Log today's rides"/></div>
+      <div class="f2">
+        <div class="frow"><label>Time</label><input type="time" id="rem-time"/></div>
+        <div class="frow"><label>Date</label><input type="date" id="rem-date"/></div>
+      </div>
+      <button class="btn acc full" onclick="addReminder()">Add Reminder</button>
+    </div>
+    <div id="rem-list"></div>
+  </div>
+  <div id="routine-tasks" style="display:none">
+    <div class="card">
+      <div class="ctitle">Daily Tasks</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input type="text" id="task-inp" placeholder="Add a task for today..." style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;color:var(--text)"/>
+        <button class="btn acc sm" onclick="addTask()">Add</button>
+      </div>
+      <div id="task-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= WORKOUT ======= -->
+<div id="pg-workout" class="pg">
+  <div class="tbar"><div class="tbar-left"><h1>Workout</h1><p>Log exercises, photos & timer</p></div></div>
+  <div class="tabs">
+    <button class="tab on" onclick="stab('workout','log',this)">Log</button>
+    <button class="tab" onclick="stab('workout','photos',this)">Photos</button>
+    <button class="tab" onclick="stab('workout','timer',this)">Timer</button>
+  </div>
+  <div id="workout-log">
+    <div class="card">
+      <div class="ctitle">Log Exercise</div>
+      <div class="f2">
+        <div class="frow"><label>Exercise Name</label><input type="text" id="ex-name" placeholder="e.g. Push-ups"/></div>
+        <div class="frow"><label>Type</label><select id="ex-type"><option>Strength</option><option>Cardio</option><option>Flexibility</option><option>HIIT</option></select></div>
+      </div>
+      <div class="f2">
+        <div class="frow"><label>Sets × Reps / Duration</label><input type="text" id="ex-sets" placeholder="e.g. 3×15"/></div>
+        <div class="frow"><label>Weight (kg)</label><input type="number" id="ex-kg" placeholder="Optional" inputmode="decimal"/></div>
+      </div>
+      <button class="btn acc full" onclick="addExercise()">Log Exercise</button>
+    </div>
+    <div id="ex-list"></div>
+  </div>
+  <div id="workout-photos" style="display:none">
+    <div class="card">
+      <div class="ctitle">Progress Photos</div>
+      <div class="ph2">
+        <div>
+          <p style="font-size:11px;color:var(--sub);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Before</p>
+          <label class="phslot" id="ph-before" for="ph-before-inp"><i class="ti ti-camera" style="font-size:28px;color:var(--sub)"></i><span>Tap to upload</span></label>
+          <input type="file" id="ph-before-inp" accept="image/*" style="display:none" onchange="prevPhoto(this,'ph-before','ph-before-data')"/>
+          <input type="hidden" id="ph-before-data"/>
+        </div>
+        <div>
+          <p style="font-size:11px;color:var(--sub);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">After</p>
+          <label class="phslot" id="ph-after" for="ph-after-inp"><i class="ti ti-camera" style="font-size:28px;color:var(--sub)"></i><span>Tap to upload</span></label>
+          <input type="file" id="ph-after-inp" accept="image/*" style="display:none" onchange="prevPhoto(this,'ph-after','ph-after-data')"/>
+          <input type="hidden" id="ph-after-data"/>
+        </div>
+      </div>
+      <button class="btn acc full" onclick="saveWoPhotos()">Save Progress Photos</button>
+    </div>
+    <div id="ph-history"></div>
+  </div>
+  <div id="workout-timer" style="display:none">
+    <div class="card" style="text-align:center">
+      <div class="ctitle">Workout Stopwatch</div>
+      <div class="timerdisp" id="wo-timer">00:00</div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn acc" id="wo-timer-btn" onclick="woTimerAction()">Start</button>
+        <button class="btn" onclick="woTimerReset()">Reset</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Rest Timer</div>
+      <div class="frow"><label>Rest Duration</label>
+        <select id="rest-dur"><option value="30">30 sec</option><option value="60" selected>60 sec</option><option value="90">90 sec</option><option value="120">2 min</option><option value="180">3 min</option><option value="300">5 min</option></select>
+      </div>
+      <button class="btn blu full" onclick="startRest()">Start Rest Timer</button>
+      <div class="timerdisp" id="rest-timer" style="font-size:36px;display:none;color:var(--blue)">01:00</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Set Workout Reminder</div>
+      <div class="f2">
+        <div class="frow"><label>Time</label><input type="time" id="wo-rem-time"/></div>
+        <div class="frow"><label>Label</label><input type="text" id="wo-rem-label" placeholder="e.g. Leg day!"/></div>
+      </div>
+      <button class="btn acc full" onclick="addWoReminder()">Set Reminder</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= MEALS ======= -->
+<div id="pg-meals" class="pg">
+  <div class="tbar"><div class="tbar-left"><h1>Meals & Nutrition</h1><p>Photo log & calorie tracker</p></div></div>
+  <div class="card">
+    <div class="ctitle">Log a Meal</div>
+    <div class="f2">
+      <div class="frow"><label>Meal Type</label>
+        <select id="ml-type"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option><option>Pre-workout</option><option>Post-workout</option></select>
+      </div>
+      <div class="frow"><label>Calories (approx)</label><input type="number" id="ml-cal" placeholder="e.g. 450" inputmode="decimal"/></div>
+    </div>
+    <div class="frow"><label>What did you eat?</label><input type="text" id="ml-desc" placeholder="e.g. Rice, dal, sabzi, roti"/></div>
+    <div class="frow">
+      <label>Meal Photo</label>
+      <label class="phslot" id="ml-ph-slot" for="ml-ph-inp" style="height:90px"><i class="ti ti-camera" style="font-size:22px;color:var(--sub)"></i><span>Tap to upload meal photo</span></label>
+      <input type="file" id="ml-ph-inp" accept="image/*" style="display:none" onchange="prevPhoto(this,'ml-ph-slot','ml-ph-data')"/>
+      <input type="hidden" id="ml-ph-data"/>
+    </div>
+    <button class="btn acc full" onclick="addMeal()">Log Meal</button>
+  </div>
+  <div class="sgrid">
+    <div class="sbox"><div class="slabel">Today Calories</div><div class="sval o" id="ml-cal-total">0</div></div>
+    <div class="sbox"><div class="slabel">Meals Logged</div><div class="sval b" id="ml-count">0</div></div>
+  </div>
+  <div class="card"><div class="ctitle">Today's Meals</div><div id="ml-list"><p style="font-size:13px;color:var(--sub)">No meals logged today.</p></div></div>
+</div>
+
+<!-- ======= PROFILE ======= -->
+<div id="pg-profile" class="pg">
+  <div class="tbar"><div class="tbar-left"><h1>Profile</h1><p>Account & settings</p></div></div>
+  <div class="profile-card">
+    <div id="profile-avatar-wrap">
+      <div class="profile-avatar-placeholder" id="profile-initials">?</div>
+    </div>
+    <div>
+      <div style="font-size:18px;font-weight:700" id="profile-name">Loading...</div>
+      <div style="font-size:13px;opacity:.8;margin-top:2px" id="profile-email">—</div>
+      <div style="font-size:11px;opacity:.65;margin-top:6px" id="profile-uid">—</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Account</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+      <div><div style="font-size:14px;font-weight:500">Sync Status</div><div style="font-size:11px;color:var(--sub)" id="sync-status-text">Checking...</div></div>
+      <span class="bdg g" id="sync-status-badge">Live</span>
+    </div>
+    <div class="sep"></div>
+    <button class="btn red full" style="margin-top:8px" onclick="signOut()">Sign Out</button>
+  </div>
+  <div class="card">
+    <div class="ctitle">Export Data</div>
+    <button class="btn full" onclick="exportData()">Export All Data (JSON)</button>
+  </div>
+  <div class="card">
+    <div class="ctitle">App Info</div>
+    <div style="font-size:13px;color:var(--sub);line-height:1.8">
+      <div>Project: <strong>ROUTINE</strong></div>
+      <div>Firebase ID: <strong>routine-a10da</strong></div>
+      <div>Version: <strong>3.0 — Firebase Sync</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="nv on" onclick="spg('home',this)"><i class="ti ti-home"></i><span>Home</span></button>
+  <button class="nv" onclick="spg('rapido',this)"><i class="ti ti-motorbike"></i><span>Rapido</span></button>
+  <button class="nv" onclick="spg('bank',this)"><i class="ti ti-building-bank"></i><span>Bank</span></button>
+  <button class="nv" onclick="spg('routine',this)"><i class="ti ti-bell"></i><span>Routine</span></button>
+  <button class="nv" onclick="spg('workout',this)"><i class="ti ti-barbell"></i><span>Workout</span></button>
+  <button class="nv" onclick="spg('meals',this)"><i class="ti ti-salad"></i><span>Meals</span></button>
+  <button class="nv" onclick="spg('profile',this)"><i class="ti ti-user"></i><span>Profile</span></button>
+</nav>
+
+<!-- ======= FIREBASE SDK ======= -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, collection, addDoc, deleteDoc, getDocs, setDoc, getDoc, query, where, orderBy }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs,
+         query, orderBy, limit, onSnapshot, serverTimestamp, deleteDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// ─── FIREBASE CONFIG ───────────────────────────────────
 const firebaseConfig = {
-  apiKey:"AIzaSyDAcOgIN5vcjkPZUenOtH58u9fLWsbgiLI",
-  authDomain:"tracker-9aa73.firebaseapp.com",
-  projectId:"tracker-9aa73",
-  storageBucket:"tracker-9aa73.firebasestorage.app",
-  messagingSenderId:"752124193682",
-  appId:"1:752124193682:web:7cdd3b9ca578abe3daef4b"
+  apiKey: "AIzaSyCZbpoMP8OEE2xgfOzF3HXdY9cAWdRa7Bs",
+  authDomain: "routine-a10da.firebaseapp.com",
+  projectId: "routine-a10da",
+  storageBucket: "routine-a10da.firebasestorage.app",
+  messagingSenderId: "167162831153",
+  appId: "1:167162831153:web:06b422e38dfb3ba28a9010",
+  measurementId: "G-0BZMPMXMFY"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 let currentUser = null;
-let currentYear = new Date().getFullYear();
-let currentMonth = new Date().getMonth(); // 0-indexed
-let entries = [];
-let targets = {};
-let donationRecords = [];
 
-window._fbSignIn = () => signInWithPopup(auth, provider).catch(e => {
-  document.getElementById('authErr').textContent = 'Sign-in failed: ' + e.message;
-  document.getElementById('authErr').style.display = 'block';
-});
-window._fbSignOut = () => signOut(auth);
+// ─── HELPERS ───────────────────────────────────────────
+const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const now    = () => new Date();
+const todayStr = () => { const d=now(); return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`; };
+const p2  = n => String(n).padStart(2,'0');
+const fmt = n => '₹' + Number(n||0).toLocaleString('en-IN');
+const uid = () => Date.now() + '_' + Math.random().toString(36).slice(2,7);
+
+// In-memory state (mirrored from Firestore)
+let S = {
+  rides:[], expenses:[], bankTxns:[], alarms:[], reminders:[], tasks:[],
+  exercises:[], meals:[], wophotos:[], savingGoals:[], ringtones:[],
+  monthlyGoal:0, selectedRingtone:'default'
+};
+
+// ─── AUTH ───────────────────────────────────────────────
+window.signInGoogle = async () => {
+  try {
+    syncBar('Signing in...','syncing');
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    syncBar('Sign-in failed: '+e.message,'error');
+    setTimeout(clearSyncBar, 3000);
+  }
+};
+
+window.signOut = async () => {
+  if(!confirm('Sign out?')) return;
+  await fbSignOut(auth);
+  location.reload();
+};
 
 onAuthStateChanged(auth, async user => {
-  if (user) {
+  if(user){
     currentUser = user;
-    document.getElementById('authScreen').classList.remove('active');
-    document.getElementById('appScreen').classList.add('active');
-    setUserAvatar(user);
+    document.getElementById('login-screen').style.display='none';
+    updateProfileUI(user);
     await loadAllData();
-    renderDashboard();
-    startAlarmChecker();
+    initApp();
+    syncBar('Data synced ✓','');
+    setTimeout(clearSyncBar,2500);
   } else {
     currentUser = null;
-    document.getElementById('authScreen').classList.add('active');
-    document.getElementById('appScreen').classList.remove('active');
+    document.getElementById('login-screen').style.display='flex';
   }
 });
 
-function setUserAvatar(user) {
-  const wrap = document.getElementById('userAvatarWrap');
-  if (user.photoURL) {
-    wrap.innerHTML = `<img src="${user.photoURL}" class="user-avatar" alt="avatar"/>`;
+function updateProfileUI(user){
+  const name  = user.displayName || 'Driver';
+  const email = user.email || '';
+  const photo = user.photoURL;
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  document.getElementById('profile-name').textContent  = name;
+  document.getElementById('profile-email').textContent = email;
+  document.getElementById('profile-uid').textContent   = 'UID: '+user.uid.slice(0,12)+'...';
+
+  const avatarWrap = document.getElementById('profile-avatar-wrap');
+  const homeAvatar = document.getElementById('user-avatar-home');
+
+  if(photo){
+    avatarWrap.innerHTML = `<img src="${photo}" class="profile-avatar" />`;
+    homeAvatar.innerHTML = `<img src="${photo}" class="avatar-sm" />`;
+    homeAvatar.className = '';
   } else {
-    const initials = (user.displayName || 'U').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
-    wrap.innerHTML = `<div class="user-avatar-placeholder">${initials}</div>`;
+    document.getElementById('profile-initials').textContent = initials;
+    homeAvatar.textContent = initials;
   }
+  document.getElementById('sync-status-text').textContent = 'Signed in as '+email;
 }
 
-async function loadAllData() {
-  if (!currentUser) return;
-  entries = [];
-  const snap = await getDocs(collection(db, 'users', currentUser.uid, 'entries'));
-  snap.forEach(d => entries.push({id: d.id, ...d.data()}));
+// ─── FIRESTORE HELPERS ─────────────────────────────────
+const userDoc  = (col, id) => doc(db, 'users', currentUser.uid, col, id);
+const userCol  = col => collection(db, 'users', currentUser.uid, col);
+const metaDoc  = () => doc(db, 'users', currentUser.uid, 'meta', 'settings');
 
-  targets = {};
-  const tSnap = await getDocs(collection(db, 'users', currentUser.uid, 'targets'));
-  tSnap.forEach(d => targets[d.id] = d.data());
-
-  donationRecords = [];
-  const dSnap = await getDocs(collection(db, 'users', currentUser.uid, 'donations'));
-  dSnap.forEach(d => donationRecords.push({id: d.id, ...d.data()}));
+async function fsSet(col, id, data){
+  if(!currentUser) return;
+  try { await setDoc(userDoc(col, id), {...data, updatedAt: serverTimestamp()}); }
+  catch(e){ console.warn('fsSet error',e); }
+}
+async function fsAdd(col, data){
+  if(!currentUser) return;
+  try { await addDoc(userCol(col), {...data, createdAt: serverTimestamp()}); }
+  catch(e){ console.warn('fsAdd error',e); }
+}
+async function fsDel(col, id){
+  if(!currentUser) return;
+  try { await deleteDoc(userDoc(col, id)); }
+  catch(e){ console.warn('fsDel error',e); }
+}
+async function fsGetAll(col){
+  if(!currentUser) return [];
+  try {
+    const snap = await getDocs(userCol(col));
+    return snap.docs.map(d=>({...d.data(), _fsId:d.id}));
+  } catch(e){ return []; }
 }
 
-function monthKey(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
+// ─── LOAD ALL DATA ─────────────────────────────────────
+async function loadAllData(){
+  syncBar('Loading your data...','syncing');
+  const [rides,expenses,bankTxns,alarms,reminders,tasks,exercises,meals,wophotos,savingGoals] = await Promise.all([
+    fsGetAll('rides'), fsGetAll('expenses'), fsGetAll('bankTxns'),
+    fsGetAll('alarms'), fsGetAll('reminders'), fsGetAll('tasks'),
+    fsGetAll('exercises'), fsGetAll('meals'), fsGetAll('wophotos'), fsGetAll('savingGoals')
+  ]);
 
-function monthEntries(y, m) {
-  const k = monthKey(y, m);
-  return entries.filter(e => e.monthKey === k);
+  // load meta/settings
+  let meta = {};
+  try { const md = await getDoc(metaDoc()); if(md.exists()) meta = md.data(); } catch(e){}
+
+  // ringtones stored locally (too large for Firestore)
+  let ringtones = [];
+  try { ringtones = JSON.parse(localStorage.getItem('ringtones_'+currentUser.uid)||'[]'); } catch(e){}
+
+  S = {
+    rides, expenses, bankTxns, alarms, reminders, tasks,
+    exercises, meals, wophotos, savingGoals, ringtones,
+    monthlyGoal: meta.monthlyGoal||0,
+    selectedRingtone: meta.selectedRingtone||'default'
+  };
 }
 
-function calcStats(y, m) {
-  const list = monthEntries(y, m);
-  const earnings = list.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
-  const expenses = list.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
-  const profit = earnings - expenses;
-  const donation = Math.max(0, profit * 0.01);
-  return { earnings, expenses, profit, donation, list };
+async function saveMeta(){
+  await setDoc(metaDoc(), {
+    monthlyGoal: S.monthlyGoal,
+    selectedRingtone: S.selectedRingtone,
+    updatedAt: serverTimestamp()
+  }, {merge:true});
 }
 
-function fmt(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+// ─── NAV ────────────────────────────────────────────────
+window.spg = function(id, btn){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nv').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo(0,0);
+  if(id==='home')    renderHome();
+  if(id==='rapido')  { renderRapidoHist(); renderSavingGoals(); renderMGoal(); }
+  if(id==='bank')    renderBank();
+  if(id==='routine') { renderAlarms(); renderRingtones(); renderReminders(); renderTasks(); }
+  if(id==='workout') { renderExercises(); renderWoPhotos(); }
+  if(id==='meals')   renderMeals();
+};
 
-function renderDashboard() {
-  const { earnings, expenses, profit, donation } = calcStats(currentYear, currentMonth);
-  document.getElementById('dashEarnings').textContent = fmt(earnings);
-  document.getElementById('dashExpenses').textContent = fmt(expenses);
-  document.getElementById('dashProfit').textContent = fmt(profit);
-  document.getElementById('dashDonation').textContent = fmt(donation);
-  document.getElementById('dashDonationAmt').textContent = fmt(donation);
-  document.getElementById('donationCalc').textContent = fmt(donation);
-  document.getElementById('donationCalcSub').textContent = `Based on ${getMonthName(currentYear, currentMonth)} profit of ${fmt(profit)}`;
+window.stab = function(page, tab, btn){
+  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll(`[id^="${page}-"]`).forEach(d=>{ if(d.classList.contains('tabs'))return; d.style.display='none'; });
+  const el = document.getElementById(`${page}-${tab}`);
+  if(el) el.style.display='block';
+  if(tab==='hist')      renderRapidoHist();
+  if(tab==='goals')     { renderSavingGoals(); renderMGoal(); }
+  if(tab==='bkhist')    renderBank();
+  if(tab==='deposit'||tab==='withdraw') renderBank();
+  if(tab==='ringtones') renderRingtones();
+  if(tab==='alarms')    renderAlarms();
+  if(tab==='reminders') renderReminders();
+  if(tab==='tasks')     renderTasks();
+  if(tab==='log')       renderExercises();
+  if(tab==='photos')    renderWoPhotos();
+};
 
-  const mk = monthKey(currentYear, currentMonth);
-  const mLabel = getMonthName(currentYear, currentMonth);
-  ['monthLabel','histMonthLabel','tgtMonthLabel'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = mLabel;
+// ─── DATE ───────────────────────────────────────────────
+document.getElementById('today-date').textContent =
+  `${DAYS[now().getDay()]}, ${MONTHS[now().getMonth()]} ${now().getDate()}, ${now().getFullYear()}`;
+
+// ─── RIDES ──────────────────────────────────────────────
+window.addRide = async function(){
+  const amt = parseFloat(document.getElementById('r-amt').value);
+  if(!amt||amt<=0) return alert('Enter a valid ride amount');
+  const pay  = document.getElementById('r-pay').value;
+  const time = document.getElementById('r-time').value || now().toTimeString().slice(0,5);
+  const note = document.getElementById('r-note').value;
+  const item = { id:uid(), amt, pay, time, note, date:todayStr() };
+  S.rides.push(item);
+  renderHome();
+  await fsAdd('rides', item);
+  document.getElementById('r-amt').value=''; document.getElementById('r-note').value='';
+  notif('Ride '+fmt(amt)+' added ✅');
+};
+
+window.addExpense = async function(){
+  const amt = parseFloat(document.getElementById('e-amt').value);
+  if(!amt||amt<=0) return alert('Enter a valid expense amount');
+  const cat  = document.getElementById('e-cat').value;
+  const desc = document.getElementById('e-desc').value || cat;
+  const item = { id:uid(), amt, cat, desc, date:todayStr() };
+  S.expenses.push(item);
+  renderHome();
+  await fsAdd('expenses', item);
+  document.getElementById('e-amt').value=''; document.getElementById('e-desc').value='';
+  notif('Expense '+fmt(amt)+' logged');
+};
+
+// ─── BANK ────────────────────────────────────────────────
+function getBankBalance(){ return S.bankTxns.reduce((a,t)=>t.type==='deposit'?a+t.amt:a-t.amt,0); }
+
+window.addDeposit = async function(){
+  const amt = parseFloat(document.getElementById('dep-amt').value);
+  if(!amt||amt<=0) return alert('Enter a valid deposit amount');
+  const method = document.getElementById('dep-method').value;
+  const date   = document.getElementById('dep-date').value || todayStr();
+  const desc   = document.getElementById('dep-desc').value || 'Bank Deposit';
+  const item   = { id:uid(), type:'deposit', amt, method, date, desc };
+  S.bankTxns.push(item); renderBank(); renderHome();
+  await fsAdd('bankTxns', item);
+  document.getElementById('dep-amt').value=''; document.getElementById('dep-desc').value='';
+  notif('Deposited '+fmt(amt)+' ✅');
+};
+
+window.addWithdrawal = async function(){
+  const amt = parseFloat(document.getElementById('wit-amt').value);
+  if(!amt||amt<=0) return alert('Enter a valid withdrawal amount');
+  const bal = getBankBalance();
+  if(amt>bal) return alert('Insufficient balance! Available: '+fmt(bal));
+  const method = document.getElementById('wit-method').value;
+  const date   = document.getElementById('wit-date').value || todayStr();
+  const desc   = document.getElementById('wit-desc').value || 'Withdrawal';
+  const item   = { id:uid(), type:'withdrawal', amt, method, date, desc };
+  S.bankTxns.push(item); renderBank(); renderHome();
+  await fsAdd('bankTxns', item);
+  document.getElementById('wit-amt').value=''; document.getElementById('wit-desc').value='';
+  notif('Withdrawn '+fmt(amt));
+};
+
+function renderBank(){
+  const deps  = S.bankTxns.filter(t=>t.type==='deposit');
+  const wits  = S.bankTxns.filter(t=>t.type==='withdrawal');
+  const tdep  = deps.reduce((a,t)=>a+t.amt,0);
+  const twit  = wits.reduce((a,t)=>a+t.amt,0);
+  const bal   = tdep-twit;
+  const cdep  = deps.filter(t=>t.method==='cash').reduce((a,t)=>a+t.amt,0);
+  const udep  = deps.filter(t=>t.method==='upi').reduce((a,t)=>a+t.amt,0);
+  document.getElementById('bk-bal').textContent = fmt(bal);
+  document.getElementById('bk-dep-count').textContent = deps.length+' deposit'+(deps.length!==1?'s':'');
+  document.getElementById('bk-wit-count').textContent = wits.length+' withdrawal'+(wits.length!==1?'s':'');
+  document.getElementById('bk-tdep').textContent = fmt(tdep);
+  document.getElementById('bk-twit').textContent = fmt(twit);
+  document.getElementById('bk-cash').textContent = fmt(cdep);
+  document.getElementById('bk-upi').textContent  = fmt(udep);
+  const el = document.getElementById('bk-txns');
+  if(!S.bankTxns.length){ el.innerHTML='<p style="font-size:13px;color:var(--sub)">No bank transactions yet.</p>'; return; }
+  const sorted = [...S.bankTxns].sort((a,b)=>(b.id||'').localeCompare(a.id||''));
+  el.innerHTML = sorted.map(t=>`
+    <div class="txnrow">
+      <div class="txnico ${t.type==='deposit'?'dep':'wit'}"><i class="ti ti-arrow-${t.type==='deposit'?'down':'up'}"></i></div>
+      <div class="linfo"><div class="ltitle">${t.desc}</div><div class="lsub">${t.date} · ${t.method}</div></div>
+      <span style="font-weight:700;color:${t.type==='deposit'?'var(--green)':'var(--red)'};flex-shrink:0">${t.type==='deposit'?'+':'-'}${fmt(t.amt)}</span>
+    </div>`).join('');
+}
+
+// ─── HOME ────────────────────────────────────────────────
+function renderHome(){
+  const td   = todayStr();
+  const tR   = S.rides.filter(r=>r.date===td);
+  const tE   = S.expenses.filter(e=>e.date===td);
+  const inc  = tR.reduce((a,r)=>a+r.amt,0);
+  const exp  = tE.reduce((a,e)=>a+e.amt,0);
+  const cash = tR.filter(r=>r.pay==='cash').reduce((a,r)=>a+r.amt,0);
+  const upi  = tR.filter(r=>r.pay==='upi').reduce((a,r)=>a+r.amt,0);
+  const prof = inc-exp; const bal = getBankBalance();
+  document.getElementById('d-rides').textContent  = fmt(inc);
+  document.getElementById('d-profit').textContent = fmt(prof);
+  document.getElementById('d-profit').className   = 'sval '+(prof>=0?'g':'r');
+  document.getElementById('d-exp').textContent    = fmt(exp);
+  document.getElementById('d-bank').textContent   = fmt(bal);
+  document.getElementById('d-cash').textContent   = fmt(cash);
+  document.getElementById('d-upi').textContent    = fmt(upi);
+  document.getElementById('d-bankbal').textContent= fmt(bal);
+  const n=now(); const pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
+  const mInc=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0);
+  if(S.monthlyGoal>0){
+    const pct=Math.min(100,Math.round(mInc/S.monthlyGoal*100));
+    const dleft=new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate();
+    document.getElementById('d-goal-label').textContent=fmt(mInc)+' / '+fmt(S.monthlyGoal);
+    document.getElementById('d-goal-pct').textContent=pct+'%';
+    document.getElementById('d-goal-bar').style.width=pct+'%';
+    document.getElementById('d-goal-days').textContent=dleft+' days left this month';
+  }
+  const tRems=S.reminders.filter(r=>r.date===td);
+  document.getElementById('d-reminders').innerHTML=tRems.length
+    ? tRems.map(r=>`<div class="lrow" style="border:none;padding:6px 0"><div class="linfo"><div class="ltitle">${r.txt}</div><div class="lsub">${r.time}</div></div><span class="bdg o">Today</span></div>`).join('')
+    : '<p style="font-size:13px;color:var(--sub)">No reminders today.</p>';
+}
+
+// ─── RAPIDO HISTORY ──────────────────────────────────────
+function renderRapidoHist(){
+  const inc=S.rides.reduce((a,r)=>a+r.amt,0);
+  const exp=S.expenses.reduce((a,e)=>a+e.amt,0);
+  const cih=S.rides.filter(r=>r.pay==='cash').reduce((a,r)=>a+r.amt,0)
+           -S.bankTxns.filter(t=>t.type==='deposit'&&t.method==='cash').reduce((a,t)=>a+t.amt,0);
+  document.getElementById('h-inc').textContent=fmt(inc);
+  document.getElementById('h-exp').textContent=fmt(exp);
+  document.getElementById('h-pro').textContent=fmt(inc-exp);
+  document.getElementById('h-cih').textContent=fmt(cih);
+  const all=[
+    ...S.rides.map(r=>({...r,_lbl:r.note||'Ride income',_col:'var(--green)',_sign:'+',_ico:'rid'})),
+    ...S.expenses.map(e=>({...e,_lbl:e.desc||e.cat,_col:'var(--red)',_sign:'-',_ico:'exp'}))
+  ].sort((a,b)=>(b.id||'').localeCompare(a.id||'')).slice(0,50);
+  document.getElementById('r-txns').innerHTML=all.length
+    ? all.map(t=>`<div class="txnrow"><div class="txnico ${t._ico}"><i class="ti ti-${t._ico==='rid'?'motorbike':'receipt'}"></i></div>
+        <div class="linfo"><div class="ltitle">${t._lbl}</div><div class="lsub">${t.date} ${t.time||''} · ${t._ico==='rid'?t.pay:t.cat||''}</div></div>
+        <span style="font-weight:700;color:${t._col};flex-shrink:0">${t._sign}${fmt(t.amt)}</span></div>`).join('')
+    : '<p style="font-size:13px;color:var(--sub)">No transactions yet.</p>';
+}
+
+// ─── GOALS ───────────────────────────────────────────────
+window.setMonthlyGoal = async function(){
+  const g=parseFloat(document.getElementById('mg-inp').value);
+  if(!g||g<=0) return alert('Enter a valid goal amount');
+  S.monthlyGoal=g; renderMGoal(); renderHome();
+  await saveMeta(); notif('Monthly goal '+fmt(g)+' set! 🎯');
+};
+function renderMGoal(){
+  const n=now(); const pre=`${n.getFullYear()}-${p2(n.getMonth()+1)}`;
+  const mInc=S.rides.filter(r=>r.date&&r.date.startsWith(pre)).reduce((a,r)=>a+r.amt,0);
+  const pct=S.monthlyGoal>0?Math.min(100,Math.round(mInc/S.monthlyGoal*100)):0;
+  const b=document.getElementById('mg-bar'); if(b)b.style.width=pct+'%';
+  const s=document.getElementById('mg-status'); if(s)s.textContent=S.monthlyGoal>0?`${fmt(mInc)} earned of ${fmt(S.monthlyGoal)} (${pct}%)`:'No goal set yet';
+  if(S.monthlyGoal>0){
+    const dleft=new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate();
+    const rem=Math.max(0,S.monthlyGoal-mInc); const daily=dleft>0?Math.ceil(rem/dleft):rem;
+    const d=document.getElementById('mg-daily');
+    if(d)d.innerHTML=`<div class="sgrid"><div class="sbox"><div class="slabel">Remaining</div><div class="sval o">${fmt(rem)}</div></div><div class="sbox"><div class="slabel">Daily Target</div><div class="sval b">${fmt(daily)}</div></div></div>`;
+  }
+  const inp=document.getElementById('mg-inp'); if(inp&&S.monthlyGoal)inp.value=S.monthlyGoal;
+}
+window.addSavingGoal = async function(){
+  const name=document.getElementById('sg-name').value;
+  const target=parseFloat(document.getElementById('sg-target').value);
+  if(!name||!target) return;
+  const item={id:uid(),name,target,saved:0};
+  S.savingGoals.push(item); renderSavingGoals();
+  await fsAdd('savingGoals',item);
+  document.getElementById('sg-name').value=''; document.getElementById('sg-target').value='';
+};
+function renderSavingGoals(){
+  const el=document.getElementById('sg-list'); if(!el)return;
+  el.innerHTML=S.savingGoals.map(g=>{
+    const pct=Math.min(100,Math.round(g.saved/g.target*100));
+    return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">${g.name}</span><span class="bdg o">${pct}%</span></div><div class="pbar-wrap"><div class="pbar o" style="width:${pct}%"></div></div><div style="font-size:11px;color:var(--sub);margin-top:4px">${fmt(g.saved)} saved of ${fmt(g.target)}</div></div>`;
+  }).join('');
+}
+
+// ─── RINGTONES ───────────────────────────────────────────
+let rtAudio=null, rtPlayingId=null;
+
+window.uploadRingtones = function(input){
+  Array.from(input.files).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      if(!S.ringtones.find(r=>r.name===file.name)){
+        S.ringtones.push({id:'rt_'+uid(),name:file.name,data:e.target.result,size:Math.round(file.size/1024)+'KB'});
+        try{ localStorage.setItem('ringtones_'+currentUser.uid, JSON.stringify(S.ringtones)); }catch(err){}
+      }
+      renderRingtones(); updateRingtoneSelect();
+      notif('Ringtone uploaded! 🎵');
+    };
+    reader.readAsDataURL(file);
   });
-
-  // Target progress
-  const tgt = targets[mk];
-  const tpWrap = document.getElementById('targetProgressWrap');
-  if (tgt && tgt.amount > 0) {
-    const pct = Math.min(100, Math.round((profit / tgt.amount) * 100));
-    const overBudget = profit > tgt.amount;
-    tpWrap.innerHTML = `
-      <div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:13px;color:var(--text2)">Target: <strong style="color:var(--text)">${fmt(tgt.amount)}</strong></span>
-        <span class="badge ${overBudget?'badge-green':'badge-orange'}">${overBudget?'✅ Achieved':'⏳ In Progress'}</span>
-      </div>
-      <div class="progress-wrap">
-        <div class="progress-label"><span>Profit: ${fmt(profit)}</span><span>${pct}%</span></div>
-        <div class="progress-bar"><div class="progress-fill ${overBudget?'green':''}" style="width:${pct}%"></div></div>
-      </div>
-    `;
-    document.getElementById('targetCard').style.display = 'block';
-    document.getElementById('targetDisplayAmt').textContent = fmt(tgt.amount);
-    document.getElementById('targetDisplaySub').textContent = mLabel;
-    document.getElementById('targetPrgPct').textContent = pct + '%';
-    document.getElementById('targetPrgBar').style.width = pct + '%';
-    document.getElementById('targetPrgBar').className = 'progress-fill ' + (overBudget ? 'green' : '');
-    document.getElementById('targetPrgLabel').textContent = `Profit: ${fmt(profit)}`;
-    document.getElementById('targetSummary').innerHTML = `
-      <div class="summary-row"><span class="summary-row-label">Target</span><span class="summary-row-value" style="color:var(--accent)">${fmt(tgt.amount)}</span></div>
-      <div class="summary-row"><span class="summary-row-label">Achieved</span><span class="summary-row-value" style="color:var(--green)">${fmt(profit)}</span></div>
-      <div class="summary-row"><span class="summary-row-label">${overBudget?'Extra Earned':'Remaining'}</span><span class="summary-row-value" style="color:${overBudget?'var(--green)':'var(--red)'}">${fmt(Math.abs(tgt.amount - profit))}</span></div>
-    `;
-    if (tgt.hours) {
-      document.getElementById('targetDisplaySub').textContent = mLabel + ' • ' + tgt.hours + 'h/day plan';
-    }
-  } else {
-    tpWrap.innerHTML = `<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">No target set. Go to Target tab!</div></div>`;
-    document.getElementById('targetCard').style.display = 'none';
-  }
-
-  // Summary rows
-  const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-  const today = new Date();
-  const daysElapsed = (currentYear === today.getFullYear() && currentMonth === today.getMonth())
-    ? today.getDate() : daysInMonth;
-  const avgPerDay = daysElapsed > 0 ? profit / daysElapsed : 0;
-  document.getElementById('summaryRows').innerHTML = `
-    <div class="summary-row"><span class="summary-row-label">Total Earnings</span><span class="summary-row-value" style="color:var(--green)">${fmt(earnings)}</span></div>
-    <div class="summary-row"><span class="summary-row-label">Total Expenses</span><span class="summary-row-value" style="color:var(--red)">${fmt(expenses)}</span></div>
-    <div class="summary-row"><span class="summary-row-label">Pure Profit</span><span class="summary-row-value" style="color:var(--accent)">${fmt(profit)}</span></div>
-    <div class="summary-row"><span class="summary-row-label">Avg Profit/Day</span><span class="summary-row-value">${fmt(avgPerDay)}</span></div>
-    <div class="summary-row"><span class="summary-row-label">Thirupathi Donation (1%)</span><span class="summary-row-value" style="color:var(--purple)">${fmt(donation)}</span></div>
-  `;
-
-  // Check month-end alarm today
-  const now = new Date();
-  const lastDay = new Date(currentYear, currentMonth+1, 0).getDate();
-  if (now.getDate() === lastDay && now.getMonth() === currentMonth && now.getFullYear() === currentYear) {
-    document.getElementById('donationAlertWrap').style.display = 'block';
-  } else {
-    document.getElementById('donationAlertWrap').style.display = 'none';
-  }
-
-  renderHistory();
-  renderDonationHistory();
-  updateNextAlarmDate();
-}
-
-function renderHistory() {
-  const { list } = calcStats(currentYear, currentMonth);
-  const sorted = [...list].sort((a,b) => new Date(b.date) - new Date(a.date));
-  const container = document.getElementById('txList');
-  if (!sorted.length) {
-    container.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No entries this month</div></div>`;
-    return;
-  }
-  container.innerHTML = `<div class="tx-list">${sorted.map(e => `
-    <div class="tx-item">
-      <div class="tx-left">
-        <div class="tx-icon ${e.type}">${e.type==='income'?'💰':'💸'}</div>
-        <div>
-          <div class="tx-name">${e.category}</div>
-          <div class="tx-meta">${formatDate(e.date)}${e.note ? ' • ' + e.note : ''}</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div class="tx-amount ${e.type}">${e.type==='income'?'+':'-'}${fmt(e.amount)}</div>
-        <button class="tx-del" onclick="deleteEntry('${e.id}')">🗑</button>
-      </div>
-    </div>
-  `).join('')}</div>`;
-}
-
-function renderDonationHistory() {
-  const list = document.getElementById('donationHistoryList');
-  if (!donationRecords.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-text">No donation records yet</div></div>`;
-    return;
-  }
-  const sorted = [...donationRecords].sort((a,b)=>b.timestamp-a.timestamp);
-  list.innerHTML = sorted.map(d=>`
-    <div class="summary-row">
-      <div><div style="font-size:13px;font-weight:500">${d.monthLabel}</div><div style="font-size:11px;color:var(--text3)">${d.note||'Donated via Hundi'}</div></div>
-      <div style="font-size:14px;font-weight:600;color:var(--purple)">${fmt(d.amount)}</div>
-    </div>
-  `).join('');
-}
-
-function updateNextAlarmDate() {
-  const now = new Date();
-  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);
-  const el = document.getElementById('nextAlarmDate');
-  if (el) el.textContent = lastDay.toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
-}
-
-function getMonthName(y, m) {
-  return new Date(y, m, 1).toLocaleDateString('en-IN', {month:'long',year:'numeric'});
-}
-
-function formatDate(str) {
-  if (!str) return '';
-  const d = new Date(str);
-  return d.toLocaleDateString('en-IN', {day:'numeric',month:'short'});
-}
-
-window.changeMonth = function(delta) {
-  currentMonth += delta;
-  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-  renderDashboard();
 };
 
-window.switchTab = function(tab) {
-  ['dashboard','add','history','target','donation'].forEach(t => {
-    document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
-    document.querySelectorAll('.nav-tab').forEach((el,i) => {
-      el.classList.toggle('active', ['dashboard','add','history','target','donation'][i]===tab);
+function renderRingtones(){
+  const el=document.getElementById('rt-list'); if(!el)return;
+  const defSel=S.selectedRingtone==='default';
+  let html=`<div class="rtrow"><div style="flex:1;min-width:0"><div class="rtname">Default Beep</div><div class="rtsub">Built-in · Always available</div></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+      <button class="playbtn" onclick="playDefault()"><i class="ti ti-player-play"></i></button>
+      ${defSel?'<span class="bdg g">✓ Selected</span>':`<button class="btn sm" onclick="selectRt('default')">Use</button>`}
+    </div></div>`;
+  html+=S.ringtones.map(r=>{
+    const sel=S.selectedRingtone===r.id; const playing=rtPlayingId===r.id;
+    return `<div class="rtrow"><div style="flex:1;min-width:0"><div class="rtname">${r.name.replace(/\.[^.]+$/,'')}</div><div class="rtsub">${r.size}</div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <button class="playbtn" onclick="playRt('${r.id}')"><i class="ti ti-player-${playing?'stop':'play'}"></i></button>
+        ${sel?'<span class="bdg g">✓ Selected</span>':`<button class="btn sm" onclick="selectRt('${r.id}')">Use</button>`}
+        <button onclick="deleteRt('${r.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px"><i class="ti ti-trash"></i></button>
+      </div></div>`;
+  }).join('');
+  el.innerHTML=html;
+}
+
+window.playRt = function(id){
+  if(rtAudio){rtAudio.pause();rtAudio=null;}
+  if(rtPlayingId===id){rtPlayingId=null;renderRingtones();return;}
+  const rt=S.ringtones.find(r=>r.id===id); if(!rt)return;
+  rtAudio=new Audio(rt.data); rtAudio.play(); rtPlayingId=id;
+  rtAudio.onended=()=>{rtPlayingId=null;renderRingtones();};
+  renderRingtones();
+};
+window.playDefault = function(){
+  try{
+    const ctx=new AudioContext();
+    [[0,880],[0.35,1100],[0.7,880]].forEach(([t,f])=>{
+      const o=ctx.createOscillator(); const g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value=f; g.gain.setValueAtTime(0.35,ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.3);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.3);
     });
+  }catch(e){}
+};
+function fireRingtone(rtId){
+  if(!rtId||rtId==='default'){window.playDefault();return;}
+  const rt=S.ringtones.find(r=>r.id===rtId);
+  if(rt){const a=new Audio(rt.data);a.loop=true;a.play();setTimeout(()=>a.pause(),30000);}
+  else window.playDefault();
+}
+window.selectRt = async function(id){
+  S.selectedRingtone=id; renderRingtones(); updateRingtoneSelect();
+  await saveMeta(); notif('Ringtone selected 🎵');
+};
+window.deleteRt = function(id){
+  S.ringtones=S.ringtones.filter(r=>r.id!==id);
+  if(S.selectedRingtone===id) S.selectedRingtone='default';
+  try{localStorage.setItem('ringtones_'+currentUser.uid,JSON.stringify(S.ringtones));}catch(e){}
+  renderRingtones(); updateRingtoneSelect();
+};
+function updateRingtoneSelect(){
+  const sel=document.getElementById('al-ringtone'); if(!sel)return;
+  sel.innerHTML='<option value="default">Default Beep</option>'+
+    S.ringtones.map(r=>`<option value="${r.id}">${r.name.replace(/\.[^.]+$/,'')}</option>`).join('');
+  sel.value=S.selectedRingtone||'default';
+}
+
+// ─── ALARMS ──────────────────────────────────────────────
+window.addAlarm = async function(){
+  const time=document.getElementById('al-time').value; if(!time)return alert('Set an alarm time');
+  const label=document.getElementById('al-label').value||'Alarm';
+  const repeat=document.getElementById('al-repeat').value;
+  const ringtone=document.getElementById('al-ringtone').value||'default';
+  const alarm={id:uid(),time,label,repeat,ringtone,on:true};
+  S.alarms.push(alarm); renderAlarms(); scheduleAlarm(alarm);
+  await fsAdd('alarms',alarm);
+  document.getElementById('al-time').value=''; document.getElementById('al-label').value='';
+  notif('Alarm set for '+time+' ⏰');
+};
+function renderAlarms(){
+  const el=document.getElementById('al-list'); if(!el)return;
+  if(!S.alarms.length){el.innerHTML='<div class="card"><p style="font-size:13px;color:var(--sub)">No alarms set yet.</p></div>';return;}
+  el.innerHTML=S.alarms.map((a,i)=>{
+    const rtName=a.ringtone==='default'?'Default Beep':(S.ringtones.find(r=>r.id===a.ringtone)?.name.replace(/\.[^.]+$/,'')||'Default Beep');
+    return `<div class="card"><div class="alrow">
+      <div><div class="altime">${a.time}</div><div class="allabel">${a.label} · ${a.repeat}</div><div class="alring">🎵 ${rtName}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+        <button class="tog ${a.on?'on':'off'}" onclick="toggleAlarm(${i})"></button>
+        <button onclick="delAlarm(${i})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:20px"><i class="ti ti-trash"></i></button>
+      </div></div></div>`;
+  }).join('');
+}
+window.toggleAlarm = async function(i){ S.alarms[i].on=!S.alarms[i].on; renderAlarms(); if(S.alarms[i].on)scheduleAlarm(S.alarms[i]); };
+window.delAlarm = async function(i){
+  const a=S.alarms.splice(i,1)[0]; renderAlarms();
+  if(a._fsId) await fsDel('alarms',a._fsId);
+};
+function scheduleAlarm(alarm){
+  if(!alarm.on)return;
+  const[h,m]=alarm.time.split(':').map(Number);
+  const target=new Date(); target.setHours(h,m,0,0);
+  if(target<=new Date())target.setDate(target.getDate()+1);
+  setTimeout(()=>fireAlarm(alarm),target-new Date());
+}
+function fireAlarm(alarm){
+  notif('⏰ '+alarm.label+' — '+alarm.time);
+  if('vibrate' in navigator)navigator.vibrate([500,150,500,150,500]);
+  fireRingtone(alarm.ringtone||'default');
+  if(alarm.repeat==='daily')scheduleAlarm(alarm);
+  if(alarm.repeat==='weekdays'){const d=new Date().getDay();if(d>=1&&d<=5)scheduleAlarm(alarm);}
+  if(alarm.repeat==='weekends'){const d=new Date().getDay();if(d===0||d===6)scheduleAlarm(alarm);}
+}
+
+// ─── REMINDERS ───────────────────────────────────────────
+window.addReminder = async function(){
+  const txt=document.getElementById('rem-txt').value; if(!txt)return;
+  const time=document.getElementById('rem-time').value;
+  const date=document.getElementById('rem-date').value||todayStr();
+  const item={id:uid(),txt,time,date};
+  S.reminders.push(item); renderReminders(); renderHome();
+  await fsAdd('reminders',item);
+  if(time){const target=new Date(date+'T'+time);if(target>new Date())setTimeout(()=>fireAlarm({label:txt,time,on:true,repeat:'once',ringtone:S.selectedRingtone}),target-new Date());}
+  document.getElementById('rem-txt').value='';
+  notif('Reminder added ✅');
+};
+function renderReminders(){
+  const el=document.getElementById('rem-list'); if(!el)return;
+  el.innerHTML=S.reminders.length
+    ? S.reminders.slice().reverse().map((r,ri)=>`<div class="card" style="padding:12px 16px"><div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div style="font-weight:600;font-size:14px">${r.txt}</div><div style="font-size:11px;color:var(--sub);margin-top:3px">${r.date} · ${r.time}</div></div>
+        <button onclick="delRem(${S.reminders.length-1-ri})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button>
+      </div></div>`).join('')
+    : '<div class="card"><p style="font-size:13px;color:var(--sub)">No reminders set.</p></div>';
+}
+window.delRem = async function(i){ const r=S.reminders.splice(i,1)[0]; renderReminders(); if(r._fsId)await fsDel('reminders',r._fsId); };
+
+// ─── TASKS ───────────────────────────────────────────────
+window.addTask = async function(){
+  const t=document.getElementById('task-inp').value; if(!t)return;
+  const item={id:uid(),txt:t,done:false,date:todayStr()};
+  S.tasks.push(item); renderTasks();
+  await fsAdd('tasks',item);
+  document.getElementById('task-inp').value='';
+};
+function renderTasks(){
+  const el=document.getElementById('task-list'); if(!el)return;
+  const td=S.tasks.filter(t=>t.date===todayStr());
+  el.innerHTML=td.length
+    ? td.map(t=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)">
+        <button onclick="toggleTask('${t.id}')" style="width:22px;height:22px;border-radius:50%;border:2px solid ${t.done?'var(--green)':'var(--border)'};background:${t.done?'var(--green)':'none'};display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+          ${t.done?'<i class="ti ti-check" style="font-size:12px;color:#fff"></i>':''}
+        </button>
+        <span style="font-size:14px;text-decoration:${t.done?'line-through':'none'};color:${t.done?'var(--sub)':'var(--text)'}">${t.txt}</span>
+      </div>`).join('')
+    : '<p style="font-size:13px;color:var(--sub)">No tasks today. Add one above!</p>';
+}
+window.toggleTask = function(id){ const t=S.tasks.find(x=>x.id===id); if(t){t.done=!t.done; renderTasks();} };
+
+// ─── EXERCISES ───────────────────────────────────────────
+window.addExercise = async function(){
+  const name=document.getElementById('ex-name').value; if(!name)return;
+  const type=document.getElementById('ex-type').value;
+  const sets=document.getElementById('ex-sets').value;
+  const kg=document.getElementById('ex-kg').value;
+  const item={id:uid(),name,type,sets,kg,date:todayStr()};
+  S.exercises.push(item); renderExercises();
+  await fsAdd('exercises',item);
+  document.getElementById('ex-name').value=''; document.getElementById('ex-sets').value=''; document.getElementById('ex-kg').value='';
+  notif(name+' logged 💪');
+};
+function renderExercises(){
+  const el=document.getElementById('ex-list'); if(!el)return;
+  const td=S.exercises.filter(e=>e.date===todayStr());
+  el.innerHTML=td.length?`<div class="card"><div class="ctitle">Today's Exercises (${td.length})</div>`+
+    td.map(e=>`<div class="exrow"><div><div style="font-weight:600;font-size:14px">${e.name}</div><div style="font-size:11px;color:var(--sub);margin-top:2px">${e.sets||''} ${e.kg?'· '+e.kg+'kg':''}</div></div>
+    <span class="bdg ${e.type==='Cardio'?'b':e.type==='HIIT'?'o':'g'}">${e.type}</span></div>`).join('')+'</div>'
+    :'<div class="card"><p style="font-size:13px;color:var(--sub)">No exercises logged today.</p></div>';
+}
+
+// ─── PHOTOS ──────────────────────────────────────────────
+window.prevPhoto = function(input,slotId,dataId){
+  const file=input.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{document.getElementById(slotId).innerHTML=`<img src="${e.target.result}"/>`;document.getElementById(dataId).value=e.target.result;};
+  reader.readAsDataURL(file);
+};
+window.saveWoPhotos = async function(){
+  const before=document.getElementById('ph-before-data').value;
+  const after=document.getElementById('ph-after-data').value;
+  if(!before&&!after)return alert('Upload at least one photo');
+  const item={id:uid(),date:todayStr(),before,after};
+  S.wophotos.push(item); renderWoPhotos();
+  // Note: photos stored locally only (too large for Firestore free tier)
+  try{localStorage.setItem('wophotos_'+currentUser.uid,JSON.stringify(S.wophotos));}catch(e){}
+  notif('Progress photos saved 📸');
+};
+function renderWoPhotos(){
+  const el=document.getElementById('ph-history'); if(!el)return;
+  el.innerHTML=S.wophotos.slice().reverse().map(p=>`
+    <div class="card"><div class="ctitle">${p.date}</div><div class="ph2">
+      ${p.before?`<div><p style="font-size:11px;color:var(--sub);margin-bottom:5px;font-weight:600">BEFORE</p><img src="${p.before}" style="width:100%;height:110px;object-fit:cover;border-radius:10px"/></div>`:''}
+      ${p.after?`<div><p style="font-size:11px;color:var(--sub);margin-bottom:5px;font-weight:600">AFTER</p><img src="${p.after}" style="width:100%;height:110px;object-fit:cover;border-radius:10px"/></div>`:''}
+    </div></div>`).join('');
+}
+
+// ─── TIMER ───────────────────────────────────────────────
+let woSecs=0,woRunning=false,woInterval=null,restSecs=0,restInterval=null;
+window.woTimerAction=function(){
+  if(woRunning){clearInterval(woInterval);woRunning=false;document.getElementById('wo-timer-btn').textContent='Resume';}
+  else{woRunning=true;document.getElementById('wo-timer-btn').textContent='Pause';
+    woInterval=setInterval(()=>{woSecs++;document.getElementById('wo-timer').textContent=`${p2(Math.floor(woSecs/60))}:${p2(woSecs%60)}`;},1000);}
+};
+window.woTimerReset=function(){clearInterval(woInterval);woSecs=0;woRunning=false;document.getElementById('wo-timer').textContent='00:00';document.getElementById('wo-timer-btn').textContent='Start';};
+window.startRest=function(){
+  clearInterval(restInterval);
+  restSecs=parseInt(document.getElementById('rest-dur').value);
+  const td=document.getElementById('rest-timer'); td.style.display='block';
+  td.textContent=`${p2(Math.floor(restSecs/60))}:${p2(restSecs%60)}`;
+  restInterval=setInterval(()=>{restSecs--;td.textContent=`${p2(Math.floor(restSecs/60))}:${p2(restSecs%60)}`;
+    if(restSecs<=0){clearInterval(restInterval);notif('Rest over! Back to work 💪');fireRingtone(S.selectedRingtone);td.style.display='none';}},1000);
+};
+window.addWoReminder=async function(){
+  const time=document.getElementById('wo-rem-time').value; if(!time)return alert('Set a time');
+  const label=document.getElementById('wo-rem-label').value||'Workout time!';
+  const item={id:uid(),txt:'🏋️ '+label,time,date:todayStr()};
+  S.reminders.push(item); await fsAdd('reminders',item);
+  const target=new Date(); const[h,m]=time.split(':').map(Number); target.setHours(h,m,0,0); if(target<=new Date())target.setDate(target.getDate()+1);
+  setTimeout(()=>fireAlarm({label:'🏋️ '+label,time,on:true,repeat:'once',ringtone:S.selectedRingtone}),target-new Date());
+  notif('Workout reminder set for '+time);
+};
+
+// ─── MEALS ───────────────────────────────────────────────
+window.addMeal = async function(){
+  const type=document.getElementById('ml-type').value;
+  const cal=parseInt(document.getElementById('ml-cal').value)||0;
+  const desc=document.getElementById('ml-desc').value;
+  const photo=document.getElementById('ml-ph-data').value;
+  const item={id:uid(),type,cal,desc,photo,date:todayStr()};
+  S.meals.push(item); renderMeals();
+  // save text data to Firestore, photo locally
+  await fsAdd('meals',{id:item.id,type,cal,desc,date:item.date});
+  if(photo){try{const mp=JSON.parse(localStorage.getItem('meal_photos_'+currentUser.uid)||'{}');mp[item.id]=photo;localStorage.setItem('meal_photos_'+currentUser.uid,JSON.stringify(mp));}catch(e){}}
+  document.getElementById('ml-cal').value=''; document.getElementById('ml-desc').value='';
+  document.getElementById('ml-ph-slot').innerHTML='<i class="ti ti-camera" style="font-size:22px;color:var(--sub)"></i><span>Tap to upload meal photo</span>';
+  document.getElementById('ml-ph-data').value='';
+  notif(type+' logged 🍽️');
+};
+function renderMeals(){
+  const td=S.meals.filter(m=>m.date===todayStr());
+  document.getElementById('ml-cal-total').textContent=td.reduce((a,m)=>a+m.cal,0);
+  document.getElementById('ml-count').textContent=td.length;
+  document.getElementById('ml-list').innerHTML=td.length
+    ? td.map(m=>`<div class="lrow"><div class="linfo"><div class="ltitle">${m.type}${m.desc?' — '+m.desc:''}</div><div class="lsub">${m.cal?m.cal+' cal':''}</div></div>
+        ${m.photo?`<img src="${m.photo}" style="width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0"/>`:'<span class="bdg gr">No photo</span>'}</div>`).join('')
+    : '<p style="font-size:13px;color:var(--sub)">No meals logged today.</p>';
+}
+
+// ─── EXPORT ──────────────────────────────────────────────
+window.exportData = function(){
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rapido-life-data.json'; a.click();
+};
+
+// ─── NOTIFICATION ────────────────────────────────────────
+let notifTimer=null;
+window.notif=function(msg){
+  const el=document.getElementById('notif'); document.getElementById('notif-msg').textContent=msg;
+  el.classList.add('on'); clearTimeout(notifTimer); notifTimer=setTimeout(closeNotif,3500);
+};
+window.closeNotif=function(){document.getElementById('notif').classList.remove('on');};
+
+function syncBar(msg, cls){
+  const el=document.getElementById('sync-bar');
+  el.textContent=msg; el.className='show '+(cls||'');
+}
+function clearSyncBar(){
+  const el=document.getElementById('sync-bar'); el.className='';
+}
+
+// ─── INIT ────────────────────────────────────────────────
+function initApp(){
+  if('Notification' in window) Notification.requestPermission();
+  const td=todayStr();
+  ['dep-date','wit-date','rem-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=td;});
+  document.getElementById('r-time').value=now().toTimeString().slice(0,5);
+  S.alarms.filter(a=>a.on).forEach(scheduleAlarm);
+  S.reminders.forEach(r=>{
+    if(r.time&&r.date){const t=new Date(r.date+'T'+r.time);if(t>new Date())setTimeout(()=>fireAlarm({label:r.txt,time:r.time,on:true,repeat:'once',ringtone:S.selectedRingtone}),t-new Date());}
   });
-  if (tab !== 'dashboard') renderDashboard();
-};
-
-window.addIncome = async function() {
-  const amt = parseFloat(document.getElementById('incomeAmt').value);
-  const source = document.getElementById('incomeSource').value;
-  const date = document.getElementById('incomeDate').value;
-  const note = document.getElementById('incomeNote').value;
-  if (!amt || amt <= 0) return showToast('Enter a valid amount');
-  if (!date) return showToast('Select a date');
-  const d = new Date(date);
-  const mk = monthKey(d.getFullYear(), d.getMonth());
-  const entry = { type:'income', category:source, amount:amt, date, note, monthKey:mk, timestamp:Date.now() };
-  const ref = await addDoc(collection(db,'users',currentUser.uid,'entries'), entry);
-  entries.push({id:ref.id,...entry});
-  document.getElementById('incomeAmt').value='';
-  document.getElementById('incomeNote').value='';
-  showToast('✅ Income added!');
-  renderDashboard();
-};
-
-window.addExpense = async function() {
-  const amt = parseFloat(document.getElementById('expenseAmt').value);
-  const cat = document.getElementById('expenseCategory').value;
-  const date = document.getElementById('expenseDate').value;
-  const note = document.getElementById('expenseNote').value;
-  if (!amt || amt <= 0) return showToast('Enter a valid amount');
-  if (!date) return showToast('Select a date');
-  const d = new Date(date);
-  const mk = monthKey(d.getFullYear(), d.getMonth());
-  const entry = { type:'expense', category:cat, amount:amt, date, note, monthKey:mk, timestamp:Date.now() };
-  const ref = await addDoc(collection(db,'users',currentUser.uid,'entries'), entry);
-  entries.push({id:ref.id,...entry});
-  document.getElementById('expenseAmt').value='';
-  document.getElementById('expenseNote').value='';
-  showToast('✅ Expense added!');
-  renderDashboard();
-};
-
-window.deleteEntry = async function(id) {
-  await deleteDoc(doc(db,'users',currentUser.uid,'entries',id));
-  entries = entries.filter(e=>e.id!==id);
-  showToast('🗑 Entry deleted');
-  renderDashboard();
-};
-
-window.saveTarget = async function() {
-  const amt = parseFloat(document.getElementById('targetAmt').value);
-  const hours = parseFloat(document.getElementById('targetHours').value) || null;
-  if (!amt || amt <= 0) return showToast('Enter a valid target amount');
-  const mk = monthKey(currentYear, currentMonth);
-  const data = { amount:amt, hours, monthKey:mk };
-  await setDoc(doc(db,'users',currentUser.uid,'targets',mk), data);
-  targets[mk] = data;
-  showToast('🎯 Target saved!');
-  renderDashboard();
-};
-
-window.markDonationDone = async function() {
-  const amt = parseFloat(document.getElementById('donationDoneAmt').value);
-  const note = document.getElementById('donationDoneNote').value;
-  if (!amt || amt <= 0) return showToast('Enter donation amount');
-  const mk = monthKey(currentYear, currentMonth);
-  const data = { amount:amt, note, monthLabel:getMonthName(currentYear,currentMonth), monthKey:mk, timestamp:Date.now() };
-  const ref = await addDoc(collection(db,'users',currentUser.uid,'donations'), data);
-  donationRecords.push({id:ref.id,...data});
-  document.getElementById('donationDoneAmt').value='';
-  document.getElementById('donationDoneNote').value='';
-  showToast('🙏 Donation recorded!');
-  renderDonationHistory();
-};
-
-window.openDonationSite = function() {
-  window.open('https://ttdevasthanams.ap.gov.in/hundi/donation?flow=srivarihundi','_blank');
-};
-
-function startAlarmChecker() {
-  setInterval(() => {
-    const now = new Date();
-    const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-    if (now.getDate() === lastDay && now.getHours() === 22 && now.getMinutes() === 0 && now.getSeconds() < 30) {
-      triggerDonationAlarm();
-    }
-  }, 10000);
-}
-
-let alarmTriggered = false;
-function triggerDonationAlarm() {
-  if (alarmTriggered) return;
-  alarmTriggered = true;
-  setTimeout(() => { alarmTriggered = false; }, 60000);
-  const { profit, donation } = calcStats(new Date().getFullYear(), new Date().getMonth());
-  showToast(`🙏 Donation time! 1% of ${fmt(profit)} = ${fmt(donation)}`);
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification('🙏 Thirupathi Donation Reminder', {
-      body: `Donate ${fmt(donation)} (1% of ${fmt(profit)} profit). Open Hundi donation site.`,
-      icon: '🕌'
-    });
-  } else if ('Notification' in window) {
-    Notification.requestPermission();
-  }
-  document.getElementById('donationAlertWrap').style.display = 'block';
-  switchTab('donation');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// Set default dates to today
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('incomeDate').value = today;
-document.getElementById('expenseDate').value = today;
-
-// Request notification permission
-if ('Notification' in window && Notification.permission === 'default') {
-  Notification.requestPermission();
+  // load local-only data (photos, ringtones)
+  try{
+    const lp=JSON.parse(localStorage.getItem('wophotos_'+currentUser.uid)||'[]');
+    if(lp.length) S.wophotos=lp;
+    const mp=JSON.parse(localStorage.getItem('meal_photos_'+currentUser.uid)||'{}');
+    S.meals.forEach(m=>{if(mp[m.id])m.photo=mp[m.id];});
+  }catch(e){}
+  updateRingtoneSelect();
+  renderMGoal();
+  renderHome();
+  renderAlarms();
+  renderRingtones();
 }
 </script>
 </body>
