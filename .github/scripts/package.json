@@ -1,0 +1,10 @@
+{
+  "name": "rapido-alarm-checker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Actions script that checks Firestore alarms/reminders and sends FCM push notifications every minute.",
+  "main": "check-alarms.js",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
