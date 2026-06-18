@@ -1,0 +1,29 @@
+name: Alarm & Reminder Checker
+
+on:
+  schedule:
+    # Runs every minute (GitHub may delay slightly under load, usually within ~1-3 min)
+    - cron: '* * * * *'
+  workflow_dispatch: {} # allows manual "Run workflow" button for testing
+
+jobs:
+  check-alarms:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install firebase-admin
+        working-directory: scripts
+
+      - name: Run alarm checker
+        working-directory: scripts
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node check-alarms.js
